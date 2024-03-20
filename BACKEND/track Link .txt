@@ -1,0 +1,47 @@
+const mongoose = require('mongoose');
+const express = require('express');
+const app = express();
+
+// Define a schema for click details
+const clickSchema = new mongoose.Schema({
+  link: String,
+  clicks: { type: Number, default: 0 },
+  clickDetails: [{
+    clickedAt: { type: Date, default: Date.now },
+    ipAddress: String,
+    // Add more fields as needed
+  }]
+});
+
+// Create a model from the schema
+const Click = mongoose.model('Click', clickSchema);
+
+app.get('/track/:linkId', async (req, res) => {
+  try {
+    // Find the link document by linkId
+    const linkDoc = await Click.findById(req.params.linkId);
+
+    // Update the click count and push a new click detail
+    linkDoc.clicks += 1;
+    linkDoc.clickDetails.push({ ipAddress: req.ip }); // Add more details as needed
+
+    // Save the updated document
+    await linkDoc.save();
+
+    // Redirect or respond as needed
+    res.redirect(linkDoc.link);
+  } catch (error) {
+    console.error('Error tracking click:', error);
+    res.status(500).send('Error tracking click');
+  }
+});
+
+// Connect to MongoDB and start the server
+mongoose.connect('mongodb://localhost:27017/yourDatabase', { useNewUrlParser: true });
+app.listen(3000, () => {
+  console.log('Server running on port 3000');
+});
+
+
+   product.views += 1;
+    product.save();
