@@ -45,12 +45,16 @@ const App = () => {
             <Route path="signup" element={<Signup />} />
             <Route path="login" element={<LoginSeller />} />
           </Route>
-          <Route path="/dasboard" element={<DashBordLayout />}>
-            <Route index path="/dasboard/main" element={<DashbordMainPage />} />
-            <Route path="/dasboard/inbox" element={<SellerInbox />} />
-            <Route path="/dasboard/products" element={<SellerProducts />} />
+          <Route path="/dashboard" element={<DashBordLayout />}>
             <Route
-              path="/dasboard/addnewproducts"
+              index
+              path="/dashboard/main"
+              element={<DashbordMainPage />}
+            />
+            <Route path="/dashboard/inbox" element={<SellerInbox />} />
+            <Route path="/dashboard/products" element={<SellerProducts />} />
+            <Route
+              path="/dashboard/addnewproducts"
               element={<SellerAddProducts />}
             />
           </Route>

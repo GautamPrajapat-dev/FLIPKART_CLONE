@@ -6,7 +6,6 @@ import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import useDebounce from "../../../../Hooks/useDebounce.Hook";
 import axios from "axios";
-
 const LoginSeller = () => {
   const [isloading, seLoading] = useState(false);
   const navigate = useNavigate();
@@ -55,7 +54,7 @@ const LoginSeller = () => {
           theme: "dark",
         });
 
-        navigate("/dasboard/main");
+        navigate("/dashboard/main");
       }
     } catch (error) {
       toast.error(error.response.data.errorMessage, {

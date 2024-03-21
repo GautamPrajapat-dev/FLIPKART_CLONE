@@ -1,9 +1,16 @@
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import DashBoardNavbar from "../../SellerComponents/DashboardNavbar";
+import { useEffect } from "react";
+import { GET_ALL_PRODUCTS_SAGA } from "../../../../Stores/Slice/Seller.Product.Slice";
 
 const DashbordMainPage = () => {
+  const dispatch = useDispatch();
   const data = useSelector((state) => state.SellerProduct);
   const details = data?.products;
+  console.log(details);
+  useEffect(() => {
+    dispatch(GET_ALL_PRODUCTS_SAGA());
+  }, [dispatch]);
   return (
     // JWT exp is in <seconds></seconds>
     <main className="px-3">

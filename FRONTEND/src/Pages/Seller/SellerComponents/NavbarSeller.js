@@ -13,7 +13,7 @@ const NavbarSeller = () => {
 
   useEffect(() => {
     if (isAuthantiCate) {
-      navigate("/seller/dasboard");
+      navigate("/dashboard/main");
     }
   }, [isAuthantiCate, navigate]);
 
