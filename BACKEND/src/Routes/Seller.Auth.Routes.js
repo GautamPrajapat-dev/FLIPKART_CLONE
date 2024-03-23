@@ -7,6 +7,10 @@ SellerRoutes.route("/sellerDetails").get(
   SellerauthMiddleware.SellerValidUser,
   SellerAuthController.getSellerDetails
 );
+SellerRoutes.route("/seller-profile").get(
+  SellerauthMiddleware.SellerValidUser,
+  SellerAuthController.getAllDetails
+);
 SellerRoutes.route("/register").post(
   SellerauthMiddleware.SellerRegiseter,
   SellerAuthController.registerSeller

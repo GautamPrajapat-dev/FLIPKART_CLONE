@@ -11,6 +11,19 @@ const SellerAuthController = {
       id: res.Seller.sellerId,
     });
   }),
+  getAllDetails: asyncHandler(async (req, res) => {
+    const user = await SellerAuhSchema.findById({ _id: res.Seller.sellerId });
+    if (!user) {
+      res.status(400).json({
+        status: false,
+        errorMessage: "User not found",
+      });
+    }
+    res.status(200).json({
+      status: true,
+      user,
+    });
+  }),
 
   registerSeller: asyncHandler(async (req, res) => {
     const details = req.body;

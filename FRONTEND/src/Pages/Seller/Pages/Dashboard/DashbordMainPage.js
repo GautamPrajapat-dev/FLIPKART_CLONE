@@ -6,13 +6,13 @@ import { GET_ALL_PRODUCTS_SAGA } from "../../../../Stores/Slice/Seller.Product.S
 const DashbordMainPage = () => {
   const dispatch = useDispatch();
   const data = useSelector((state) => state.SellerProduct);
-  const details = data?.products;
-  console.log(details);
+  const details = data.products;
+
   useEffect(() => {
-    dispatch(GET_ALL_PRODUCTS_SAGA());
+    const currentPage = 1;
+    dispatch(GET_ALL_PRODUCTS_SAGA(currentPage));
   }, [dispatch]);
   return (
-    // JWT exp is in <seconds></seconds>
     <main className="px-3">
       <DashBoardNavbar name="Dashboard" />
       {/* ! Product Details  */}

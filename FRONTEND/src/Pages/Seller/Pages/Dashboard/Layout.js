@@ -14,7 +14,7 @@ const DashBordLayout = () => {
 
   return (
     <>
-      <div className="grid grid-cols-12 gap-2 px-2 text-black bg-daintree-100/25">
+      <div className="grid grid-cols-12 gap-2 px-2 text-black ">
         <div className="col-span-2 m-2 rounded-xl bg-daintree-400">
           <DashSideBar />
         </div>

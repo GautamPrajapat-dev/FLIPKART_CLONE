@@ -16,6 +16,7 @@ import DashbordMainPage from "./Pages/Seller/Pages/Dashboard/DashbordMainPage.js
 import SellerInbox from "./Pages/Seller/Pages/Dashboard/SellerInbox";
 import SellerAddProducts from "./Pages/Seller/Pages/Dashboard/SellerAddProducts.js";
 import SellerProducts from "./Pages/Seller/Pages/Dashboard/SellerProducts.js";
+import SellerProfile from "./Pages/Seller/Pages/Dashboard/Profile/SellerProfile.js";
 // import { lazy } from "react";
 
 const App = () => {
@@ -57,6 +58,7 @@ const App = () => {
               path="/dashboard/addnewproducts"
               element={<SellerAddProducts />}
             />
+            <Route path="/dashboard/profile" element={<SellerProfile />} />
           </Route>
           <Route path="*" element={<h1>Page Note Found</h1>} />
         </Routes>

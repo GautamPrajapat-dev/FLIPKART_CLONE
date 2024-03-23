@@ -54,6 +54,7 @@ const schema = new Schema(
     },
     password: {
       type: String,
+      select: false,
     },
     bussinessDetail: { type: bussinessDetails },
     paymentDetails: {

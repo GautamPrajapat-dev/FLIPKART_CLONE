@@ -1,5 +1,8 @@
 import { call, put } from "redux-saga/effects";
-import { getAllProduct, postNewProduct } from "../Services/Seller.Services";
+import {
+  getAllProduct,
+  postNewProduct,
+} from "../Services/Seller.Product.Services";
 import {
   AddNewProductRedux,
   getAllProdctsRedux,
@@ -9,7 +12,6 @@ export function* addNewProductHandler(action) {
   try {
     const data = action.payload;
     const postData = yield call(postNewProduct, data);
-
     yield put(AddNewProductRedux(postData));
   } catch (error) {
     console.log(error);
@@ -18,9 +20,9 @@ export function* addNewProductHandler(action) {
 
 export function* getProductHandler(action) {
   try {
-    const data = action.payload;
-    const getData = yield call(getAllProduct, data);
+    const data = action?.payload;
 
+    const getData = yield call(getAllProduct, data);
     yield put(getAllProdctsRedux(getData));
   } catch (error) {
     console.log(error);

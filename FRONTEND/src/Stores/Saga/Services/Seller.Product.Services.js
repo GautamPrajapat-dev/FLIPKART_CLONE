@@ -113,7 +113,7 @@ export const getAllProduct = async ({
   title,
 }) => {
   try {
-    const res = await axios.get(
+    const res = await axios?.get(
       `${URL}/products/v1/products/?fields=price,title,qty,thumbnail,category,views&page=${currentPage}&sort=${views},${title},${qty}`,
       config
     );
