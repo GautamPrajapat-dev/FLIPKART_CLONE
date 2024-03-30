@@ -3,6 +3,7 @@ const asyncHandler = require("../Utils/asyncHandler");
 const sendMail = require("../Utils/sendMail");
 const crypto = require("crypto");
 const jwt = require("jsonwebtoken");
+const bcrypt = require("bcryptjs");
 const cloudinary = require("cloudinary").v2;
 
 const SellerAuthController = {
@@ -67,6 +68,7 @@ const SellerAuthController = {
   }),
   async loginSeller(req, res) {
     const data = req.body;
+
     try {
       // check user exits first
       const isUserEmail = await SellerAuhSchema.findOne({
@@ -115,6 +117,7 @@ const SellerAuthController = {
         });
       }
     } catch (error) {
+      console.log(error);
       res.status(500).json({
         status: false,
         errorMessage: "Internal Server Error",
@@ -141,6 +144,7 @@ const SellerAuthController = {
               email: seller.email,
               mobile: seller.mobile,
               fullAddress: seller.fullAddress,
+              bussinessDetail: seller.bussinessDetail,
             },
           },
           { new: true }
@@ -149,6 +153,7 @@ const SellerAuthController = {
         if (updateDetails) {
           res.status(201).json({
             status: true,
+            path: req.path,
             successMessage: "seller details updated successfully",
           });
         } else {
@@ -358,6 +363,7 @@ const SellerAuthController = {
         });
       }
     } catch (error) {
+      console.log(error);
       res.status(500).json({
         status: false,
         errorMessage: "Internal Server Error",
@@ -367,12 +373,18 @@ const SellerAuthController = {
   // profile picture link generate for ther user
   async uploadAvatar(req, res) {
     // get image file path
-    const file = req.file.path;
+
     // user id get
     const sellerID = res.Seller.sellerId;
     try {
       // is file true
-      if (file) {
+      if (req.file === undefined || !req.file) {
+        res.status(400).json({
+          status: false,
+          errorMessage: "please upload avatar form user file",
+        });
+      } else {
+        const file = req.file.path;
         // fined user id from user authontication
         const userfind = await SellerAuhSchema.findById({ _id: sellerID });
         // check avatar true or false
@@ -428,7 +440,7 @@ const SellerAuthController = {
             );
             // send status in client for success
             if (avatarUpload) {
-              res.status(201).json({
+              res.status(200).json({
                 status: true,
                 successMessage: "uploaded",
               });
@@ -440,11 +452,6 @@ const SellerAuthController = {
             errorMessage: "user not logged in please logged in ",
           });
         }
-      } else {
-        res.status(400).json({
-          status: false,
-          errorMessage: "please upload avatar form user file",
-        });
       }
     } catch (error) {
       res.status(500).json({

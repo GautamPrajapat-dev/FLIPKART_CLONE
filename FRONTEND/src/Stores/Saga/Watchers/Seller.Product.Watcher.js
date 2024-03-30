@@ -7,6 +7,7 @@ import {
   addNewProductHandler,
   getProductHandler,
 } from "../Handler/Seller.Product.Handler";
+
 export function* AddNewProductWatcher() {
   yield takeLatest(AddNewProductSellerSaga.type, addNewProductHandler);
 }

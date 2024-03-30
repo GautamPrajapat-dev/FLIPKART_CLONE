@@ -17,6 +17,7 @@ import SellerInbox from "./Pages/Seller/Pages/Dashboard/SellerInbox";
 import SellerAddProducts from "./Pages/Seller/Pages/Dashboard/SellerAddProducts.js";
 import SellerProducts from "./Pages/Seller/Pages/Dashboard/SellerProducts.js";
 import SellerProfile from "./Pages/Seller/Pages/Dashboard/Profile/SellerProfile.js";
+import NotFound from "./Components/404/index.js";
 // import { lazy } from "react";
 
 const App = () => {
@@ -34,7 +35,7 @@ const App = () => {
             <Route index element={<Home />} />
             <Route path="/login" element={<Login />} />
             <Route path="/cart" element={<Cart />} />
-            <Route path="/:products" element={<Products />}></Route>
+            <Route path="products/:products" element={<Products />}></Route>
             <Route path="/signup" element={<SignUp />} />
             <Route
               path="/products/:SingleProduct"
@@ -60,7 +61,7 @@ const App = () => {
             />
             <Route path="/dashboard/profile" element={<SellerProfile />} />
           </Route>
-          <Route path="*" element={<h1>Page Note Found</h1>} />
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </Suspense>
     </div>

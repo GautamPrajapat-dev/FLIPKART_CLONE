@@ -1,10 +1,24 @@
-import React, { memo } from "react";
+import React, { memo, useEffect } from "react";
 import { BiMessage } from "react-icons/bi";
 import { Link, useNavigate } from "react-router-dom";
 import Button from "../../../Components/Buttons/Button";
+import { useDispatch, useSelector } from "react-redux";
+import { SELLER_PROFILE_SAGA } from "../../../Stores/Slice/Seller.Auth.Slice";
 
 const DashboardNavbar = ({ name, subname }) => {
   const navigate = useNavigate();
+
+  const { profile, avatar } = useSelector((state) => state.Seller);
+
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(SELLER_PROFILE_SAGA());
+  }, [dispatch]);
+  useEffect(() => {
+    if (avatar?.status === true) {
+      dispatch(SELLER_PROFILE_SAGA());
+    }
+  }, [dispatch, avatar.status]);
   const handleOnClickLogout = () => {
     navigate("/seller");
     localStorage.clear("_token");
@@ -39,7 +53,7 @@ const DashboardNavbar = ({ name, subname }) => {
                 <div className="w-10 rounded-full">
                   <img
                     alt="Tailwind CSS Navbar component"
-                    src="https://daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg"
+                    src={profile?.user?.avatar?.path}
                   />
                 </div>
               </div>

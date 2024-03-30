@@ -198,9 +198,11 @@ const SellerProduct = {
       }
       res.status(200).json({
         status: true,
-        length: products.length,
         totalProduct: count,
         totalPage: total,
+        path: req.path,
+        length: products.length,
+        next: Number(req.query.page) + 1,
         products,
       });
     } else {
@@ -221,6 +223,7 @@ const SellerProduct = {
       }
       res.status(200).json({
         status: true,
+        path: req.path,
         product,
       });
     } else {

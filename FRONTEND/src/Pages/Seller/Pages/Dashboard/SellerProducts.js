@@ -3,16 +3,20 @@ import DashBoardNavbar from "../../SellerComponents/DashboardNavbar";
 import { useDispatch, useSelector } from "react-redux";
 import { GET_ALL_PRODUCTS_SAGA } from "../../../../Stores/Slice/Seller.Product.Slice";
 import { IoArrowDown, IoArrowUp } from "react-icons/io5";
+import ProductDetails from "./ProductDetails/ProductDetails";
+import ModalOutsideClick from "../../../../Components/Dialoag/ModalOutsideClick";
 
 const SellerProducts = () => {
   // pagination
   const dispatch = useDispatch();
+  const [showDetails, setShowDetails] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [price, sePriceFilter] = useState("price");
   const [qty, seQtyFilter] = useState("qty");
   const [title, seTitleFilter] = useState("title");
   const [views, setViewsFilter] = useState("views");
   const products = useSelector((state) => state.SellerProduct);
+  const { isLoading } = useSelector((state) => state.loading);
   const handleOnPrev = () => {
     if (currentPage === 1) {
       setCurrentPage(currentPage);
@@ -46,7 +50,7 @@ const SellerProducts = () => {
         {/* FILTER */}
         <div className="w-full my-7">
           <div>
-            <ul className="flex gap-4">
+            <ul className="flex gap-4 ">
               {title === "-title" ? (
                 <li
                   onClick={() => seTitleFilter("title")}
@@ -166,98 +170,110 @@ const SellerProducts = () => {
                 </tr>
               </thead>
 
-              <tbody>
+              <tbody className="relative">
                 {/* row 1 */}
-                {products?.products?.products &&
-                  products?.products?.products.map((product, i) => {
-                    return (
-                      <tr key={i}>
-                        <th>
-                          <label>
-                            <input type="checkbox" className="checkbox" />
-                          </label>
-                        </th>
-                        <td>
-                          <div className="flex items-center gap-3">
-                            <div className="avatar">
-                              <div className="w-12 h-12 mask mask-squircle">
-                                <img
-                                  src={product.thumbnail.img}
-                                  alt="Avatar Tailwind CSS Component"
-                                />
+                {isLoading
+                  ? [1, 2, 3].map((val, i) => {
+                      return (
+                        <tr key={i} className="">
+                          <th>
+                            <label className="">
+                              <input
+                                type=""
+                                className="rounded-lg pointer-events-none focus:ring-0 checkbox skeleton bg-black/20"
+                              />
+                            </label>
+                          </th>
+                          <td>
+                            <div className="flex items-center gap-3">
+                              <div className="avatar animate-pulse bg-black/20 skeleton">
+                                <div className="w-12 h-12 mask mask-squircle"></div>
+                              </div>
+                              <div>
+                                <div className="w-48 font-bold text-transparent truncate animate-pulse bg-black/20 skeleton">
+                                  .
+                                </div>
+                                <div className="w-16 mt-1 text-sm text-transparent opacity-50 bg-black/20 skeleton">
+                                  .
+                                </div>
                               </div>
                             </div>
-                            <div>
-                              <div className="w-48 font-bold truncate">
-                                {product.title}
+                          </td>
+                          <td className="text-transparent ">
+                            <span className="w-12 rounded-lg bg-black/20 skeleton">
+                              ....................
+                            </span>
+                            {/* <br />
+                   <span className="badge badge-ghost badge-sm">
+                     Desktop Support Technician
+                   </span> */}
+                          </td>
+                          <td className="text-transparent">
+                            <span className="w-12 rounded-lg animate-pulse bg-black/20 skeleton">
+                              ....................
+                            </span>
+                          </td>
+                          <th>
+                            <button className="text-transparent animate-pulse bg-black/20 btn btn-ghost btn-xs skeleton">
+                              details
+                            </button>
+                          </th>
+                        </tr>
+                      );
+                    })
+                  : products?.products?.products &&
+                    products?.products?.products.map((product, i) => {
+                      return (
+                        <tr key={i}>
+                          <th>
+                            <label>
+                              <input type="checkbox" className="checkbox" />
+                            </label>
+                          </th>
+                          <td>
+                            <div className="flex items-center gap-3">
+                              <div className="avatar">
+                                <div className="w-12 h-12 mask mask-squircle">
+                                  <img
+                                    src={product.thumbnail.img}
+                                    alt="Avatar Tailwind CSS Component"
+                                  />
+                                </div>
                               </div>
-                              <div className="text-sm opacity-50">
-                                {product.category.category}
+                              <div>
+                                <div className="w-48 font-bold truncate">
+                                  {product.title}
+                                </div>
+                                <div className="text-sm opacity-50">
+                                  {product.category.category}
+                                </div>
                               </div>
                             </div>
-                          </div>
-                        </td>
-                        <td>
-                          {product.views} Views
-                          {/* <br />
+                          </td>
+                          <td>
+                            {product.views} Views
+                            {/* <br />
                         <span className="badge badge-ghost badge-sm">
                           Desktop Support Technician
                         </span> */}
-                        </td>
-                        <td>{product.qty}</td>
-                        <th>
-                          <button className="btn btn-ghost btn-xs">
-                            details
-                          </button>
-                        </th>
-                      </tr>
-                    );
-                  })}
-
-                <tr className="">
-                  <th>
-                    <label className="">
-                      <input
-                        type=""
-                        className="rounded-lg pointer-events-none focus:ring-0 checkbox skeleton bg-black/20"
-                      />
-                    </label>
-                  </th>
-                  <td>
-                    <div className="flex items-center gap-3">
-                      <div className="avatar animate-pulse bg-black/20 skeleton">
-                        <div className="w-12 h-12 mask mask-squircle"></div>
-                      </div>
-                      <div>
-                        <div className="w-48 font-bold text-transparent truncate animate-pulse bg-black/20 skeleton">
-                          .
-                        </div>
-                        <div className="w-16 mt-1 text-sm text-transparent opacity-50 bg-black/20 skeleton">
-                          .
-                        </div>
-                      </div>
-                    </div>
-                  </td>
-                  <td className="text-transparent ">
-                    <span className="w-12 rounded-lg bg-black/20 skeleton">
-                      ....................
-                    </span>
-                    {/* <br />
-                        <span className="badge badge-ghost badge-sm">
-                          Desktop Support Technician
-                        </span> */}
-                  </td>
-                  <td className="text-transparent">
-                    <span className="w-12 rounded-lg animate-pulse bg-black/20 skeleton">
-                      ....................
-                    </span>
-                  </td>
-                  <th>
-                    <button className="text-transparent animate-pulse bg-black/20 btn btn-ghost btn-xs skeleton">
-                      details
-                    </button>
-                  </th>
-                </tr>
+                          </td>
+                          <td>{product.qty}</td>
+                          <th>
+                            <button
+                              // onClick={() => setShowDetails(true)}
+                              onClick={() =>
+                                document
+                                  .getElementById("show_sellerProductDetails")
+                                  .showModal()
+                              }
+                              className="btn btn-ghost btn-xs"
+                            >
+                              details
+                            </button>
+                          </th>
+                        </tr>
+                      );
+                    })}
               </tbody>
               {/* foot */}
               <tfoot>
@@ -270,6 +286,12 @@ const SellerProducts = () => {
                 </tr>
               </tfoot>
             </table>
+            <ModalOutsideClick
+              id="show_sellerProductDetails"
+              // open={showDetails ? "modal-open" : ""}
+            >
+              <ProductDetails />
+            </ModalOutsideClick>
           </div>
         </div>
       </section>
@@ -278,6 +300,7 @@ const SellerProducts = () => {
           <button className="join-item btn btn-outline" onClick={handleOnPrev}>
             Prev
           </button>
+
           <button onClick={handleOnNext} className="join-item btn btn-outline">
             Next
           </button>

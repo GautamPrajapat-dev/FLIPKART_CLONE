@@ -3,7 +3,7 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const addressSchema = new Schema({
   address: { type: String },
-  conunty: { type: String },
+  country: { type: String },
   city: { type: String },
   pincode: {
     type: String,
@@ -54,7 +54,6 @@ const schema = new Schema(
     },
     password: {
       type: String,
-      select: false,
     },
     bussinessDetail: { type: bussinessDetails },
     paymentDetails: {

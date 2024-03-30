@@ -1,8 +1,10 @@
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
+
 // import { toast } from "react-toastify";
 const URL = "http://localhost:3031/seller";
-const token = localStorage.getItem("_token");
+
+const token = localStorage?.getItem("_token") || "";
 if (token !== "") {
   try {
     let decodedToken = jwtDecode(token);
@@ -13,7 +15,7 @@ if (token !== "") {
       localStorage.clear();
     }
   } catch (error) {
-    console.log(error);
+    console.log("");
   }
 }
 
@@ -53,6 +55,22 @@ export const getDetails = async () => {
         Authorization: `Bearer ${token}`,
       },
     });
+    const data = await res.data;
+
+    return data;
+  } catch (error) {
+    // console.log(error);
+  }
+};
+
+export const updateSellerProfile = async (img) => {
+  try {
+    const res = await axios.put(`${URL}/upload-avatar`, img, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
     const data = await res.data;
 
     return data;

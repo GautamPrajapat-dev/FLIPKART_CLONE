@@ -7,6 +7,7 @@ import {
   AddNewProductRedux,
   getAllProdctsRedux,
 } from "../../Slice/Seller.Product.Slice";
+import { startLoading, stopLoading } from "../../Slice/loading.Slice";
 
 export function* addNewProductHandler(action) {
   try {
@@ -20,11 +21,13 @@ export function* addNewProductHandler(action) {
 
 export function* getProductHandler(action) {
   try {
+    yield put(startLoading());
     const data = action?.payload;
-
     const getData = yield call(getAllProduct, data);
     yield put(getAllProdctsRedux(getData));
+    yield put(stopLoading());
   } catch (error) {
     console.log(error);
+    yield put(stopLoading());
   }
 }
