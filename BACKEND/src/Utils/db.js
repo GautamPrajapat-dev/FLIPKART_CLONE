@@ -1,21 +1,21 @@
 const { default: mongoose } = require("mongoose");
 
 const db = async () => {
-  const URL =
-    "mongodb://goutamprajapat554:goutam123@estore.t8zk1jd.mongodb.net/?retryWrites=true&w=majority&appName=estore";
+  const uri =
+    "mongodb+srv://goutam:fvPSHkRJlcpCqncG@estore.7jtxuw1.mongodb.net/?retryWrites=true&w=majority&appName=Estore";
+
   try {
     const clientOptions = {
-      serverApi: {
-        version: "1",
-        strict: true,
-        deprecationErrors: true,
-      },
+      serverApi: { version: "1", strict: true, deprecationErrors: true },
     };
-    await mongoose.connect(URL, clientOptions);
-    await mongoose.connection.db.admin().command({ ping: 1 });
+    await mongoose.connect(uri, clientOptions);
+    await mongoose.connection.db("admin").command({ ping: 1 });
     console.log("sucessfully connect");
-  } catch (error) {
-    console.log(error);
+  } catch (err) {
+    console.log(err);
+  } finally {
+    // Ensures that the client will close when you finish/error
+    await mongoose.disconnect();
   }
 };
 
