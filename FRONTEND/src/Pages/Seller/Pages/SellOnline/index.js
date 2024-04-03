@@ -1,6 +1,18 @@
-import React from "react";
-
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { SELLER_PROFILE_SAGA } from "../../../../Stores/Slice/Seller.Auth.Slice";
 const SellOnlineMainPage = () => {
+  const dispatch = useDispatch();
+  const profile = useSelector((state) => state.Seller.profile);
+  const navigate = useNavigate();
+  console.log(profile.status);
+  useEffect(() => {
+    if (profile?.status === true) {
+      navigate("/dashboard/main");
+    }
+    dispatch(SELLER_PROFILE_SAGA());
+  }, [profile?.status, navigate, dispatch]);
   return (
     <>
       <div className="mx-auto lg:w-10/12">
@@ -13,7 +25,7 @@ const SellOnlineMainPage = () => {
             width="90%"
           />
           <div className="absolute w-1/2 md:text-4xl top-14 lg:top-40 md:left-20 ">
-            <span className="font-semibold"> Become a Flipkart Seller</span>{" "}
+            <span className="font-semibold"> Become a Flipkart Seller</span>
             <br /> and sell to 45+Crore customers
           </div>
         </div>

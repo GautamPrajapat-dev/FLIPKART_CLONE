@@ -13,7 +13,19 @@ const SellerAuthController = {
     });
   }),
   getAllDetails: asyncHandler(async (req, res) => {
-    const user = await SellerAuhSchema.findById({ _id: res.Seller.sellerId });
+    const user = await SellerAuhSchema.findById(
+      { _id: res.Seller.sellerId },
+      {
+        password: 0,
+        __v: 0,
+        gstNum: 0,
+        resetoken: 0,
+        _id: 0,
+        bussinessDetail: { panNum: 0 },
+        createdAt: 0,
+        updatedAt: 0,
+      }
+    );
     if (!user) {
       res.status(400).json({
         status: false,

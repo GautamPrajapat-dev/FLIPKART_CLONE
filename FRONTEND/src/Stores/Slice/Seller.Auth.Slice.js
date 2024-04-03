@@ -15,6 +15,10 @@ const SellerAuthSlice = createSlice({
     UPDATE_PROFILE_REDUX: (state, action) => {
       state.avatar = action.payload;
     },
+    GET_SINGLE_DETAILS_SAGA: (state, action) => {},
+    GET_SINGLE_DETAILS_REDUX: (state, action) => {
+      state.avatar = action.payload;
+    },
   },
 });
 export const {
