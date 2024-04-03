@@ -9,7 +9,6 @@ import ModalOutsideClick from "../../../../Components/Dialoag/ModalOutsideClick"
 const SellerProducts = () => {
   // pagination
   const dispatch = useDispatch();
-  const [showDetails, setShowDetails] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [price, sePriceFilter] = useState("price");
   const [qty, seQtyFilter] = useState("qty");
@@ -29,7 +28,9 @@ const SellerProducts = () => {
       setCurrentPage(currentPage + 1);
     }
   };
-
+  const handleOnShowDetailsClick = (id) => {
+    document.getElementById("show_sellerProductDetails").showModal();
+  };
   useEffect(() => {
     const config = {
       currentPage,
@@ -262,9 +263,7 @@ const SellerProducts = () => {
                             <button
                               // onClick={() => setShowDetails(true)}
                               onClick={() =>
-                                document
-                                  .getElementById("show_sellerProductDetails")
-                                  .showModal()
+                                handleOnShowDetailsClick(product._id)
                               }
                               className="btn btn-ghost btn-xs"
                             >

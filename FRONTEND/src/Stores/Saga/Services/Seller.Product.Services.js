@@ -119,16 +119,6 @@ export const getAllProduct = async ({
     );
     const data = await res.data;
     if (data.status === true) {
-      toast.success(data.successMessage, {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "dark",
-      });
       return data;
     } else {
       toast.warn(data.errorMessage, {
@@ -144,5 +134,17 @@ export const getAllProduct = async ({
     }
   } catch (error) {
     console.log(error);
+  }
+};
+
+export const getSingleProductService = async (id) => {
+  // http://localhost:3031/seller/products/v1/products/
+  const res = await axios?.get(`${URL}/products/v1/products/${id}`, config);
+  const data = await res.data;
+  console.log(data);
+  if (data.status === true) {
+    return data;
+  } else {
+    console.log(data.errorMessage);
   }
 };
