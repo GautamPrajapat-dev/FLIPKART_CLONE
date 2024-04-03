@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React, { forwardRef, useState } from "react";
 import { LuEye, LuEyeOff } from "react-icons/lu";
 
-const FormInput = (props) => {
+const FormInput = (props, ref) => {
   const [showPassword, setShowPassword] = useState(true);
   const {
     className,
@@ -26,6 +26,7 @@ const FormInput = (props) => {
               type={type === "password" && !showPassword ? "text" : type}
               id={name}
               name={name}
+              ref={ref}
               value={value}
               autoComplete={type === "password" ? "false" : "true"}
               className={`block rounded-t-lg px-2.5 pb-1.5 pt-4 w-full text-sm text-gray-900 bg-gray-50 dark:bg-gray-700 border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer ${className}`}
@@ -64,6 +65,7 @@ const FormInput = (props) => {
               type={type || "text"}
               id={name}
               name={name}
+              ref={ref}
               autoComplete={type === "password" ? "false" : "true"}
               className={`block px-2.5 pb-1.5 pt-3 w-full text-sm text-gray-900 bg-transparent rounded-lg border-2 border-gray-200 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer`}
               placeholder={placeholder || ""}
@@ -100,6 +102,8 @@ const FormInput = (props) => {
             <input
               type={type || "text"}
               id={name}
+              name={name}
+              ref={ref}
               value={value}
               autoComplete={type === "password" ? "false" : "true"}
               className={`block w-full px-0 py-2 text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer ${className}`}
@@ -140,6 +144,7 @@ const FormInput = (props) => {
               value={value}
               autoComplete={type === "password" ? "false" : "true"}
               name={name}
+              ref={ref}
               className={`block rounded-t-lg px-2.5 pb-2.5 pt-5 w-full text-sm text-gray-900 bg-gray-50 dark:bg-gray-700 border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer ${className}`}
               placeholder={placeholder || " "}
             />
@@ -178,6 +183,7 @@ const FormInput = (props) => {
               value={value}
               autoComplete={type === "password" ? "false" : "true"}
               name={name}
+              ref={ref}
               className={`block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border-2 border-gray-200 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer ${className}`}
               placeholder={placeholder || ""}
             />
@@ -215,6 +221,7 @@ const FormInput = (props) => {
               id={name}
               value={value}
               name={name}
+              ref={ref}
               autoComplete={type === "password" ? "false" : "true"}
               className={`block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer ${className}`}
               placeholder={placeholder || ""}
@@ -249,4 +256,4 @@ const FormInput = (props) => {
   );
 };
 
-export default FormInput;
+export default forwardRef(FormInput);

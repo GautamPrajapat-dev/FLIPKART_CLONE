@@ -14,6 +14,7 @@ const SellerProducts = () => {
   const [qty, seQtyFilter] = useState("qty");
   const [title, seTitleFilter] = useState("title");
   const [views, setViewsFilter] = useState("views");
+  const [product_id, setIDProduct] = useState("");
   const products = useSelector((state) => state.SellerProduct);
   const { isLoading } = useSelector((state) => state.loading);
   const handleOnPrev = () => {
@@ -29,6 +30,7 @@ const SellerProducts = () => {
     }
   };
   const handleOnShowDetailsClick = (id) => {
+    setIDProduct(id);
     document.getElementById("show_sellerProductDetails").showModal();
   };
   useEffect(() => {
@@ -286,10 +288,12 @@ const SellerProducts = () => {
               </tfoot>
             </table>
             <ModalOutsideClick
+              backdrop={true}
+              className="w-11/12 max-w-5xl"
               id="show_sellerProductDetails"
-              // open={showDetails ? "modal-open" : ""}
+              title="Product Details"
             >
-              <ProductDetails />
+              <ProductDetails id={product_id} />
             </ModalOutsideClick>
           </div>
         </div>

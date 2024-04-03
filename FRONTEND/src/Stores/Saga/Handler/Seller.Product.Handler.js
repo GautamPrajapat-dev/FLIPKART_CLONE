@@ -6,6 +6,7 @@ import {
 } from "../Services/Seller.Product.Services";
 import {
   AddNewProductRedux,
+  GET_SINGLE_PRODUCT_REDUX,
   getAllProdctsRedux,
 } from "../../Slice/Seller.Product.Slice";
 import { startLoading, stopLoading } from "../../Slice/loading.Slice";
@@ -32,12 +33,12 @@ export function* getProductHandler(action) {
     yield put(stopLoading());
   }
 }
-export function* getSingleProduct(action) {
+export function* getSingleProductHandler(action) {
   try {
     yield put(startLoading());
     const id = action?.payload;
     const getData = yield call(getSingleProductService, id);
-    yield put(getAllProdctsRedux(getData));
+    yield put(GET_SINGLE_PRODUCT_REDUX(getData));
     yield put(stopLoading());
   } catch (error) {
     console.log(error);

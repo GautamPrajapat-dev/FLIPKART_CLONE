@@ -2,6 +2,7 @@ import { all } from "redux-saga/effects";
 import {
   AddNewProductWatcher,
   getAllProductWatcher,
+  getSingleProductWatcher,
 } from "./Watchers/Seller.Product.Watcher";
 import {
   SellerProfileWatcher,
@@ -13,6 +14,7 @@ export function* rootSaga() {
     getAllProductWatcher(),
     SellerProfileWatcher(),
     SellerUpdateProfileWatcher(),
+    getSingleProductWatcher(),
   ];
 
   yield all(arr);

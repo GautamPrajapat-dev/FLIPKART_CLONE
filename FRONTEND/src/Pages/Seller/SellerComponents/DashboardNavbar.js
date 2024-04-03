@@ -68,7 +68,7 @@ const DashboardNavbar = ({ name, subname }) => {
                   </Link>
                 </li>
                 <li>
-                  <Link>Settings</Link>
+                  <Link to="/">Home Page</Link>
                 </li>
                 <li>
                   <Button
