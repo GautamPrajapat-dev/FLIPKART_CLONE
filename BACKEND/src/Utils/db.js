@@ -2,7 +2,7 @@ const { default: mongoose } = require("mongoose");
 
 const db = async () => {
   try {
-    const api = process.env.URLLocal;
+    const api = process.env.URI;
     const clientOptions = {
       serverApi: { version: "1", strict: true, deprecationErrors: true },
     };
