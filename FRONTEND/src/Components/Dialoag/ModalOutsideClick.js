@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo } from "react";
 
 const ModalOutsideClick = ({
   id,
@@ -12,7 +12,7 @@ const ModalOutsideClick = ({
     <dialog id={id} className={`modal ${open} `}>
       <div className={`modal-box ${className}`}>
         {backdrop ? (
-          <form method="dialog">
+          <form method="dialog" className="">
             <div className="flex justify-between">
               <h3 className="text-lg font-bold">{title}</h3>
               <button className=" btn btn-sm btn-circle btn-ghost">X</button>
@@ -21,7 +21,7 @@ const ModalOutsideClick = ({
         ) : (
           <h3 className="text-lg font-bold">{title}</h3>
         )}
-        {children}
+        <div>{children}</div>
       </div>
       {!backdrop && (
         <form method="dialog" className="modal-backdrop">
@@ -32,7 +32,7 @@ const ModalOutsideClick = ({
   );
 };
 
-export default ModalOutsideClick;
+export default memo(ModalOutsideClick);
 
 // <div
 // className="btn btn-outline"

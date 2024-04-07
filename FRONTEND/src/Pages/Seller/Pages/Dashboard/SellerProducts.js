@@ -1,39 +1,42 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import DashBoardNavbar from "../../SellerComponents/DashboardNavbar";
 import { useDispatch, useSelector } from "react-redux";
 import { GET_ALL_PRODUCTS_SAGA } from "../../../../Stores/Slice/Seller.Product.Slice";
 import { IoArrowDown, IoArrowUp } from "react-icons/io5";
-import ProductDetails from "./ProductDetails/ProductDetails";
-import ModalOutsideClick from "../../../../Components/Dialoag/ModalOutsideClick";
-import { ToastContainer } from "react-toastify";
+
+import { Link } from "react-router-dom";
 
 const SellerProducts = () => {
-  // pagination
   const dispatch = useDispatch();
   const [currentPage, setCurrentPage] = useState(1);
   const [price, sePriceFilter] = useState("price");
   const [qty, seQtyFilter] = useState("qty");
   const [title, seTitleFilter] = useState("title");
   const [views, setViewsFilter] = useState("views");
-  const [product_id, setIDProduct] = useState("");
+  // const [product_id, setIDProduct] = useState("");
   const products = useSelector((state) => state.SellerProduct);
+
   const { isLoading } = useSelector((state) => state.loading);
-  const handleOnPrev = () => {
+  //MARK:Pagination
+  console.log("render perent -----------------------------------");
+  const handleOnPrev = useCallback(() => {
     if (currentPage === 1) {
       setCurrentPage(currentPage);
     } else {
       setCurrentPage(currentPage - 1);
     }
-  };
-  const handleOnNext = () => {
+  }, [currentPage]);
+
+  const handleOnNext = useCallback(() => {
     if (products?.products?.totalPage > currentPage) {
       setCurrentPage(currentPage + 1);
     }
-  };
-  const handleOnShowDetailsClick = (id) => {
-    setIDProduct(id);
-    document.getElementById("show_sellerProductDetails").showModal();
-  };
+  }, [currentPage, products?.products?.totalPage]);
+  // const handleOnShowDetailsClick = useCallback((id) => {
+  //   setIDProduct(id);
+  //   document.getElementById("show_sellerProductDetails").showModal();
+  // }, []);
+
   useEffect(() => {
     const config = {
       currentPage,
@@ -43,11 +46,23 @@ const SellerProducts = () => {
       views,
     };
 
-    dispatch(GET_ALL_PRODUCTS_SAGA(config));
-  }, [dispatch, currentPage, price, qty, views, title]);
+    if (products?.products?.products?.length !== 0) {
+      dispatch(GET_ALL_PRODUCTS_SAGA(config));
+    }
+    return () => dispatch(GET_ALL_PRODUCTS_SAGA());
+  }, [
+    dispatch,
+    products?.products?.products?.length,
+    currentPage,
+    price,
+    qty,
+    views,
+    title,
+  ]);
+  // MARK:return
   return (
     <>
-      <div className="px-3">
+      <div className="md:px-3 ">
         <DashBoardNavbar name="All Products" />
 
         {/* SEE ALL PRODUCT  */}
@@ -55,11 +70,11 @@ const SellerProducts = () => {
           {/* FILTER */}
           <div className="w-full my-7">
             <div>
-              <ul className="flex gap-4 ">
+              <ul className="flex flex-wrap gap-4 ">
                 {title === "-title" ? (
                   <li
                     onClick={() => seTitleFilter("title")}
-                    className="w-32 text-white hover:bg-personal-800 btn btn-square bg-daintree-400"
+                    className="text-white w-28 hover:bg-personal-800 btn btn-square bg-daintree-400"
                   >
                     A-Z
                     <span>
@@ -69,7 +84,7 @@ const SellerProducts = () => {
                 ) : (
                   <li
                     onClick={() => seTitleFilter("-title")}
-                    className="w-32 text-white hover:bg-personal-800 btn btn-square bg-daintree-400"
+                    className="text-white w-28 hover:bg-personal-800 btn btn-square bg-daintree-400"
                   >
                     A-Z
                     <span>
@@ -81,7 +96,7 @@ const SellerProducts = () => {
                   <li>
                     <span
                       onClick={() => sePriceFilter("price")}
-                      className="w-32 text-white btn hover:bg-personal-800 btn-square bg-daintree-400"
+                      className="text-white w-28 btn hover:bg-personal-800 btn-square bg-daintree-400"
                     >
                       Price
                       <span>
@@ -93,7 +108,7 @@ const SellerProducts = () => {
                   <li>
                     <span
                       onClick={() => sePriceFilter("-price")}
-                      className="w-32 text-white btn hover:bg-personal-800 btn-square bg-daintree-400"
+                      className="text-white w-28 btn hover:bg-personal-800 btn-square bg-daintree-400"
                     >
                       Prie
                       <span>
@@ -106,7 +121,7 @@ const SellerProducts = () => {
                   <li>
                     <span
                       onClick={() => seQtyFilter("qty")}
-                      className="w-32 text-white btn hover:bg-personal-800 bg-daintree-400"
+                      className="text-white w-28 btn hover:bg-personal-800 bg-daintree-400"
                     >
                       Qty
                       <span>
@@ -118,7 +133,7 @@ const SellerProducts = () => {
                   <li>
                     <span
                       onClick={() => seQtyFilter("-qty")}
-                      className="w-32 text-white btn hover:bg-personal-800 bg-daintree-400"
+                      className="text-white w-28 btn hover:bg-personal-800 bg-daintree-400"
                     >
                       Qty
                       <span>
@@ -131,7 +146,7 @@ const SellerProducts = () => {
                   <li>
                     <span
                       onClick={() => setViewsFilter("views")}
-                      className="w-32 text-white btn hover:bg-personal-800 bg-daintree-400"
+                      className="text-white w-28 btn hover:bg-personal-800 bg-daintree-400"
                     >
                       views
                       <span>
@@ -143,7 +158,7 @@ const SellerProducts = () => {
                   <li>
                     <span
                       onClick={() => setViewsFilter("-views")}
-                      className="w-32 text-white btn hover:bg-personal-800 bg-daintree-400"
+                      className="text-white w-28 btn hover:bg-personal-800 bg-daintree-400"
                     >
                       views
                       <span>
@@ -155,40 +170,29 @@ const SellerProducts = () => {
               </ul>
             </div>
           </div>
-
-          {/* allproducts in table  */}
-          <div>
+          {/* MARK:allproducts in table */}
+          <div className="">
             <div className="overflow-x-auto">
-              <table className="table">
+              <table className="table table-zebra lg:table-lg table-xs">
                 {/* head */}
-                <thead>
+                <thead className="">
                   <tr>
-                    <th>
-                      <label>
-                        <input type="checkbox" className="checkbox" />
-                      </label>
-                    </th>
                     <th>Title</th>
                     <th>view</th>
                     <th>Quantity</th>
-                    <th></th>
+                    <th>Price</th>
+                    <th>Brand Logo</th>
+                    <th>Details</th>
                   </tr>
                 </thead>
 
-                <tbody className="relative">
+                <tbody className="relative ">
                   {/* row 1 */}
                   {isLoading
-                    ? [1, 2, 3].map((val, i) => {
+                    ? products?.products?.products &&
+                      products?.products?.products.map((val, i) => {
                         return (
-                          <tr key={i} className="">
-                            <th>
-                              <label className="">
-                                <input
-                                  type=""
-                                  className="rounded-lg pointer-events-none focus:ring-0 checkbox skeleton bg-black/20"
-                                />
-                              </label>
-                            </th>
+                          <tr key={i} className="table-row">
                             <td>
                               <div className="flex items-center gap-3">
                                 <div className="avatar animate-pulse bg-black/20 skeleton">
@@ -208,18 +212,28 @@ const SellerProducts = () => {
                               <span className="w-12 rounded-lg bg-black/20 skeleton">
                                 ....................
                               </span>
-                              {/* <br />
-                   <span className="badge badge-ghost badge-sm">
-                     Desktop Support Technician
-                   </span> */}
                             </td>
                             <td className="text-transparent">
                               <span className="w-12 rounded-lg animate-pulse bg-black/20 skeleton">
                                 ....................
                               </span>
                             </td>
+                            <td className="text-transparent">
+                              <span className="w-12 rounded-lg animate-pulse bg-black/20 skeleton">
+                                ....................
+                              </span>
+                            </td>
+                            <td className="text-transparent">
+                              <div className="flex items-center gap-3 animate-pulse bg-black/20 skeleton">
+                                <div className="avatar">
+                                  <div className="w-12 h-12 mask mask-squircle">
+                                    .
+                                  </div>
+                                </div>
+                              </div>
+                            </td>
                             <th>
-                              <button className="text-transparent animate-pulse bg-black/20 btn btn-ghost btn-xs skeleton">
+                              <button className="text-transparent animate-pulse bg-black/20 btn btn-outline btn-xs skeleton">
                                 details
                               </button>
                             </th>
@@ -230,17 +244,12 @@ const SellerProducts = () => {
                       products?.products?.products.map((product, i) => {
                         return (
                           <tr key={i}>
-                            <th>
-                              <label>
-                                <input type="checkbox" className="checkbox" />
-                              </label>
-                            </th>
                             <td>
                               <div className="flex items-center gap-3">
                                 <div className="avatar">
                                   <div className="w-12 h-12 mask mask-squircle">
                                     <img
-                                      src={product.thumbnail.img}
+                                      src={product?.thumbnail?.img}
                                       alt="Avatar Tailwind CSS Component"
                                     />
                                   </div>
@@ -255,52 +264,56 @@ const SellerProducts = () => {
                                 </div>
                               </div>
                             </td>
+                            <td>{product?.views} Views</td>
+                            <td>{product?.qty}</td>
+                            <td>{product?.price?.mrp} /-</td>
+
                             <td>
-                              {product.views} Views
-                              {/* <br />
-                        <span className="badge badge-ghost badge-sm">
-                          Desktop Support Technician
-                        </span> */}
+                              <div className="flex items-center gap-3">
+                                <div className="avatar">
+                                  <div className="w-12 h-12 mask mask-squircle">
+                                    <img
+                                      src={product?.brand?.logo?.img}
+                                      alt="brand Logo"
+                                    />
+                                  </div>
+                                </div>
+                              </div>
                             </td>
-                            <td>{product.qty}</td>
-                            <th>
-                              <button
+                            <td>
+                              {/* <button
                                 // onClick={() => setShowDetails(true)}
                                 onClick={() =>
                                   handleOnShowDetailsClick(product._id)
                                 }
-                                className="btn btn-ghost btn-xs"
+                                className="btn btn-outline btn-xs"
                               >
                                 details
-                              </button>
-                            </th>
+                              </button> */}
+                              <Link
+                                to={`/dashboard/products/${product._id}`}
+                                className="btn btn-outline btn-xs"
+                              >
+                                Details
+                              </Link>
+                            </td>
                           </tr>
                         );
                       })}
                 </tbody>
-                {/* foot */}
-                <tfoot>
-                  <tr>
-                    <th></th>
-                    <th>Name</th>
-                    <th>Job</th>
-                    <th>Favorite Color</th>
-                    <th></th>
-                  </tr>
-                </tfoot>
               </table>
-              <ModalOutsideClick
-                backdrop={true}
+              {/* <ModalOutsideClick
+                backdrop={false}
                 className="w-11/12 max-w-5xl"
                 id="show_sellerProductDetails"
                 title="Product Details"
               >
                 <ProductDetails id={product_id} />
-              </ModalOutsideClick>
+              </ModalOutsideClick> */}
             </div>
           </div>
         </section>
-        <div className="w-60">
+        <div className="flex justify-end gap-4">
           <div className="grid grid-cols-2 join">
             <button
               className="join-item btn btn-outline"

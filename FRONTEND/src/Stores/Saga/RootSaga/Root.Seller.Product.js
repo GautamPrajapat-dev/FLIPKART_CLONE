@@ -3,18 +3,26 @@ import {
   AddNewProductWatcher,
   getAllProductWatcher,
   getSingleProductWatcher,
-} from "./Watchers/Seller.Product.Watcher";
+  updateBrandLogoWatcher,
+  updateImagesWatcher,
+  updateSellerProductWatcher,
+  updateThumbnailWatcher,
+} from "../Watchers/Seller.Product.Watcher";
 import {
   SellerProfileWatcher,
   SellerUpdateProfileWatcher,
-} from "./Watchers/Seller.Auth.Watcher";
-export function* rootSaga() {
+} from "../Watchers/Seller.Auth.Watcher";
+export function* sellerProductsRootSaga() {
   const arr = [
     AddNewProductWatcher(),
     getAllProductWatcher(),
     SellerProfileWatcher(),
     SellerUpdateProfileWatcher(),
     getSingleProductWatcher(),
+    updateSellerProductWatcher(),
+    updateBrandLogoWatcher(),
+    updateThumbnailWatcher(),
+    updateImagesWatcher(),
   ];
 
   yield all(arr);

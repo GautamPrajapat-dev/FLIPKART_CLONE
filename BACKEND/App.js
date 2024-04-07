@@ -8,6 +8,7 @@ const SellerRoutes = require("./src/Routes/Seller.Auth.Routes");
 const helmet = require("helmet");
 const SellerProductRoutes = require("./src/Routes/Seller.Product.Routes");
 const ProductRouter = require("./src/Routes/Public.Product.Routes");
+const config = require("./src/Utils/config");
 
 const app = express();
 app.use(helmet());
@@ -40,8 +41,9 @@ app.use("/seller", SellerRoutes);
 app.use("/seller/products/v1", SellerProductRoutes);
 
 // listion server on port 3031
+
 db().then(() => {
-  app.listen(process.env.PORT, () =>
+  app.listen(config.get("_PORT"), () =>
     console.log(` app listening on port http://localhost:${process.env.PORT}`)
   );
 });

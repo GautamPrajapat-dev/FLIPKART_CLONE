@@ -1,7 +1,8 @@
 import { configureStore } from "@reduxjs/toolkit";
 import reducer from "./CombineReducers";
 import createSagaMiddleware from "redux-saga";
-import { rootSaga } from "./Saga/Root.Saga";
+import { rootSellerAuthSaga } from "./Saga/RootSaga/Root.Seller.Auth";
+import { sellerProductsRootSaga } from "./Saga/RootSaga/Root.Seller.Product";
 const sagaMiddleware = createSagaMiddleware();
 const Store = configureStore({
   reducer,
@@ -10,7 +11,8 @@ const Store = configureStore({
       serializableCheck: false,
     }).concat(sagaMiddleware),
 });
-sagaMiddleware.run(rootSaga);
+sagaMiddleware.run(rootSellerAuthSaga);
+sagaMiddleware.run(sellerProductsRootSaga);
 
 export default Store;
 

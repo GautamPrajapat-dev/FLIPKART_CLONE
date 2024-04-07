@@ -20,8 +20,8 @@ SellerProductRoutes.route("/products").get(
 );
 SellerProductRoutes.route("/products/:id")
   .get(ProductValidation.ValidUser, SellerProduct.getProduct)
-  .delete(ProductValidation.ValidUser, SellerProduct.deleteProduct)
-  .put(ProductValidation.ValidUser, SellerProduct.updateProduct);
+  .put(ProductValidation.ValidUser, SellerProduct.updateProduct)
+  .delete(ProductValidation.ValidUser, SellerProduct.deleteProduct);
 
 SellerProductRoutes.route("/brandlogo/:id").put(
   upload.single("brandLogo"),

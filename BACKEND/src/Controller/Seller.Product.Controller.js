@@ -187,7 +187,7 @@ const SellerProduct = {
     const count = await ProductSchema.find({
       sellerId: res?.Seller?.sellerId,
     }).countDocuments();
-    const total = Math.ceil(count / 3);
+    const total = Math.ceil(count / req.query.limit || 3);
 
     if (products) {
       if (products.length === 0) {
@@ -213,7 +213,20 @@ const SellerProduct = {
     }
   }),
   getProduct: asyncHandler(async (req, res) => {
-    const product = await ProductSchema.findById({ _id: req.params.id });
+    const product = await ProductSchema.findById(
+      { _id: req.params.id },
+      {
+        thumbnail: {
+          public_id: 0,
+        },
+        brand: {
+          logo: {
+            public_id: 0,
+          },
+        },
+        images: { public_id: 0, _id: 0 },
+      }
+    );
     if (product.sellerId === res.Seller.sellerId || product.sellerId !== null) {
       if (!product) {
         return res.status(400).json({
@@ -236,13 +249,11 @@ const SellerProduct = {
   updateProduct: asyncHandler(async (req, res) => {
     const { title, qty, description, category, features, price, rating } =
       req.body;
-
-    console.log(req.body);
     // upload product on cloudinary using uploader method and save in public/avatar folder
     const sellerFind = await SellerAuhSchema.findById({
       _id: res.Seller.sellerId,
     });
-    console.log(sellerFind);
+
     if (!sellerFind) {
       return res.status(401).json({
         status: false,
@@ -253,31 +264,30 @@ const SellerProduct = {
     const productFind = await ProductSchema.findById({
       _id: req.params.id,
     });
+
     const brand = {
       public_id: productFind.brand.logo.public_id,
       img: productFind.brand.logo.img,
     };
     req.body.brand.logo = brand;
-    console.log(req.body);
 
-    const matchTitle = await ProductSchema.findOne({
-      title: { $regex: `^${title}$`, $options: "i" },
-    });
+    // const matchTitle = await ProductSchema.findOne({
+    //   title: { $regex: `^${title}$`, $options: "i" },
+    // });
+    // if (matchTitle) {
+    //   res.status(406).json({
+    //     status: false,
+    //     errorMessage: "Title Hash Been Matched Another Product",
+    //   });
+    //   return false;
+    // }
 
-    if (matchTitle) {
-      res.status(406).json({
-        status: false,
-        errorMessage: "Title Hash Been Matched Another Product",
-      });
-      return false;
-    }
-
+    // sellerId: res.Seller.sellerId,
     const product = await ProductSchema.updateOne(
       {
         _id: req.params.id,
       },
       {
-        sellerId: res.Seller.sellerId,
         title: title,
         qty: qty,
         description: description,
@@ -286,13 +296,13 @@ const SellerProduct = {
         price: price,
         rating: rating,
         brand: req.body.brand,
-      }
+      },
+      { new: true }
     );
     if (product) {
       res.status(200).json({
         status: true,
         successMessage: "product Update successfully",
-        product: product,
       });
     } else {
       res.status(400).json({
@@ -367,6 +377,7 @@ const SellerProduct = {
           errorMessage: "not updated",
         });
       }
+
       const brandlogo = await ProductSchema.updateOne(
         {
           _id: productId._id,
@@ -374,7 +385,7 @@ const SellerProduct = {
         {
           $set: {
             brand: {
-              name: req.body.brand.name,
+              name: productId.brand.name,
               logo: {
                 public_id: product.public_id,
                 img: product.secure_url,
@@ -388,13 +399,13 @@ const SellerProduct = {
       );
       if (brandlogo) {
         return res.status(200).json({
-          status: false,
-          errorMessage: "Logo Has Been Update",
+          status: true,
+          successMessage: "Brand Logo Has Been Update",
         });
       } else {
         return res.status(404).json({
           status: false,
-          errorMessage: "not updated",
+          errorMessage: "Not updated",
         });
       }
     }
@@ -414,7 +425,7 @@ const SellerProduct = {
       productId.thumbnail.public_id
     );
 
-    if (!deleteThumbnail) {
+    if (!deleteImage) {
       return res.status(404).json({
         status: false,
         errorMessage: "not updated",
@@ -449,8 +460,8 @@ const SellerProduct = {
       );
       if (thumbnail) {
         return res.status(200).json({
-          status: false,
-          errorMessage: "Thumbnail Has Been Update",
+          status: true,
+          successMessage: "Thumbnail Has Been Update",
         });
       } else {
         return res.status(404).json({
@@ -471,7 +482,6 @@ const SellerProduct = {
         errorMessage: "logo not found",
       });
     }
-    console.log(productId);
 
     if (!productId) {
       return res.status(404).json({
@@ -484,7 +494,6 @@ const SellerProduct = {
       );
       const arr = [];
       for (const files of file) {
-        console.log("files hai kya" + files);
         const { path } = files;
 
         const uploadUrl = await cloudinary.uploader.upload(path, {
@@ -504,7 +513,6 @@ const SellerProduct = {
           });
         }
       }
-      console.log(arr);
       if (!arr) {
         return res.status(404).json({
           status: false,
@@ -526,8 +534,8 @@ const SellerProduct = {
       );
       if (image) {
         return res.status(200).json({
-          status: false,
-          errorMessage: "Logo Has Been Update",
+          status: true,
+          successMessage: "Logo Has Been Update",
         });
       } else {
         return res.status(404).json({

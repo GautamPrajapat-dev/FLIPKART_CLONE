@@ -114,7 +114,7 @@ export const getAllProduct = async ({
 }) => {
   try {
     const res = await axios?.get(
-      `${URL}/products/v1/products/?fields=price,title,qty,thumbnail,category,views&page=${currentPage}&sort=${views},${title},${qty}`,
+      `${URL}/products/v1/products/?fields=price,title,qty,thumbnail,brand,category,views&page=${currentPage}&limit=5&sort=${views},${title},${qty}`,
       config
     );
     const data = await res.data;
@@ -138,7 +138,6 @@ export const getAllProduct = async ({
 };
 
 export const getSingleProductService = async (id) => {
-  // http://localhost:3031/seller/products/v1/products/
   if (!id) {
     return;
   }
@@ -148,5 +147,154 @@ export const getSingleProductService = async (id) => {
     return data;
   } else {
     console.log(data.errorMessage);
+  }
+};
+export const updateProductService = async ({ id, formData }) => {
+  if (!id) {
+    return;
+  }
+  const res = await axios?.put(`${URL}/products/v1/products/${id}`, formData, {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  const data = await res.data;
+
+  if (data.status === true) {
+    toast.success(data.successMessage, {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "dark",
+    });
+    return data;
+  } else {
+    toast.warn(data.errorMessage, {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "dark",
+    });
+  }
+};
+export const updateBrandLogoService = async ({ id, brandLogo }) => {
+  if (!id) {
+    return;
+  }
+  const res = await axios?.put(
+    `${URL}/products/v1/brandlogo/${id}`,
+    brandLogo,
+    config
+  );
+
+  const data = await res.data;
+
+  if (data.status === true) {
+    toast.success(data.successMessage, {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "dark",
+    });
+    return data;
+  } else {
+    toast.warn(data.errorMessage, {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "dark",
+    });
+  }
+};
+export const updateImageService = async ({ id, images }) => {
+  if (!id) {
+    return;
+  }
+  const res = await axios?.put(
+    `${URL}/products/v1/updateImage/${id}`,
+    images,
+    config
+  );
+
+  const data = await res.data;
+
+  if (data.status === true) {
+    toast.success(data.successMessage, {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "dark",
+    });
+    return data;
+  } else {
+    toast.warn(data.errorMessage, {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "dark",
+    });
+  }
+};
+export const updateThumbnailService = async ({ id, thumb }) => {
+  if (!id) {
+    return;
+  }
+  const res = await axios?.put(
+    `${URL}/products/v1/thumbnail/${id}`,
+    thumb,
+    config
+  );
+
+  const data = await res.data;
+
+  if (data.status === true) {
+    toast.success(data.successMessage, {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "dark",
+    });
+    return data;
+  } else {
+    toast.warn(data.errorMessage, {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "dark",
+    });
   }
 };

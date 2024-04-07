@@ -1,4 +1,4 @@
-import React, { Suspense } from "react";
+import React from "react";
 import Main from "./Pages/Public/Main";
 import { Route, Routes } from "react-router-dom";
 import SignUp from "./Pages/Public/page/SignUp/SignUp";
@@ -18,53 +18,39 @@ import SellerAddProducts from "./Pages/Seller/Pages/Dashboard/SellerAddProducts.
 import SellerProducts from "./Pages/Seller/Pages/Dashboard/SellerProducts.js";
 import SellerProfile from "./Pages/Seller/Pages/Dashboard/Profile/SellerProfile.js";
 import NotFound from "./Components/404/index.js";
-// import { lazy } from "react";
+import ProductDetails from "./Pages/Seller/Pages/Dashboard/ProductDetails/ProductDetails.js";
 
 const App = () => {
   return (
-    <div>
-      <Suspense
-        fallback={
-          <div className="flex items-center justify-center w-full h-screen text-3xl text-black">
-            Loading
-          </div>
-        }
-      >
-        <Routes>
-          <Route path="/" element={<Main />}>
-            <Route index element={<Home />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/cart" element={<Cart />} />
-            <Route path="products/:products" element={<Products />}></Route>
-            <Route path="/signup" element={<SignUp />} />
-            <Route
-              path="/products/:SingleProduct"
-              element={<SingleProduct />}
-            />
-          </Route>
-          <Route path="seller" element={<AdminLayout />}>
-            <Route index element={<SellOnlineMainPage />} />
-            <Route path="signup" element={<Signup />} />
-            <Route path="login" element={<LoginSeller />} />
-          </Route>
-          <Route path="/dashboard" element={<DashBordLayout />}>
-            <Route
-              index
-              path="/dashboard/main"
-              element={<DashbordMainPage />}
-            />
-            <Route path="/dashboard/inbox" element={<SellerInbox />} />
-            <Route path="/dashboard/products" element={<SellerProducts />} />
-            <Route
-              path="/dashboard/addnewproducts"
-              element={<SellerAddProducts />}
-            />
-            <Route path="/dashboard/profile" element={<SellerProfile />} />
-          </Route>
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </Suspense>
-    </div>
+    <>
+      <Routes>
+        <Route path="/" element={<Main />}>
+          <Route index element={<Home />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/cart" element={<Cart />} />
+          <Route path="products/:products" element={<Products />}></Route>
+          <Route path="/signup" element={<SignUp />} />
+          <Route path="/products/:SingleProduct" element={<SingleProduct />} />
+        </Route>
+        <Route path="/seller" element={<AdminLayout />}>
+          <Route index element={<SellOnlineMainPage />} />
+          <Route path="signup" element={<Signup />} />
+          <Route path="login" element={<LoginSeller />} />
+        </Route>
+        <Route path="/dashboard" element={<DashBordLayout />}>
+          <Route index path="/dashboard/main" element={<DashbordMainPage />} />
+          <Route path="/dashboard/inbox" element={<SellerInbox />} />
+          <Route path="/dashboard/products" element={<SellerProducts />} />
+          <Route path="/dashboard/products/:id" element={<ProductDetails />} />
+          <Route
+            path="/dashboard/addnewproducts"
+            element={<SellerAddProducts />}
+          />
+          <Route path="/dashboard/profile" element={<SellerProfile />} />
+        </Route>
+        <Route path="*" element={<NotFound />} />
+      </Routes>
+    </>
   );
 };
 

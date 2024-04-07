@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import DashBoardNavbar from "../../SellerComponents/DashboardNavbar";
 import FormInputIcon from "../../../../Components/Inputs/FormInputIcon";
 import { IoMailOutline } from "react-icons/io5";
@@ -39,11 +39,14 @@ const SellerAddProducts = () => {
   const handleThumbnail = (e) => {
     SetThumbnail(e.target.files[0]);
   };
-  const handleOnChange = (e) => {
-    const name = e.target.name;
-    const value = e.target.value;
-    setProduct({ ...product, [name]: value });
-  };
+  const handleOnChange = useCallback(
+    (e) => {
+      const name = e.target.name;
+      const value = e.target.value;
+      setProduct({ ...product, [name]: value });
+    },
+    [product]
+  );
   const uploadMultipleFiles = (e) => {
     SetImages(e.target.files);
     if (Array.from(e.target.files).length > 4) {

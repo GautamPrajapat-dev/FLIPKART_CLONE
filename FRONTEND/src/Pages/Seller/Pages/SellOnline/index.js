@@ -6,7 +6,6 @@ const SellOnlineMainPage = () => {
   const dispatch = useDispatch();
   const profile = useSelector((state) => state.Seller.profile);
   const navigate = useNavigate();
-  console.log(profile.status);
   useEffect(() => {
     if (profile?.status === true) {
       navigate("/dashboard/main");
