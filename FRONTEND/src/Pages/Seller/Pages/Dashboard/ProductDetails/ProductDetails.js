@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
+  DELETE_SELLER_PRODUCT_SAGA,
   GET_SINGLE_PRODUCT_SAGA,
   UPDATE_SELLER_BRAND_LOGO_SAGA,
   UPDATE_SELLER_MULTIPLE_IMAGES_SAGA,
@@ -10,7 +11,7 @@ import {
 import FormInput from "../../../../../Components/Inputs/FormInput";
 import { ReactSearchAutocomplete } from "react-search-autocomplete";
 import DashboardNavbar from "../../../SellerComponents/DashboardNavbar";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import ModalOutsideClick from "../../../../../Components/Dialoag/ModalOutsideClick";
 import { ToastContainer } from "react-toastify";
 
@@ -88,15 +89,18 @@ const ProductDetails = () => {
 
   const { id } = useParams();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [model, setOpenModel] = useState(false);
 
   const product = useSelector((state) => state?.SellerProduct?.product);
+
   const brand = useSelector((state) => state?.SellerProduct);
   const { isLoading } = useSelector((state) => state?.loading);
 
   const [multipleImage, setMultipleImage] = useState([]);
   const [multipleImageUrl, setMultipleImageURL] = useState([]);
   const [multipleImageModel, setMultipleImageModel] = useState(false);
+  const [showDeleteModal, setShowDeletModal] = useState(false);
   const [subCategoryVal, setSubCategoryVal] = useState("");
   const [CategoryVal, setCategoryVal] = useState("");
   const title = useRef(null);
@@ -195,7 +199,8 @@ const ProductDetails = () => {
   const [brandLogoImgLink, setBrandLogoImg] = useState("");
   const updateBrandLogo = (e) => {
     setBrandLogo(e.target.files[0]);
-    setBrandLogoImg(URL.createObjectURL(e.target.files[0]));
+    const image = e.target.files[0];
+    setBrandLogoImg(window.URL.createObjectURL(image));
   };
   const UpdateBrandLogo = () => {
     const brandLogo = new FormData();
@@ -216,6 +221,10 @@ const ProductDetails = () => {
     thumb.append("thumbnail", thubnailSeller);
     dispatch(UPDATE_SELLER_THUMBNAIL_SAGA({ id, thumb }));
   };
+
+  const handleOnProductDelete = () => {
+    dispatch(DELETE_SELLER_PRODUCT_SAGA(id));
+  };
   useEffect(() => {
     if (brand?.Brand_logo?.status === true) {
       setOpenModel(false);
@@ -229,9 +238,17 @@ const ProductDetails = () => {
       setMultipleImageModel(false);
       dispatch(GET_SINGLE_PRODUCT_SAGA(id));
     }
+    if (brand?.delete?.status === true) {
+      navigate("/dashboard/products");
+      setShowDeletModal(false);
+      dispatch(GET_SINGLE_PRODUCT_SAGA(id));
+    }
+    return () => dispatch(DELETE_SELLER_PRODUCT_SAGA());
   }, [
     brand?.Brand_logo?.status,
     id,
+    navigate,
+    brand?.delete?.status,
     brand?.thumbnail?.status,
     brand?.Images?.status,
     dispatch,
@@ -592,14 +609,87 @@ const ProductDetails = () => {
                   </ModalOutsideClick>
                 </div>
               </div>
-              {/*MARK:Add product Btn */}
-              <div
-                onClick={handleOnUpdateDetails}
-                children="Add Product "
-                className="py-2 btn btn-neutral"
-              >
-                Add Product
+              <div className="flex gap-3 ">
+                {/*MARK:Add product Btn */}
+                <button
+                  onClick={handleOnUpdateDetails}
+                  children=" Add Product "
+                  className="flex-1 py-2 btn btn-neutral"
+                >
+                  {isLoading ? (
+                    <span className="animate-pulse">Updating...</span>
+                  ) : (
+                    "Update"
+                  )}
+                </button>
+
+                <button
+                  onClick={() => setShowDeletModal(true)}
+                  children="Add Product "
+                  className="py-2 text-white bg-red-700 btn hover:bg-personal-900"
+                >
+                  Delete Product
+                </button>
               </div>
+              <ModalOutsideClick open={showDeleteModal ? "modal-open" : ""}>
+                <div className="relative z-10">
+                  <div class="bg-white  sm:p-6 sm:pb-4">
+                    <div class="sm:flex sm:items-start">
+                      <div class="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10">
+                        <svg
+                          class="h-6 w-6 text-red-600"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke-width="1.5"
+                          stroke="currentColor"
+                          aria-hidden="true"
+                        >
+                          <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z"
+                          />
+                        </svg>
+                      </div>
+                      <div class="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
+                        <h3
+                          class="text-base font-semibold leading-6 text-gray-900"
+                          id="modal-title"
+                        >
+                          Delete This Product
+                        </h3>
+                        <div class="mt-2">
+                          <p class="text-sm text-gray-500">
+                            Are you sure you want to Delete your Product? All of
+                            your Product data will be permanently removed. This
+                            action cannot be undone.
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
+                    <button
+                      onClick={handleOnProductDelete}
+                      type="button"
+                      class="inline-flex w-full justify-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 sm:ml-3 sm:w-auto"
+                    >
+                      {isLoading ? (
+                        <span className="animate-pulse">Deleting...</span>
+                      ) : (
+                        "Delete Product"
+                      )}
+                    </button>
+                    <button
+                      onClick={() => setShowDeletModal(false)}
+                      type="button"
+                      class="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto"
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                </div>
+              </ModalOutsideClick>
             </div>
           </div>
         </section>
@@ -611,18 +701,24 @@ const ProductDetails = () => {
         open={model ? "modal-open" : ""}
       >
         <div className="flex flex-col gap-4">
-          <form className="flex items-center gap-4 space-x-6">
+          <form className="flex items-center justify-center gap-6 space-x-6">
             <div className="avatar ">
-              <div className="w-32">
-                <img
-                  className="object-cover w-16 h-16 rounded-full "
-                  src={
-                    brandLogoImgLink !== ""
-                      ? brandLogoImgLink
-                      : "https://cdn.icon-icons.com/icons2/3214/PNG/512/cloud_file_upload_server_icon_196427.png"
-                  }
-                  alt="update_profile"
-                />
+              <div className="w-32 h-auto">
+                {isLoading ? (
+                  <div className="flex items-center justify-center w-24 h-[6.5rem]  p-3 rounded-full loading loading-ball">
+                    <div className=""></div>
+                  </div>
+                ) : (
+                  <img
+                    className="object-cover w-16 h-16 rounded-full "
+                    src={
+                      brandLogoImgLink !== ""
+                        ? brandLogoImgLink
+                        : "https://cdn.icon-icons.com/icons2/3214/PNG/512/cloud_file_upload_server_icon_196427.png"
+                    }
+                    alt="update_profile"
+                  />
+                )}
               </div>
             </div>
             <label className="block">

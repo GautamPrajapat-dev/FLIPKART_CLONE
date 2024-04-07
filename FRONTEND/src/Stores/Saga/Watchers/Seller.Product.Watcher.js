@@ -1,6 +1,7 @@
 import { takeLatest } from "redux-saga/effects";
 import {
   AddNewProductSellerSaga,
+  DELETE_SELLER_PRODUCT_SAGA,
   GET_ALL_PRODUCTS_SAGA,
   GET_SINGLE_PRODUCT_SAGA,
   UPDATE_SELLER_BRAND_LOGO_SAGA,
@@ -14,6 +15,7 @@ import {
   UpdateProductHandler,
   UpdateThumbnailHandler,
   addNewProductHandler,
+  delelteProductHandler,
   getProductHandler,
   getSingleProductHandler,
 } from "../Handler/Seller.Product.Handler";
@@ -41,4 +43,7 @@ export function* updateImagesWatcher() {
     UPDATE_SELLER_MULTIPLE_IMAGES_SAGA.type,
     UpdateImagesHandler
   );
+}
+export function* DeleteSellerProductWatcher() {
+  yield takeLatest(DELETE_SELLER_PRODUCT_SAGA.type, delelteProductHandler);
 }

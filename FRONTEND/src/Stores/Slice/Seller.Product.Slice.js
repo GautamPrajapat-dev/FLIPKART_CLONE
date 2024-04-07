@@ -9,6 +9,7 @@ const SellerProductSlice = createSlice({
     Brand_logo: {},
     thumbnail: {},
     Images: {},
+    delete: {},
   },
 
   reducers: {
@@ -38,6 +39,10 @@ const SellerProductSlice = createSlice({
     UPDATE_SELLER_MULTIPLE_IMAGES_REDUX: (state, action) => {
       state.Images = action.payload;
     },
+    DELETE_SELLER_PRODUCT_SAGA: (state, action) => {},
+    DELETE_SELLER_PRODUCT_REDUX: (state, action) => {
+      state.delete = action.payload;
+    },
   },
 });
 export const {
@@ -55,5 +60,7 @@ export const {
   UPDATE_SELLER_MULTIPLE_IMAGES_SAGA,
   UPDATE_SELLER_THUMBNAIL_REDUX,
   UPDATE_SELLER_THUMBNAIL_SAGA,
+  DELETE_SELLER_PRODUCT_SAGA,
+  DELETE_SELLER_PRODUCT_REDUX,
 } = SellerProductSlice.actions;
 export default SellerProductSlice.reducer;

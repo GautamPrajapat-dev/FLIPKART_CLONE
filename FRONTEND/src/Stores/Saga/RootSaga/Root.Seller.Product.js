@@ -1,6 +1,7 @@
 import { all } from "redux-saga/effects";
 import {
   AddNewProductWatcher,
+  DeleteSellerProductWatcher,
   getAllProductWatcher,
   getSingleProductWatcher,
   updateBrandLogoWatcher,
@@ -23,6 +24,7 @@ export function* sellerProductsRootSaga() {
     updateBrandLogoWatcher(),
     updateThumbnailWatcher(),
     updateImagesWatcher(),
+    DeleteSellerProductWatcher(),
   ];
 
   yield all(arr);

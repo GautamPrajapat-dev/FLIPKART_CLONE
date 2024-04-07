@@ -114,7 +114,7 @@ export const getAllProduct = async ({
 }) => {
   try {
     const res = await axios?.get(
-      `${URL}/products/v1/products/?fields=price,title,qty,thumbnail,brand,category,views&page=${currentPage}&limit=5&sort=${views},${title},${qty}`,
+      `${URL}/products/v1/products/?fields=price,title,qty,thumbnail,brand,category,views,updatedAt&page=${currentPage}&limit=5&sort=${views},${title},${qty}`,
       config
     );
     const data = await res.data;
@@ -270,6 +270,39 @@ export const updateThumbnailService = async ({ id, thumb }) => {
     thumb,
     config
   );
+
+  const data = await res.data;
+
+  if (data.status === true) {
+    toast.success(data.successMessage, {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "dark",
+    });
+    return data;
+  } else {
+    toast.warn(data.errorMessage, {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "dark",
+    });
+  }
+};
+export const deleteProductService = async (id) => {
+  if (!id) {
+    return;
+  }
+  const res = await axios?.delete(`${URL}/products/v1/products/${id}`, config);
 
   const data = await res.data;
 

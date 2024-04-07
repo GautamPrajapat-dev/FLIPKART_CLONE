@@ -1,5 +1,6 @@
 import { call, put } from "redux-saga/effects";
 import {
+  deleteProductService,
   getAllProduct,
   getSingleProductService,
   postNewProduct,
@@ -10,6 +11,7 @@ import {
 } from "../Services/Seller.Product.Services";
 import {
   AddNewProductRedux,
+  DELETE_SELLER_PRODUCT_REDUX,
   GET_SINGLE_PRODUCT_REDUX,
   UPDATE_SELLER_BRAND_LOGO_REDUX,
   UPDATE_SELLER_MULTIPLE_IMAGES_REDUX,
@@ -99,6 +101,19 @@ export function* UpdateImagesHandler(action) {
 
     const getData = yield call(updateImageService, data);
     yield put(UPDATE_SELLER_MULTIPLE_IMAGES_REDUX(getData));
+    yield put(stopLoading());
+  } catch (error) {
+    console.log(error);
+    yield put(stopLoading());
+  }
+}
+export function* delelteProductHandler(action) {
+  try {
+    yield put(startLoading());
+    const data = action?.payload;
+
+    const getData = yield call(deleteProductService, data);
+    yield put(DELETE_SELLER_PRODUCT_REDUX(getData));
     yield put(stopLoading());
   } catch (error) {
     console.log(error);

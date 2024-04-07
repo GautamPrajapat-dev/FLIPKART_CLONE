@@ -3,7 +3,7 @@ import DashBoardNavbar from "../../SellerComponents/DashboardNavbar";
 import { useDispatch, useSelector } from "react-redux";
 import { GET_ALL_PRODUCTS_SAGA } from "../../../../Stores/Slice/Seller.Product.Slice";
 import { IoArrowDown, IoArrowUp } from "react-icons/io5";
-
+import { ToastContainer } from "react-toastify";
 import { Link } from "react-router-dom";
 
 const SellerProducts = () => {
@@ -18,7 +18,7 @@ const SellerProducts = () => {
 
   const { isLoading } = useSelector((state) => state.loading);
   //MARK:Pagination
-  console.log("render perent -----------------------------------");
+
   const handleOnPrev = useCallback(() => {
     if (currentPage === 1) {
       setCurrentPage(currentPage);
@@ -62,6 +62,7 @@ const SellerProducts = () => {
   // MARK:return
   return (
     <>
+      <ToastContainer />
       <div className="md:px-3 ">
         <DashBoardNavbar name="All Products" />
 

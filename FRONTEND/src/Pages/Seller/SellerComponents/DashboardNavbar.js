@@ -35,7 +35,10 @@ const DashboardNavbar = ({ name, subname }) => {
       </div>
       <section className="items-center">
         <div className="flex items-center flex-1 gap-4 text-2xl ">
-          <button className="bg-transparent btn btn-circle">
+          <button
+            onClick={() => navigate("/dashboard/inbox")}
+            className="bg-transparent btn btn-circle"
+          >
             <div className="indicator">
               <BiMessage className="text-xl" />
 
@@ -51,10 +54,7 @@ const DashboardNavbar = ({ name, subname }) => {
                 className="btn btn-ghost btn-circle avatar"
               >
                 <div className="w-10 rounded-full">
-                  <img
-                    alt="Tailwind CSS Navbar component"
-                    src={profile?.user?.avatar?.path}
-                  />
+                  <img alt="Avatar" src={profile?.user?.avatar?.path} />
                 </div>
               </div>
               <ul
