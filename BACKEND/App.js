@@ -9,12 +9,20 @@ const helmet = require("helmet");
 const SellerProductRoutes = require("./src/Routes/Seller.Product.Routes");
 const ProductRouter = require("./src/Routes/Public.Product.Routes");
 const config = require("./src/Utils/config");
+const { Server } = require("socket.io");
+const { createServer } = require("http");
 
 const app = express();
 app.use(helmet());
 app.set("trust proxy", 1);
 app.use(express.urlencoded({ extended: false }));
 
+const httpServer = createServer(app);
+const io = new Server(httpServer);
+io.on("connection", (socket) => {
+  console.log(socket);
+  socket.emit("hellow", "world");
+});
 app.use(function (req, res, next) {
   res.set(
     "Cache-Control",
