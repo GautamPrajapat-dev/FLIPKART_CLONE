@@ -60,9 +60,11 @@ const SellerProducts = () => {
     title,
   ]);
   // MARK:return
+  console.log(products?.products?.products, "wfwfwfwe");
   return (
     <>
       <ToastContainer />
+
       <div className="md:px-3 ">
         <DashBoardNavbar name="All Products" />
 
@@ -173,7 +175,7 @@ const SellerProducts = () => {
           </div>
           {/* MARK:allproducts in table */}
           <div className="">
-            <div className="overflow-x-auto">
+            <div className="overflow-x-auto ">
               <table className="table table-zebra lg:table-lg table-xs">
                 {/* head */}
                 <thead className="">
@@ -187,10 +189,26 @@ const SellerProducts = () => {
                   </tr>
                 </thead>
 
-                <tbody className="relative ">
-                  {/* row 1 */}
-                  {isLoading
-                    ? products?.products?.products &&
+                {/* row 1 */}
+
+                {products?.products?.products === undefined &&
+                products?.products?.products === undefined ? (
+                  <tr className="justify-center ">
+                    <td className=""></td>
+                    <td></td>
+                    <td></td>
+                    <td className="">
+                      <img
+                        src="/image/emptyList.png"
+                        alt=""
+                        width={300}
+                        title="https://www.freepik.com/free-vector/hand-drawn-no-data-concept_55024598.htm#query=empty%20illustration&position=4&from_view=keyword&track=ais&uuid=5a57be2b-b6fb-4c9f-a966-701f8885f621"
+                      />
+                    </td>
+                  </tr>
+                ) : isLoading ? (
+                  <tbody className="relative ">
+                    {products?.products?.products &&
                       products?.products?.products.map((val, i) => {
                         return (
                           <tr key={i} className="table-row">
@@ -240,8 +258,11 @@ const SellerProducts = () => {
                             </th>
                           </tr>
                         );
-                      })
-                    : products?.products?.products &&
+                      })}
+                  </tbody>
+                ) : (
+                  <tbody className="relative ">
+                    {products?.products?.products &&
                       products?.products?.products.map((product, i) => {
                         return (
                           <tr key={i}>
@@ -301,7 +322,8 @@ const SellerProducts = () => {
                           </tr>
                         );
                       })}
-                </tbody>
+                  </tbody>
+                )}
               </table>
               {/* <ModalOutsideClick
                 backdrop={false}
@@ -314,23 +336,25 @@ const SellerProducts = () => {
             </div>
           </div>
         </section>
-        <div className="flex justify-end gap-4">
-          <div className="grid grid-cols-2 join">
-            <button
-              className="join-item btn btn-outline"
-              onClick={handleOnPrev}
-            >
-              Prev
-            </button>
+        {products?.products?.products && (
+          <div className="flex justify-end gap-4">
+            <div className="grid grid-cols-2 join">
+              <button
+                className="join-item btn btn-outline"
+                onClick={handleOnPrev}
+              >
+                Prev
+              </button>
 
-            <button
-              onClick={handleOnNext}
-              className="join-item btn btn-outline"
-            >
-              Next
-            </button>
+              <button
+                onClick={handleOnNext}
+                className="join-item btn btn-outline"
+              >
+                Next
+              </button>
+            </div>
           </div>
-        </div>
+        )}
       </div>
     </>
   );

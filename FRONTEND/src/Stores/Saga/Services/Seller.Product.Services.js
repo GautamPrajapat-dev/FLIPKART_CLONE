@@ -112,9 +112,10 @@ export const getAllProduct = async ({
   qty,
   title,
 }) => {
+  const pageNum = currentPage || 1;
   try {
     const res = await axios?.get(
-      `${URL}/products/v1/products/?fields=price,title,qty,thumbnail,brand,category,views,updatedAt&page=${currentPage}&limit=5&sort=${views},${title},${qty}`,
+      `${URL}/products/v1/products/?fields=price,title,qty,thumbnail,brand,category,views,updatedAt&page=${pageNum}&limit=5&sort=${views},${title},${qty},${price}`,
       config
     );
     const data = await res.data;

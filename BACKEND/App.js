@@ -11,6 +11,8 @@ const ProductRouter = require("./src/Routes/Public.Product.Routes");
 const config = require("./src/Utils/config");
 const { Server } = require("socket.io");
 const { createServer } = require("http");
+const NotificationRoutes = require("./src/Routes/Notification.Routes");
+const socketServer = require("./src/Utils/Socket.io.Server");
 
 const app = express();
 app.use(helmet());
@@ -18,11 +20,7 @@ app.set("trust proxy", 1);
 app.use(express.urlencoded({ extended: false }));
 
 const httpServer = createServer(app);
-const io = new Server(httpServer);
-io.on("connection", (socket) => {
-  console.log(socket);
-  socket.emit("hellow", "world");
-});
+
 app.use(function (req, res, next) {
   res.set(
     "Cache-Control",
@@ -47,11 +45,14 @@ app.use("/public", PublicRouter);
 app.use("/seller", SellerRoutes);
 // seller Routes
 app.use("/seller/products/v1", SellerProductRoutes);
-
+// Notificatios Routes
+app.use("/notificatios", NotificationRoutes);
 // listion server on port 3031
 
 db().then(() => {
-  app.listen(config.get("_PORT"), () =>
+  httpServer.listen(config.get("_PORT"), () =>
     console.log(` app listening on port http://localhost:${process.env.PORT}`)
   );
+  const io = new Server(httpServer);
+  socketServer(io);
 });

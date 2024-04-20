@@ -15,6 +15,14 @@ const productComment = new Schema({
   },
 });
 
+const Notification = new Schema({
+  title: { type: String },
+  read: { type: Boolean, default: false },
+  readAll: { type: Boolean, default: false },
+
+  userId: { type: Schema.Types.ObjectId, ref: "pulbicuser" },
+  productId: { type: Schema.Types.ObjectId, ref: "products" },
+});
 const schema = new Schema(
   {
     title: {
@@ -62,6 +70,9 @@ const schema = new Schema(
     views: {
       type: Number,
       default: 0,
+    },
+    notifications: {
+      type: Notification,
     },
   },
   { timestamps: true }

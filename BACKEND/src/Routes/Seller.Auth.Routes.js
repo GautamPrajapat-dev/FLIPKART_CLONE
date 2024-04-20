@@ -42,4 +42,5 @@ SellerRoutes.route("/upload-avatar").put(
   upload.single("avatar"),
   SellerAuthController.uploadAvatar
 );
+
 module.exports = SellerRoutes;

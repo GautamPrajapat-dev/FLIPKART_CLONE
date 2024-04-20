@@ -54,7 +54,7 @@ const LoginSeller = () => {
           theme: "dark",
         });
 
-        navigate("/dashboard/main");
+        window.location.href = "/dashboard/main";
       }
     } catch (error) {
       toast.error(error.response.data.errorMessage, {

@@ -35,6 +35,7 @@ const schema = new Schema(
       public_id: { type: String },
       path: { type: String },
     },
+
     resetoken: { type: String, default: "" },
   },
   { timestamps: true }
