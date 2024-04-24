@@ -11,6 +11,7 @@ if (token !== "") {
 
     // JWT exp is in seconds
     if (Date.now() >= decodedToken.exp * 1000) {
+      window.location.href = "/login";
       console.log("Token expired.");
       localStorage.clear();
     }

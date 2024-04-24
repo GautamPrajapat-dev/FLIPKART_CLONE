@@ -1,8 +1,9 @@
 const { default: mongoose } = require("mongoose");
+const config = require("./config");
 
 const db = async () => {
   try {
-    const api = process.env.URI;
+    const api = config.get("_URI");
     const clientOptions = {
       serverApi: { version: "1", strict: true, deprecationErrors: true },
     };

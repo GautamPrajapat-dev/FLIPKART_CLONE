@@ -20,6 +20,7 @@ const DashboardNavbar = ({ name, subname }) => {
       dispatch(SELLER_PROFILE_SAGA());
     }
   }, [dispatch, avatar.status]);
+
   const handleOnClickLogout = () => {
     clearTokenLocalStorage();
     window.location.href = "/seller";
@@ -65,7 +66,7 @@ const DashboardNavbar = ({ name, subname }) => {
                 <li>
                   <Link to="/dashboard/profile" className="justify-between">
                     Profile
-                    <span className="badge">New</span>
+                    {/* <span className="badge">New</span> */}
                   </Link>
                 </li>
                 <li>

@@ -1,13 +1,14 @@
 import React, { useCallback, useState } from "react";
 import DashBoardNavbar from "../../SellerComponents/DashboardNavbar";
 import FormInputIcon from "../../../../Components/Inputs/FormInputIcon";
-import { IoMailOutline } from "react-icons/io5";
+
 import Button from "../../../../Components/Buttons/Button";
 import { ToastContainer, toast } from "react-toastify";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { AddNewProductSellerSaga } from "../../../../Stores/Slice/Seller.Product.Slice";
 const SellerAddProducts = () => {
   const distpatch = useDispatch();
+  const { isLoading } = useSelector((state) => state.loading);
   const [brandlogo, SetBrandLogo] = useState();
   const [thumbnail, SetThumbnail] = useState();
   const [images, SetImages] = useState([]);
@@ -125,7 +126,6 @@ const SellerAddProducts = () => {
                 type="text"
                 name="title"
                 value={product.title}
-                icon={<IoMailOutline />}
                 onChange={handleOnChange}
                 placeholder="Title"
                 passwordClassName="text-personal-900"
@@ -154,7 +154,6 @@ const SellerAddProducts = () => {
                   type="number"
                   value={product.mrp}
                   name="mrp"
-                  icon={<IoMailOutline />}
                   onChange={handleOnChange}
                   placeholder="mrp"
                   passwordClassName="text-personal-900"
@@ -167,7 +166,6 @@ const SellerAddProducts = () => {
                   type="number"
                   name="cost"
                   value={product.cost}
-                  icon={<IoMailOutline />}
                   placeholder="cost"
                   onChange={handleOnChange}
                   passwordClassName="text-personal-900"
@@ -181,7 +179,6 @@ const SellerAddProducts = () => {
                   onChange={handleOnChange}
                   name="discount"
                   value={product.discount}
-                  icon={<IoMailOutline />}
                   placeholder="discount"
                   passwordClassName="text-personal-900"
                   iconClassName="text-personal-900"
@@ -194,7 +191,6 @@ const SellerAddProducts = () => {
                   name="qty"
                   value={product.qty}
                   onChange={handleOnChange}
-                  icon={<IoMailOutline />}
                   placeholder="Qunantity"
                   passwordClassName="text-personal-900"
                   iconClassName="text-personal-900"
@@ -230,7 +226,6 @@ const SellerAddProducts = () => {
                       className=" text-personal-800 placeholder:text-personal-900/50 border-personal-300"
                       type="text"
                       name="category"
-                      icon={<IoMailOutline />}
                       placeholder="email or Phone"
                       onChange={handleOnChange}
                       passwordClassName="text-personal-900"
@@ -278,7 +273,6 @@ const SellerAddProducts = () => {
                       className=" text-personal-800 placeholder:text-personal-900/50 border-personal-300"
                       type="text"
                       name="subCategory"
-                      icon={<IoMailOutline />}
                       onChange={handleOnChange}
                       placeholder="Enter Your Sub Category"
                       passwordClassName="text-personal-900"
@@ -297,7 +291,6 @@ const SellerAddProducts = () => {
                     name="name"
                     value={product.name}
                     onChange={handleOnChange}
-                    icon={<IoMailOutline />}
                     placeholder="Brand"
                     passwordClassName="text-personal-900"
                     iconClassName="text-personal-900"
@@ -311,7 +304,6 @@ const SellerAddProducts = () => {
                     className="text-personal-800 file-input placeholder:text-personal-900/50 border-personal-300 "
                     type="file"
                     name="brandLogo"
-                    icon={<IoMailOutline />}
                     onChange={handleBrandLogo}
                     placeholder="email or Phone"
                     passwordClassName="text-personal-900"
@@ -325,7 +317,6 @@ const SellerAddProducts = () => {
                 className="text-personal-800 file-input placeholder:text-personal-900/50 border-personal-300 "
                 type="file"
                 name="thumbnail"
-                icon={<IoMailOutline />}
                 onChange={handleThumbnail}
                 placeholder="thumbnail"
                 passwordClassName="text-personal-900"
@@ -351,8 +342,14 @@ const SellerAddProducts = () => {
 
             <Button
               onClick={handleOnClickSubmit}
-              children="Add Product "
-              className="py-2"
+              children={
+                isLoading ? (
+                  <span className="animate-ping">Uploading..</span>
+                ) : (
+                  "Add Product"
+                )
+              }
+              className="py-2 text-white"
             />
           </form>
         </div>

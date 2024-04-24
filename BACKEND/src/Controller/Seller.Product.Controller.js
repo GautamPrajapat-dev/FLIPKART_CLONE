@@ -271,17 +271,6 @@ const SellerProduct = {
     };
     req.body.brand.logo = brand;
 
-    // const matchTitle = await ProductSchema.findOne({
-    //   title: { $regex: `^${title}$`, $options: "i" },
-    // });
-    // if (matchTitle) {
-    //   res.status(406).json({
-    //     status: false,
-    //     errorMessage: "Title Hash Been Matched Another Product",
-    //   });
-    //   return false;
-    // }
-
     // sellerId: res.Seller.sellerId,
     const product = await ProductSchema.updateOne(
       {

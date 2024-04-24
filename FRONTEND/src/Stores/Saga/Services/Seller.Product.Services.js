@@ -105,17 +105,11 @@ export const postNewProduct = async (productData) => {
     console.log(error);
   }
 };
-export const getAllProduct = async ({
-  currentPage,
-  views,
-  price,
-  qty,
-  title,
-}) => {
-  const pageNum = currentPage || 1;
+export const getAllProduct = async ({ cPage, views, price, qty, title }) => {
+  const pageNum = cPage || 1;
   try {
     const res = await axios?.get(
-      `${URL}/products/v1/products/?fields=price,title,qty,thumbnail,brand,category,views,updatedAt&page=${pageNum}&limit=5&sort=${views},${title},${qty},${price}`,
+      `${URL}/products/v1/products/?fields=price,title,qty,thumbnail,brand,category,views,updatedAt&page=${pageNum}&limit=5&sort=${views},${title}`,
       config
     );
     const data = await res.data;

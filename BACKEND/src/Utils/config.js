@@ -21,6 +21,7 @@ module.exports = config = {
       );
       process.exit();
     }
-    return value;
+    const obj = Object.freeze(value);
+    return obj;
   },
 };

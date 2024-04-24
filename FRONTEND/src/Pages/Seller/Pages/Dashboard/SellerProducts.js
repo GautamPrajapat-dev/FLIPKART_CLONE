@@ -38,8 +38,9 @@ const SellerProducts = () => {
   // }, []);
 
   useEffect(() => {
+    let cPage = currentPage === undefined ? 1 : currentPage;
     const config = {
-      currentPage,
+      cPage,
       price,
       qty,
       title,
@@ -60,7 +61,6 @@ const SellerProducts = () => {
     title,
   ]);
   // MARK:return
-  console.log(products?.products?.products, "wfwfwfwe");
   return (
     <>
       <ToastContainer />
@@ -184,6 +184,7 @@ const SellerProducts = () => {
                     <th>view</th>
                     <th>Quantity</th>
                     <th>Price</th>
+                    <th>Modify Date</th>
                     <th>Brand Logo</th>
                     <th>Details</th>
                   </tr>
@@ -191,22 +192,7 @@ const SellerProducts = () => {
 
                 {/* row 1 */}
 
-                {products?.products?.products === undefined &&
-                products?.products?.products === undefined ? (
-                  <tr className="justify-center ">
-                    <td className=""></td>
-                    <td></td>
-                    <td></td>
-                    <td className="">
-                      <img
-                        src="/image/emptyList.png"
-                        alt=""
-                        width={300}
-                        title="https://www.freepik.com/free-vector/hand-drawn-no-data-concept_55024598.htm#query=empty%20illustration&position=4&from_view=keyword&track=ais&uuid=5a57be2b-b6fb-4c9f-a966-701f8885f621"
-                      />
-                    </td>
-                  </tr>
-                ) : isLoading ? (
+                {isLoading ? (
                   <tbody className="relative ">
                     {products?.products?.products &&
                       products?.products?.products.map((val, i) => {
@@ -229,6 +215,11 @@ const SellerProducts = () => {
                             </td>
                             <td className="text-transparent ">
                               <span className="w-12 rounded-lg bg-black/20 skeleton">
+                                ....................
+                              </span>
+                            </td>
+                            <td className="text-transparent">
+                              <span className="w-12 rounded-lg animate-pulse bg-black/20 skeleton">
                                 ....................
                               </span>
                             </td>
@@ -276,6 +267,7 @@ const SellerProducts = () => {
                                     />
                                   </div>
                                 </div>
+
                                 <div>
                                   <div className="w-48 font-bold truncate">
                                     {product.title}
@@ -289,7 +281,13 @@ const SellerProducts = () => {
                             <td>{product?.views} Views</td>
                             <td>{product?.qty}</td>
                             <td>{product?.price?.mrp} /-</td>
-
+                            <td>
+                              <div>
+                                {new Date(
+                                  product.updatedAt
+                                ).toLocaleDateString()}
+                              </div>
+                            </td>
                             <td>
                               <div className="flex items-center gap-3">
                                 <div className="avatar">
@@ -336,24 +334,37 @@ const SellerProducts = () => {
             </div>
           </div>
         </section>
-        {products?.products?.products && (
-          <div className="flex justify-end gap-4">
-            <div className="grid grid-cols-2 join">
-              <button
-                className="join-item btn btn-outline"
-                onClick={handleOnPrev}
-              >
-                Prev
-              </button>
 
-              <button
-                onClick={handleOnNext}
-                className="join-item btn btn-outline"
-              >
-                Next
-              </button>
-            </div>
+        {products?.products?.products === undefined &&
+        products?.products?.products === undefined ? (
+          <div className="flex justify-center w-full mt-32">
+            <img
+              src="/image/emptyList.png"
+              alt="https://www.freepik.com/free-vector/hand-drawn-no-data-concept_55024598.htm#query=empty%20illustration&position=4&from_view=keyword&track=ais&uuid=5a57be2b-b6fb-4c9f-a966-701f8885f621"
+              width={300}
+              title="https://www.freepik.com/free-vector/hand-drawn-no-data-concept_55024598.htm#query=empty%20illustration&position=4&from_view=keyword&track=ais&uuid=5a57be2b-b6fb-4c9f-a966-701f8885f621"
+            />
           </div>
+        ) : (
+          products?.products?.products && (
+            <div className="flex justify-end gap-4">
+              <div className="grid grid-cols-2 join">
+                <button
+                  className="join-item btn btn-outline"
+                  onClick={handleOnPrev}
+                >
+                  Prev
+                </button>
+
+                <button
+                  onClick={handleOnNext}
+                  className="join-item btn btn-outline"
+                >
+                  Next
+                </button>
+              </div>
+            </div>
+          )
         )}
       </div>
     </>

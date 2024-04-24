@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   DELETE_SELLER_PRODUCT_SAGA,
@@ -116,7 +116,7 @@ const ProductDetails = () => {
   const handleOnSelectCategory = (item) => {
     setCategoryVal(item.name);
   };
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (id) {
       title.current.value = product?.product?.title;
       description.current.value = product?.product?.description;

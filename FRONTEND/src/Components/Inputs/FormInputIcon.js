@@ -46,8 +46,10 @@ const FormInputIcon = (props) => {
               onChange={(e) => onChange(e)}
               autoComplete={type === "password" ? "false" : "true"}
               value={value}
-              className={`block rounded-t-lg px-9 pb-3 py-3.5 w-full text-sm text-gray-100 bg-gray-50 dark:bg-gray-700 border-0 border-b-2 border-gray-300 appearance-none dark:text-white  dark:border-white/30  dark:focus:border-blue-500 focus:outline-none focus:ring-0 dark:placeholder:text-personal-10/40 focus:border-blue-600 peer ${className}`}
-              placeholder={placeholder || "kkk"}
+              className={`block rounded-t-lg ${icon && "px-9"} ${
+                !icon && "px-3"
+              } pb-3 py-3.5 w-full text-sm text-gray-100 bg-gray-50 dark:bg-gray-700 border-0 border-b-2 border-gray-300 appearance-none dark:text-white  dark:border-white/30  dark:focus:border-blue-500 focus:outline-none focus:ring-0 dark:placeholder:text-personal-10/40 focus:border-blue-600 peer ${className}`}
+              placeholder={placeholder || ""}
             />
             {type === "password" && (
               <div
@@ -78,18 +80,22 @@ const FormInputIcon = (props) => {
             </label>
           )}
           <div className="relative ">
-            <div
-              className={`absolute inset-y-0 flex items-center text-base pointer-events-none start-0 ps-3 ${iconClassName}`}
-            >
-              {icon}
-            </div>
+            {icon && (
+              <div
+                className={`absolute inset-y-0 flex items-center text-base pointer-events-none start-0 ps-3 ${iconClassName}`}
+              >
+                {icon}
+              </div>
+            )}
             <input
               type={type === "password" && !showPassword ? "text" : type}
               id={name}
               onChange={(e) => onChange(e)}
               name={name}
               autoComplete={type === "password" ? "false" : "true"}
-              className={`block px-9 pb-2.5 py-2.5 w-full text-sm  text-gray-100  bg-transparent rounded-lg border-2 border-gray-200 appearance-none dark:text-white dark:border-white/30 dark:focus:border-blue-500 focus:outline-none focus:ring-0 dark:placeholder:text-personal-10/40 focus:border-blue-600 ${className} peer`}
+              className={`block ${icon && "px-9"} ${
+                !icon && "px-3"
+              } pb-2.5 py-2.5 w-full text-sm  text-gray-100  bg-transparent rounded-lg border-2 border-gray-200 appearance-none dark:text-white dark:border-white/30 dark:focus:border-blue-500 focus:outline-none focus:ring-0 dark:placeholder:text-personal-10/40 focus:border-blue-600 ${className} peer`}
               placeholder={placeholder || ""}
             />
 
@@ -133,7 +139,9 @@ const FormInputIcon = (props) => {
               autoComplete={type === "password" ? "false" : "true"}
               value={value}
               onChange={(e) => onChange(e)}
-              className={`block w-full px-9 pb-2 py-2 text-sm text-gray-100 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white  dark:border-white/30  dark:focus:border-blue-500 dark:placeholder:text-personal-10/40 focus:outline-none focus:ring-0 focus:border-blue-600 peer ${className}`}
+              className={`block w-full ${icon && "px-9"} ${
+                !icon && "px-3"
+              } pb-2 py-2 text-sm text-gray-100 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white  dark:border-white/30  dark:focus:border-blue-500 dark:placeholder:text-personal-10/40 focus:outline-none focus:ring-0 focus:border-blue-600 peer ${className}`}
               placeholder={placeholder || ""}
             />
             {type === "password" && (
@@ -177,7 +185,9 @@ const FormInputIcon = (props) => {
               name={name}
               onChange={(e) => onChange(e)}
               autoComplete={type === "password" ? "false" : "true"}
-              className={`block  rounded-t-lg px-9 pb-3.5 py-4 w-full text-base text-gray-100 bg-gray-50 dark:bg-gray-700 border-0 border-b-2 border-gray-300 dark:placeholder:text-personal-10/40 appearance-none dark:text-white  dark:border-white/30  dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer ${className}`}
+              className={`block  rounded-t-lg ${icon && "px-9"} ${
+                !icon && "px-3"
+              } pb-3.5 py-4 w-full text-base text-gray-100 bg-gray-50 dark:bg-gray-700 border-0 border-b-2 border-gray-300 dark:placeholder:text-personal-10/40 appearance-none dark:text-white  dark:border-white/30  dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer ${className}`}
               placeholder={placeholder || " "}
             />
             {type === "password" && (
@@ -221,7 +231,9 @@ const FormInputIcon = (props) => {
               value={value}
               onChange={(e) => onChange(e)}
               name={name}
-              className={`block px-9 pb-3.5 py-4 w-full text-base text-gray-100 bg-transparent rounded-lg border-2 border-gray-200 appearance-none dark:text-white  dark:border-white/30 dark:placeholder:text-personal-10/40  dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer ${className}`}
+              className={`block ${icon && "px-9"} ${
+                !icon && "px-3"
+              } pb-3.5 py-4 w-full text-base text-gray-100 bg-transparent rounded-lg border-2 border-gray-200 appearance-none dark:text-white  dark:border-white/30 dark:placeholder:text-personal-10/40  dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer ${className}`}
               placeholder={placeholder || ""}
             />
             {type === "password" && (
@@ -265,7 +277,9 @@ const FormInputIcon = (props) => {
               onChange={(e) => onChange(e)}
               name={name}
               autoComplete={type === "password" ? "false" : "true"}
-              className={`block px-9 pb-3 py-3.5 w-full text-base text-gray-100 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:placeholder:text-personal-10/40 dark:text-white  dark:border-white/30  dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer ${className}`}
+              className={`block ${icon && "px-9"} ${
+                !icon && "px-3"
+              } pb-3 py-3.5 w-full text-base text-gray-100 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:placeholder:text-personal-10/40 dark:text-white  dark:border-white/30  dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer ${className}`}
               placeholder={placeholder || ""}
             />
             {type === "password" && (

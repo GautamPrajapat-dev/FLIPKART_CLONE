@@ -22,11 +22,14 @@ import {
 import { startLoading, stopLoading } from "../../Slice/loading.Slice";
 
 export function* addNewProductHandler(action) {
+  yield put(startLoading());
   try {
     const data = action.payload;
     const postData = yield call(postNewProduct, data);
+    yield put(stopLoading());
     yield put(AddNewProductRedux(postData));
   } catch (error) {
+    yield put(stopLoading());
     console.log(error);
   }
 }

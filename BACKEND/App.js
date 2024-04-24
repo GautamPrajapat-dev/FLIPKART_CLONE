@@ -51,7 +51,9 @@ app.use("/notificatios", NotificationRoutes);
 
 db().then(() => {
   httpServer.listen(config.get("_PORT"), () =>
-    console.log(` app listening on port http://localhost:${process.env.PORT}`)
+    console.log(
+      ` app listening on port http://localhost:${config.get("_PORT")}`
+    )
   );
   const io = new Server(httpServer);
   socketServer(io);
