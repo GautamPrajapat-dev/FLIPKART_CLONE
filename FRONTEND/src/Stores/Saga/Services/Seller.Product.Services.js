@@ -3,6 +3,7 @@ import { jwtDecode } from "jwt-decode";
 import { toast } from "react-toastify";
 const URL = "http://localhost:3031/seller";
 const token = localStorage.getItem("_token");
+
 if (token !== "") {
   try {
     let decodedToken = jwtDecode(token);
