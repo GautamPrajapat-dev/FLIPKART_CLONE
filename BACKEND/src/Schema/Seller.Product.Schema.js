@@ -75,6 +75,7 @@ const schema = new Schema(
       type: Notification,
     },
   },
+
   { timestamps: true }
 );
 schema.methods.genToken = async function () {

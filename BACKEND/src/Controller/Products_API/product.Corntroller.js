@@ -34,8 +34,14 @@ const Product = {
         errorMessage: "not found",
       });
     }
-    product.views += 1;
-    await product.save();
+    const products = await ProductSchema.findOneAndUpdate(
+      { _id: req.params.id },
+      {
+        $inc: { views: 1 },
+      }
+    );
+    // product.views += 1;
+    await products.save();
     res.status(200).json({
       status: true,
       length: product.length,

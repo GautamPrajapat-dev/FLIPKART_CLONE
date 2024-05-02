@@ -171,6 +171,158 @@ const SellerProduct = {
       }
     }
   }),
+  getAllproductsDetails: asyncHandler(async (req, res) => {
+    const aggregatePipeline = [
+      {
+        $match: {
+          createdAt: {
+            $gte: new Date(Date.now() - 365 * 24 * 60 * 60 * 1000),
+          },
+          // Filter documents from last 30 days
+        },
+      },
+      {
+        $group: {
+          _id: null,
+          totalProducts: {
+            $sum: 1,
+          },
+          // Calculate total products
+          totalViews: {
+            $sum: "$views",
+          },
+          // Calculate total views
+          viewsLast30Days: {
+            $sum: {
+              $cond: [
+                {
+                  $gt: [
+                    "$updatedAt",
+                    new Date(Date.now() - 30 * 24 * 60 * 60 * 1000),
+                  ],
+                },
+                "$views",
+                0,
+              ],
+            },
+          },
+        },
+      },
+      {
+        $lookup: {
+          from: "products",
+          let: {},
+          pipeline: [
+            {
+              $match: {
+                $expr: {
+                  $lte: ["$qty", 10],
+                }, // Filter products with less than 10 quantity
+              },
+            },
+          ],
+          as: "lessqty",
+        },
+      },
+      {
+        $project: {
+          _id: 0,
+          totalViews: 1,
+          totalProducts: 1,
+          viewsLast30Days: 1,
+          lessqty: 1,
+        },
+      },
+    ];
+
+    // const aggregatePipeline = [
+    //   // Match documents with views within the last 30 days
+    //   {
+    //       createdAt: {
+    //       $match: {
+    //       $gte: new Date(new Date() - 365 * 24 * 60 * 60 * 1000), // 30 days ago
+    //       },
+    //     },
+    //   },
+    //   // Group by productId and calculate total views
+    //   {
+    //     $group: {
+    //       _id: "$_id",
+    //       totalViews: { $sum: "$views" },
+    //     },
+    //   },
+    //   // Project to rename _id to productId
+    //   {
+    //     $project: {
+    //       productId: "$_id",
+    //       totalViews: 1,
+    //       _id: 0,
+    //     },
+    //   },
+    //   // Group again to calculate total views for all time
+    //   {
+    //     $group: {
+    //       _id: null,
+    //       totalViewsAllTime: { $sum: "$totalViews" },
+    //       viewsLast30Days: { $push: "$$ROOT" }, // Push the documents for views in the last 30 days
+    //     },
+    //   },
+    //   // Project to reshape the result
+    //   {
+    //     $project: {
+    //       _id: 0,
+
+    //       totalViewsAllTime: 1,
+    //       viewsLast30Days: 1,
+    //     },
+    //   },
+    // ];
+
+    // Execute the aggregation pipeline
+    await ProductSchema.aggregate(aggregatePipeline)
+      .then((results) => {
+        res.json(results);
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+
+    //   const api = new ApiFeature(
+    //     ProductSchema.find(),
+    //     req?.query,
+    //     res?.Seller?.sellerId
+    //   )
+    //     .filter()
+    //     .search()
+    //     .sort();
+    //   const products = await api.query;
+    //   const count = await ProductSchema.find({
+    //     sellerId: res?.Seller?.sellerId,
+    //   }).countDocuments();
+    //   const total = Math.ceil(count / req.query.limit || 3);
+    //   if (products) {
+    //     if (products.length === 0) {
+    //       return res.status(400).json({
+    //         status: false,
+    //         errorMessage: "Not found",
+    //       });
+    //     }
+    //     res.status(200).json({
+    //       status: true,
+    //       totalProduct: count,
+    //       totalPage: total,
+    //       path: req.path,
+    //       length: products.length,
+    //       next: Number(req.query.page) + 1,
+    //       products,
+    //     });
+    //   } else {
+    //     res.status(400).json({
+    //       status: false,
+    //       errorMessage: "Product Not Found",
+    //     });
+    //   }
+  }),
   getAllproducts: asyncHandler(async (req, res) => {
     const api = new ApiFeature(
       ProductSchema.find(),
@@ -182,13 +334,11 @@ const SellerProduct = {
       .sort()
       .limitFields()
       .paginate();
-
     const products = await api.query;
     const count = await ProductSchema.find({
       sellerId: res?.Seller?.sellerId,
     }).countDocuments();
     const total = Math.ceil(count / req.query.limit || 3);
-
     if (products) {
       if (products.length === 0) {
         return res.status(400).json({

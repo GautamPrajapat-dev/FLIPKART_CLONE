@@ -18,6 +18,10 @@ SellerProductRoutes.route("/products").get(
   ProductValidation.ValidUser,
   SellerProduct.getAllproducts
 );
+SellerProductRoutes.route("/getAllproductsDetails").get(
+  ProductValidation.ValidUser,
+  SellerProduct.getAllproductsDetails
+);
 SellerProductRoutes.route("/products/:id")
   .get(ProductValidation.ValidUser, SellerProduct.getProduct)
   .put(ProductValidation.ValidUser, SellerProduct.updateProduct)
