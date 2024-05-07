@@ -310,7 +310,7 @@ const SellerAddProducts = () => {
                 className="text-personal-800 file-input placeholder:text-personal-900/50 border-personal-300 "
                 type="file"
                 name="thumbnail"
-                placeholder="thumbnail"
+                placeholder="thumbnail image"
                 passwordClassName="text-personal-900"
                 iconClassName="text-personal-900"
                 label="Thumbnail"
