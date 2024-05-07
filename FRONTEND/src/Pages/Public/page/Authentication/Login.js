@@ -55,7 +55,7 @@ const Login = () => {
                     <Button
                       type="submit"
                       onClick={handleSubmit}
-                      className="py-2 bg-emerald-900"
+                      className="py-2 bg-emerald-900 text-white"
                     >
                       Login
                     </Button>

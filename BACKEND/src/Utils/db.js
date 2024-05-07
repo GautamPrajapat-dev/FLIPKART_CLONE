@@ -9,10 +9,9 @@ const db = async () => {
     };
     await mongoose.connect(api, clientOptions);
     await mongoose.connection.db.admin().command({ ping: 1 });
+    console.log("sucessfully connect");
   } catch (err) {
     console.log(err);
-  } finally {
-    console.log("sucessfully connect");
   }
 };
 module.exports = db;

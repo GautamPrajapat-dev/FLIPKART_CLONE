@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useRef, useState } from "react";
 import DashBoardNavbar from "../../SellerComponents/DashboardNavbar";
 import FormInputIcon from "../../../../Components/Inputs/FormInputIcon";
 
@@ -9,47 +9,51 @@ import { AddNewProductSellerSaga } from "../../../../Stores/Slice/Seller.Product
 const SellerAddProducts = () => {
   const distpatch = useDispatch();
   const { isLoading } = useSelector((state) => state.loading);
-  const [brandlogo, SetBrandLogo] = useState();
-  const [thumbnail, SetThumbnail] = useState();
+
   const [images, SetImages] = useState([]);
-  const [category, setCategory] = useState("");
-  const [subCategory, setSubCategory] = useState("");
-  const [product, setProduct] = useState([
-    {
-      title: "",
-      description: "",
-      qty: 0,
-      name: "",
-      mrp: 0,
-      cost: 0,
-      discount: 0,
-    },
-  ]);
+  // const [product, setProduct] = useState([
+  //   {
+  //     title: "",
+  //     description: "",
+  //     qty: 0,
+  //     name: "",
+  //     mrp: 0,
+  //     cost: 0,
+  //     discount: 0,
+  //   },
+  // ]);
+
+  // const titleRef = useRef();
+  // const descriptionRef = useRef();
+  // const qtyRef = useRef(0);
+  // const mrpRef = useRef(0);
+  // const costRef = useRef(0);
+  // const discountRef = useRef(0);
+  // const nameRef = useRef();
 
   // title,description,category{category,subCategory},price{mrp,cost, discount,thumbnail,images logo=brandLogo
 
-  const handleSelectCategory = (e) => {
-    setCategory(e.target.value);
-  };
-  const handleSubCategory = (e) => {
-    setSubCategory(e.target.value);
-  };
-  const handleBrandLogo = (e) => {
-    SetBrandLogo(e.target.files[0]);
-  };
-  const handleThumbnail = (e) => {
-    SetThumbnail(e.target.files[0]);
-  };
-  const handleOnChange = useCallback(
-    (e) => {
-      const name = e.target.name;
-      const value = e.target.value;
-      setProduct({ ...product, [name]: value });
-    },
-    [product]
-  );
+  // const handleSelectCategory = (e) => {
+  //   setCategory(e.target.value);
+  // };
+  // const handleSubCategory = (e) => {
+  //   setSubCategory(e.target.value);
+  // };
+  // const handleBrandLogo = (e) => {
+  //   SetBrandLogo(e.target.files[0]);
+  // };
+  // const handleThumbnail = (e) => {
+  //   SetThumbnail(e.target.files[0]);
+  // };
+  // const handleOnChange = useCallback(
+  //   (e) => {
+  //     const name = e.target.name;
+  //     const value = e.target.value;
+  //     setProduct({ ...product, [name]: value });
+  //   },
+  //   [product]
+  // );
   const uploadMultipleFiles = (e) => {
-    SetImages(e.target.files);
     if (Array.from(e.target.files).length > 4) {
       e.preventDefault();
       toast.warn(`Cannot upload files more than 4`, {
@@ -62,12 +66,10 @@ const SellerAddProducts = () => {
         progress: undefined,
         theme: "dark",
       });
-
+      SetImages(e.target.files);
       return;
     }
   };
-
-  // formdata.append("images", images);
 
   // formdata.append("images", allimages);
   // const data = {
@@ -91,24 +93,31 @@ const SellerAddProducts = () => {
   //   images: images,
   // };
 
+  const FormRef = useRef();
+  const imageRef = useRef();
   const handleOnClickSubmit = (e) => {
-    let formdata = new FormData();
-    formdata.append("title", product.title || "");
-    formdata.append("description", product.description || "");
-    formdata.append("price[mrp]", product.mrp || 0);
-    formdata.append("price[cost]", product.cost || 0);
-    formdata.append("price[discount]", product.discount || 0);
-    formdata.append("qty", product.qty || 0);
-    formdata.append("category[category]", category || "");
-    formdata.append("category[subCategory]", subCategory || "");
-    formdata.append("brand[name]", product.name || "");
-    formdata.append("brandLogo", brandlogo);
-    formdata.append("thumbnail", thumbnail);
-    for (let i = 0; i < images.length; i++) {
+    let formdata = new FormData(FormRef.current);
+    for (let i = 0; i < imageRef.length; i++) {
       formdata.append("images", images[i]);
     }
+
+    console.log(...formdata);
+    // formdata.append("title", product.title || "");
+    // formdata.append("description", product.description || "");
+    // formdata.append("price[mrp]", product.mrp || 0);
+    // formdata.append("price[cost]", product.cost || 0);
+    // formdata.append("price[discount]", product.discount || 0);
+    // formdata.append("qty", product.qty || 0);
+    // formdata.append("category[category]", category || "");
+    // formdata.append("category[subCategory]", subCategory || "");
+    // formdata.append("brand[name]", product.name || "");
+    // formdata.append("brandLogo", brandlogo);
+    // formdata.append("thumbnail", thumbnail);
+    // for (let i = 0; i < images.length; i++) {
+    //   formdata.append("images", images[i]);
+    // }
     e.preventDefault();
-    distpatch(AddNewProductSellerSaga(formdata));
+    // distpatch(AddNewProductSellerSaga(formdata));
   };
 
   return (
@@ -118,15 +127,17 @@ const SellerAddProducts = () => {
 
       <section className="dark:text-white">
         <div className="flex flex-col gap-6 mt-5">
-          <form className="flex flex-col gap-6 ">
+          <form
+            onSubmit={handleOnClickSubmit}
+            ref={FormRef}
+            className="flex flex-col gap-6 "
+          >
             <div className="flex flex-col gap-6">
               <FormInputIcon
                 variant="sm-outlined"
                 className="text-personal-800 placeholder:text-personal-900/50 border-personal-300 "
                 type="text"
                 name="title"
-                value={product.title}
-                onChange={handleOnChange}
                 placeholder="Title"
                 passwordClassName="text-personal-900"
                 iconClassName="text-personal-900"
@@ -141,8 +152,6 @@ const SellerAddProducts = () => {
                   className="w-full px-3 py-2 pb-3 text-sm text-gray-900 bg-transparent border-2 border-blue-600 rounded-lg appearance-none dark:bg-gray-700 dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0"
                   id="Description"
                   cols="30"
-                  value={product.description}
-                  onChange={handleOnChange}
                   placeholder="Description"
                   rows="10"
                 ></textarea>
@@ -152,9 +161,7 @@ const SellerAddProducts = () => {
                   variant="sm-outlined"
                   className="text-personal-800 placeholder:text-personal-900/50 border-personal-300 "
                   type="number"
-                  value={product.mrp}
-                  name="mrp"
-                  onChange={handleOnChange}
+                  name="price[mrp]"
                   placeholder="mrp"
                   passwordClassName="text-personal-900"
                   iconClassName="text-personal-900"
@@ -164,10 +171,8 @@ const SellerAddProducts = () => {
                   variant="sm-outlined"
                   className="text-personal-800 placeholder:text-personal-900/50 border-personal-300 "
                   type="number"
-                  name="cost"
-                  value={product.cost}
+                  name="price[cost]"
                   placeholder="cost"
-                  onChange={handleOnChange}
                   passwordClassName="text-personal-900"
                   iconClassName="text-personal-900"
                   label="Cost"
@@ -176,9 +181,7 @@ const SellerAddProducts = () => {
                   variant="sm-outlined"
                   className="text-personal-800 placeholder:text-personal-900/50 border-personal-300 "
                   type="number"
-                  onChange={handleOnChange}
-                  name="discount"
-                  value={product.discount}
+                  name="price[discount]"
                   placeholder="discount"
                   passwordClassName="text-personal-900"
                   iconClassName="text-personal-900"
@@ -189,8 +192,6 @@ const SellerAddProducts = () => {
                   className="text-personal-800 placeholder:text-personal-900/50 border-personal-300 "
                   type="number"
                   name="qty"
-                  value={product.qty}
-                  onChange={handleOnChange}
                   placeholder="Qunantity"
                   passwordClassName="text-personal-900"
                   iconClassName="text-personal-900"
@@ -204,9 +205,7 @@ const SellerAddProducts = () => {
                   </label>
                   <select
                     className="bg-transparent border-2 outline-none dark:bg-gray-600 dark:text-white border-personal-300 select select-primary focus:outline-none focus:ring-0"
-                    value={category}
-                    name="category"
-                    onChange={handleSelectCategory}
+                    name="category[category]"
                     id="category"
                   >
                     <option disabled value="DEFAULT">
@@ -219,7 +218,7 @@ const SellerAddProducts = () => {
                     <option value="Other">Other</option>
                   </select>
                 </div>
-                {category === "Other" && (
+                {FormRef === "Other" && (
                   <div className="col-span-7">
                     <FormInputIcon
                       variant="sm-outlined"
@@ -227,7 +226,6 @@ const SellerAddProducts = () => {
                       type="text"
                       name="category"
                       placeholder="email or Phone"
-                      onChange={handleOnChange}
                       passwordClassName="text-personal-900"
                       iconClassName="text-personal-900"
                       label="Other Category"
@@ -242,9 +240,7 @@ const SellerAddProducts = () => {
                   </label>
                   <select
                     className="bg-transparent border-2 outline-none dark:bg-gray-600 dark:text-white border-personal-300 select select-primary focus:outline-none focus:ring-0"
-                    value={subCategory}
-                    name="subCategory"
-                    onChange={handleSubCategory}
+                    name="category[subCategory]"
                     id="subcategory"
                   >
                     <option disabled value="DEFAULT">
@@ -266,14 +262,14 @@ const SellerAddProducts = () => {
                     <option value="Other">Other</option>
                   </select>
                 </div>
-                {subCategory === "Other" && (
+                {FormRef.current === "Other" && (
                   <div className="col-span-7">
                     <FormInputIcon
                       variant="sm-outlined"
                       className=" text-personal-800 placeholder:text-personal-900/50 border-personal-300"
                       type="text"
                       name="subCategory"
-                      onChange={handleOnChange}
+                      // onChange={handleOnChange}
                       placeholder="Enter Your Sub Category"
                       passwordClassName="text-personal-900"
                       iconClassName="text-personal-900"
@@ -288,9 +284,7 @@ const SellerAddProducts = () => {
                     variant="sm-outlined"
                     className="text-personal-800 placeholder:text-personal-900/50 border-personal-300 "
                     type="text"
-                    name="name"
-                    value={product.name}
-                    onChange={handleOnChange}
+                    name="brand[name]"
                     placeholder="Brand"
                     passwordClassName="text-personal-900"
                     iconClassName="text-personal-900"
@@ -304,7 +298,6 @@ const SellerAddProducts = () => {
                     className="text-personal-800 file-input placeholder:text-personal-900/50 border-personal-300 "
                     type="file"
                     name="brandLogo"
-                    onChange={handleBrandLogo}
                     placeholder="email or Phone"
                     passwordClassName="text-personal-900"
                     iconClassName="text-personal-900"
@@ -317,7 +310,6 @@ const SellerAddProducts = () => {
                 className="text-personal-800 file-input placeholder:text-personal-900/50 border-personal-300 "
                 type="file"
                 name="thumbnail"
-                onChange={handleThumbnail}
                 placeholder="thumbnail"
                 passwordClassName="text-personal-900"
                 iconClassName="text-personal-900"
@@ -332,6 +324,7 @@ const SellerAddProducts = () => {
                     type="file"
                     name="images"
                     maxLength={4}
+                    ref={imageRef}
                     onChange={uploadMultipleFiles}
                     className="file-input-bordered file-input"
                     multiple
@@ -341,7 +334,7 @@ const SellerAddProducts = () => {
             </div>
 
             <Button
-              onClick={handleOnClickSubmit}
+              type="submit"
               children={
                 isLoading ? (
                   <span className="animate-ping">Uploading..</span>

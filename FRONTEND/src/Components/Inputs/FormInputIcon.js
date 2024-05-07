@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React, { forwardRef, useState } from "react";
 import { LuEye, LuEyeOff } from "react-icons/lu";
 
-const FormInputIcon = (props) => {
+const FormInputIcon = (props, ref) => {
   const [showPassword, setShowPassword] = useState(true);
   const {
     className,
@@ -40,10 +40,10 @@ const FormInputIcon = (props) => {
               {icon}
             </div>
             <input
+              ref={ref}
               type={type === "password" && !showPassword ? "text" : type}
               id={name}
               name={name}
-              onChange={(e) => onChange(e)}
               autoComplete={type === "password" ? "false" : "true"}
               value={value}
               className={`block rounded-t-lg ${icon && "px-9"} ${
@@ -88,9 +88,9 @@ const FormInputIcon = (props) => {
               </div>
             )}
             <input
+              ref={ref}
               type={type === "password" && !showPassword ? "text" : type}
               id={name}
-              onChange={(e) => onChange(e)}
               name={name}
               autoComplete={type === "password" ? "false" : "true"}
               className={`block ${icon && "px-9"} ${
@@ -134,11 +134,11 @@ const FormInputIcon = (props) => {
               {icon}
             </div>
             <input
+              ref={ref}
               type={type === "password" && !showPassword ? "text" : type}
               id={name}
               autoComplete={type === "password" ? "false" : "true"}
               value={value}
-              onChange={(e) => onChange(e)}
               className={`block w-full ${icon && "px-9"} ${
                 !icon && "px-3"
               } pb-2 py-2 text-sm text-gray-100 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white  dark:border-white/30  dark:focus:border-blue-500 dark:placeholder:text-personal-10/40 focus:outline-none focus:ring-0 focus:border-blue-600 peer ${className}`}
@@ -179,11 +179,11 @@ const FormInputIcon = (props) => {
               {icon}
             </div>
             <input
+              ref={ref}
               type={type === "password" && !showPassword ? "text" : type}
               id={name}
               value={value}
               name={name}
-              onChange={(e) => onChange(e)}
               autoComplete={type === "password" ? "false" : "true"}
               className={`block  rounded-t-lg ${icon && "px-9"} ${
                 !icon && "px-3"
@@ -225,11 +225,11 @@ const FormInputIcon = (props) => {
               {icon}
             </div>
             <input
+              ref={ref}
               type={type === "password" && !showPassword ? "text" : type}
               id={name}
               autoComplete={type === "password" ? "false" : "true"}
               value={value}
-              onChange={(e) => onChange(e)}
               name={name}
               className={`block ${icon && "px-9"} ${
                 !icon && "px-3"
@@ -271,10 +271,10 @@ const FormInputIcon = (props) => {
               {icon}
             </div>
             <input
+              ref={ref}
               type={type === "password" && !showPassword ? "text" : type}
               id={name}
               value={value}
-              onChange={(e) => onChange(e)}
               name={name}
               autoComplete={type === "password" ? "false" : "true"}
               className={`block ${icon && "px-9"} ${
@@ -304,4 +304,4 @@ const FormInputIcon = (props) => {
   );
 };
 
-export default FormInputIcon;
+export default forwardRef(FormInputIcon);

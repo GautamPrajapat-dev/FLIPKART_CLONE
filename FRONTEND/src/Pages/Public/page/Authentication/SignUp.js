@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import FormInputIcon from "../../../../Components/Inputs/FormInputIcon";
 import { LuUser } from "react-icons/lu";
 import { IoLockClosedOutline } from "react-icons/io5";
@@ -6,8 +6,10 @@ import Button from "../../../../Components/Buttons/Button";
 import { useNavigate } from "react-router-dom";
 const SignUp = () => {
   const navigate = useNavigate();
+  const formRef = useRef();
   const handleSubmit = (e) => {
     e.preventDefault();
+    const data = new FormData(formRef.current);
   };
   return (
     <>
@@ -32,7 +34,38 @@ const SignUp = () => {
                   />
                 </div>
                 <div className="flex flex-col justify-between col-span-12 px-4 py-8 lg:col-span-7 bg-mariner-200 ">
-                  <form action="" className="flex flex-col gap-6 px-9">
+                  <form
+                    onSubmit={handleSubmit}
+                    ref={formRef}
+                    className="flex flex-col gap-6 px-9"
+                  >
+                    <FormInputIcon
+                      className="!text-personal-800 placeholder:text-personal-900 border-personal-300"
+                      variant="sm-outlined"
+                      type="text"
+                      name="firstName"
+                      icon={<LuUser />}
+                      placeholder="firstName"
+                      iconClassName="text-personal-900"
+                    />
+                    <FormInputIcon
+                      className="!text-personal-800 placeholder:text-personal-900 border-personal-300"
+                      variant="sm-outlined"
+                      type="text"
+                      name="surrname"
+                      icon={<LuUser />}
+                      placeholder="surrname"
+                      iconClassName="text-personal-900"
+                    />
+                    <FormInputIcon
+                      className="!text-personal-800 placeholder:text-personal-900 border-personal-300"
+                      variant="sm-outlined"
+                      type="text"
+                      name="mobile"
+                      icon={<LuUser />}
+                      placeholder="mobile"
+                      iconClassName="text-personal-900"
+                    />
                     <FormInputIcon
                       className="!text-personal-800 placeholder:text-personal-900 border-personal-300"
                       variant="sm-outlined"
@@ -52,17 +85,15 @@ const SignUp = () => {
                       passwordClassName="text-personal-900"
                       iconClassName="text-personal-900"
                     />
-                    <Button
+                    <button
                       type="submit"
-                      onClick={handleSubmit}
-                      className="py-2.5 bg-mariner-900"
+                      className="py-2.5 bg-mariner-900 text-white"
                     >
                       SignUp
-                    </Button>
+                    </button>
                     <Button
-                      type="submit"
                       onClick={() => navigate("/login")}
-                      className="py-2.5 bg-blue-400"
+                      className="py-2.5 text-white "
                     >
                       Existing User? Log in
                     </Button>
