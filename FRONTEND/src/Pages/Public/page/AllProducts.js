@@ -2,7 +2,7 @@ import React from "react";
 import { LuHeart } from "react-icons/lu";
 import { useNavigate } from "react-router-dom";
 
-const Products = () => {
+const AllProducts = () => {
   const navigate = useNavigate();
   return (
     <div>
@@ -75,4 +75,4 @@ const Products = () => {
   );
 };
 
-export default Products;
+export default AllProducts;

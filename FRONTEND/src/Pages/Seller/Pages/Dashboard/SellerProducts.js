@@ -5,14 +5,13 @@ import { GET_ALL_PRODUCTS_SAGA } from "../../../../Stores/Slice/Seller.Product.S
 import { IoArrowDown, IoArrowUp } from "react-icons/io5";
 import { ToastContainer } from "react-toastify";
 import { Link } from "react-router-dom";
-
+import { SortFilter } from "../../../../Utils/SellerFilters";
+import { HiMiniChevronUpDown } from "react-icons/hi2";
 const SellerProducts = () => {
   const dispatch = useDispatch();
   const [currentPage, setCurrentPage] = useState(1);
-  const [price, sePriceFilter] = useState("price");
-  const [qty, seQtyFilter] = useState("qty");
-  const [title, seTitleFilter] = useState("title");
-  const [views, setViewsFilter] = useState("views");
+  const [sort, setSortFilter] = useState("-createdAt");
+
   // const [product_id, setIDProduct] = useState("");
   const products = useSelector((state) => state.SellerProduct);
 
@@ -32,34 +31,17 @@ const SellerProducts = () => {
       setCurrentPage(currentPage + 1);
     }
   }, [currentPage, products?.products?.totalPage]);
-  // const handleOnShowDetailsClick = useCallback((id) => {
-  //   setIDProduct(id);
-  //   document.getElementById("show_sellerProductDetails").showModal();
-  // }, []);
 
   useEffect(() => {
-    let cPage = currentPage === undefined ? 1 : currentPage;
     const config = {
-      cPage,
-      price,
-      qty,
-      title,
-      views,
+      currentPage,
+      sort,
     };
-
     if (products?.products?.products?.length !== 0) {
       dispatch(GET_ALL_PRODUCTS_SAGA(config));
     }
     return () => dispatch(GET_ALL_PRODUCTS_SAGA());
-  }, [
-    dispatch,
-    products?.products?.products?.length,
-    currentPage,
-    price,
-    qty,
-    views,
-    title,
-  ]);
+  }, [dispatch, products?.products?.products?.length, currentPage, sort]);
   // MARK:return
   return (
     <>
@@ -74,117 +56,99 @@ const SellerProducts = () => {
           <div className="w-full my-7">
             <div>
               <ul className="flex flex-wrap gap-4 ">
-                {title === "-title" ? (
-                  <li
-                    onClick={() => seTitleFilter("title")}
-                    className="text-white w-28 hover:bg-personal-800 btn btn-square bg-daintree-400"
-                  >
-                    A-Z
-                    <span>
-                      <IoArrowDown />
-                    </span>
-                  </li>
-                ) : (
-                  <li
-                    onClick={() => seTitleFilter("-title")}
-                    className="text-white w-28 hover:bg-personal-800 btn btn-square bg-daintree-400"
-                  >
-                    A-Z
-                    <span>
-                      <IoArrowUp />
-                    </span>
-                  </li>
-                )}
-                {price === "-price" ? (
-                  <li>
-                    <span
-                      onClick={() => sePriceFilter("price")}
-                      className="text-white w-28 btn hover:bg-personal-800 btn-square bg-daintree-400"
+                {SortFilter.map((sortFilterVal, i) => {
+                  return (
+                    <li
+                      key={i}
+                      onClick={() => setSortFilter(sortFilterVal.filter)}
+                      className={`text-white w-auto px-4 over:transition-colors hover:duration-300 hover:bg-personal-500 btn btn-square  ${
+                        sort === sortFilterVal.filter
+                          ? "bg-burnt_umber-400"
+                          : "bg-daintree-400"
+                      }`}
                     >
-                      Price
-                      <span>
-                        <IoArrowDown />
-                      </span>
-                    </span>
-                  </li>
-                ) : (
-                  <li>
-                    <span
-                      onClick={() => sePriceFilter("-price")}
-                      className="text-white w-28 btn hover:bg-personal-800 btn-square bg-daintree-400"
-                    >
-                      Prie
-                      <span>
-                        <IoArrowUp />
-                      </span>
-                    </span>
-                  </li>
-                )}
-                {qty === "-qty" ? (
-                  <li>
-                    <span
-                      onClick={() => seQtyFilter("qty")}
-                      className="text-white w-28 btn hover:bg-personal-800 bg-daintree-400"
-                    >
-                      Qty
-                      <span>
-                        <IoArrowDown />
-                      </span>
-                    </span>
-                  </li>
-                ) : (
-                  <li>
-                    <span
-                      onClick={() => seQtyFilter("-qty")}
-                      className="text-white w-28 btn hover:bg-personal-800 bg-daintree-400"
-                    >
-                      Qty
-                      <span>
-                        <IoArrowUp />
-                      </span>
-                    </span>
-                  </li>
-                )}
-                {views === "-views" ? (
-                  <li>
-                    <span
-                      onClick={() => setViewsFilter("views")}
-                      className="text-white w-28 btn hover:bg-personal-800 bg-daintree-400"
-                    >
-                      views
-                      <span>
-                        <IoArrowDown />
-                      </span>
-                    </span>
-                  </li>
-                ) : (
-                  <li>
-                    <span
-                      onClick={() => setViewsFilter("-views")}
-                      className="text-white w-28 btn hover:bg-personal-800 bg-daintree-400"
-                    >
-                      views
-                      <span>
-                        <IoArrowUp />
-                      </span>
-                    </span>
-                  </li>
-                )}
+                      {sortFilterVal.name}
+
+                      {sort === sortFilterVal.filter ? (
+                        <span>
+                          <IoArrowUp />
+                        </span>
+                      ) : (
+                        <span>
+                          <IoArrowDown />
+                        </span>
+                      )}
+                    </li>
+                  );
+                })}
               </ul>
             </div>
           </div>
           {/* MARK:allproducts in table */}
           <div className="">
+            <div className=" grid lg:grid-cols-3 sm:grid-cols-12 justify-end">
+              <form className="md:max-w-md w-full lg:col-start-3 sm:col-start-1  ">
+                <label
+                  htmlFor="default-search"
+                  className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white"
+                >
+                  Search
+                </label>
+                <div className="relative">
+                  <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+                    <svg
+                      className="w-4 h-4 text-gray-500 dark:text-gray-400"
+                      aria-hidden="true"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 20 20"
+                    >
+                      <path
+                        stroke="currentColor"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
+                      />
+                    </svg>
+                  </div>
+                  <input
+                    type="search"
+                    id="default-search"
+                    className="block w-full px-4 py-3 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    placeholder="Search Mockups, Logos..."
+                    required
+                  />
+                  <button
+                    type="submit"
+                    className="text-white absolute end-1 bottom-1.5 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                  >
+                    Search
+                  </button>
+                </div>
+              </form>
+            </div>
+
             <div className="overflow-x-auto ">
               <table className="table table-zebra lg:table-lg table-xs">
                 {/* head */}
                 <thead className="">
-                  <tr>
-                    <th>Title</th>
-                    <th>view</th>
-                    <th>Quantity</th>
-                    <th>Price</th>
-                    <th>Modify Date</th>
+                  <tr className="">
+                    {SortFilter.map((sortFilterVal, i) => {
+                      return (
+                        // queryStr
+                        <th
+                          key={i}
+                          onClick={() => setSortFilter(sortFilterVal.filter)}
+                          className="  cursor-pointer"
+                        >
+                          <span className="flex items-center gap-1">
+                            {sortFilterVal.name}
+                            <HiMiniChevronUpDown />
+                          </span>
+                        </th>
+                      );
+                    })}
                     <th>Brand Logo</th>
                     <th>Details</th>
                   </tr>

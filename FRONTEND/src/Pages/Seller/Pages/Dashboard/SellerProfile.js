@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
-import DashboardNavbar from "../../../SellerComponents/DashboardNavbar";
+import DashboardNavbar from "../../SellerComponents/DashboardNavbar";
 
 import { useDispatch, useSelector } from "react-redux";
-import ModalOutsideClick from "../../../../../Components/Dialoag/ModalOutsideClick";
+import ModalOutsideClick from "../../../../Components/Dialoag/ModalOutsideClick";
 // import useToggle from "../../../../../Hooks/useToggle";
 import {
   SELLER_PROFILE_SAGA,
   UPDATE_PROFILE_SAGA,
-} from "../../../../../Stores/Slice/Seller.Auth.Slice";
+} from "../../../../Stores/Slice/Seller.Auth.Slice";
 
 const SellerProfile = () => {
   const dispatch = useDispatch();

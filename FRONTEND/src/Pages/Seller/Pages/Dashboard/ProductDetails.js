@@ -7,12 +7,12 @@ import {
   UPDATE_SELLER_MULTIPLE_IMAGES_SAGA,
   UPDATE_SELLER_PRODUCTS_SAGA,
   UPDATE_SELLER_THUMBNAIL_SAGA,
-} from "../../../../../Stores/Slice/Seller.Product.Slice";
-import FormInput from "../../../../../Components/Inputs/FormInput";
+} from "../../../../Stores/Slice/Seller.Product.Slice";
+import FormInput from "../../../../Components/Inputs/FormInput";
 import { ReactSearchAutocomplete } from "react-search-autocomplete";
-import DashboardNavbar from "../../../SellerComponents/DashboardNavbar";
+import DashboardNavbar from "../../SellerComponents/DashboardNavbar";
 import { useParams, useNavigate } from "react-router-dom";
-import ModalOutsideClick from "../../../../../Components/Dialoag/ModalOutsideClick";
+import ModalOutsideClick from "../../../../Components/Dialoag/ModalOutsideClick";
 import { ToastContainer } from "react-toastify";
 
 const ProductDetails = () => {

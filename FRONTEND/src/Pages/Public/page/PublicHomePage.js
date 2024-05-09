@@ -1,10 +1,10 @@
 import React from "react";
-import HorizontalCarousel from "../../PublicComponents/Carusel/HorizontalCarousel";
+import HorizontalCarousel from "../PublicComponents/Carusel/HorizontalCarousel";
 import { IoIosArrowForward } from "react-icons/io";
-import Card from "../../PublicComponents/Card";
+import Card from "../PublicComponents/Card";
 import { useNavigate } from "react-router-dom";
 
-const Home = () => {
+const PublicHomePage = () => {
   const navigate = useNavigate();
   return (
     <div>
@@ -128,4 +128,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default PublicHomePage;

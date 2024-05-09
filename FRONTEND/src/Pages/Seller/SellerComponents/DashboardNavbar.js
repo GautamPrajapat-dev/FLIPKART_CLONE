@@ -36,8 +36,8 @@ const DashboardNavbar = ({ name, subname }) => {
           {subname}
         </div>
       </div>
-      <section className="items-center">
-        <div className="flex items-center flex-1 gap-4 text-2xl ">
+      <section className="flex items-center">
+        <div className="flex justify-center items-center flex-1 gap-5 text-2xl ">
           <button
             onClick={() => navigate("/dashboard/inbox")}
             className="bg-transparent btn btn-circle"

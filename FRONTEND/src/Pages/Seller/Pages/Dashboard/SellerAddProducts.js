@@ -3,34 +3,29 @@ import DashBoardNavbar from "../../SellerComponents/DashboardNavbar";
 import FormInputIcon from "../../../../Components/Inputs/FormInputIcon";
 
 import Button from "../../../../Components/Buttons/Button";
-import { ToastContainer } from "react-toastify";
+import { ToastContainer, toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
 import { AddNewProductSellerSaga } from "../../../../Stores/Slice/Seller.Product.Slice";
+import { Category, SubCategory } from "../../../../Utils/SellerFilters";
 const SellerAddProducts = () => {
   const distpatch = useDispatch();
   const { isLoading } = useSelector((state) => state.loading);
-
-  // const uploadMultipleFiles = (e) => {
-  //   if (Array.from(e.target.files).length > 4) {
-  //     e.preventDefault();
-  //     toast.warn(`Cannot upload files more than 4`, {
-  //       position: "top-right",
-  //       autoClose: 5000,
-  //       hideProgressBar: false,
-  //       closeOnClick: true,
-  //       pauseOnHover: true,
-  //       draggable: true,
-  //       progress: undefined,
-  //       theme: "dark",
-  //     });
-
-  //     return;
-  //   }
-  // };
-
   const FormRef = useRef();
-
   const handleOnClickSubmit = (e) => {
+    if (FormRef.current.images.length > 4) {
+      toast.warn(`Cannot upload files more than 4`, {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+      });
+      return;
+    }
+
     let formdata = new FormData(FormRef.current);
 
     e.preventDefault();
@@ -126,30 +121,15 @@ const SellerAddProducts = () => {
                     name="category[category]"
                     id="category"
                   >
-                    <option disabled value="DEFAULT">
-                      Select Category
-                    </option>
-                    <option value="electronics">Electronics</option>
-                    <option value="faishion">Faishion</option>
-                    <option value="beauty">Beauty</option>
-                    <option value="furniture">furniture</option>
-                    <option value="Other">Other</option>
+                    {Category.map((_c, i) => {
+                      return (
+                        <option key={i} value={_c.value}>
+                          {_c.name}
+                        </option>
+                      );
+                    })}
                   </select>
                 </div>
-                {FormRef === "Other" && (
-                  <div className="col-span-7">
-                    <FormInputIcon
-                      variant="sm-outlined"
-                      className=" text-personal-800 placeholder:text-personal-900/50 border-personal-300"
-                      type="text"
-                      name="category"
-                      placeholder="email or Phone"
-                      passwordClassName="text-personal-900"
-                      iconClassName="text-personal-900"
-                      label="Other Category"
-                    />
-                  </div>
-                )}
               </div>
               <div className="grid items-center grid-cols-12 gap-3 place-content-center ">
                 <div className="flex flex-col col-span-5">
@@ -161,40 +141,13 @@ const SellerAddProducts = () => {
                     name="category[subCategory]"
                     id="subcategory"
                   >
-                    <option disabled value="DEFAULT">
-                      Select Sub Category
-                    </option>
-                    <option value="mens clothings">Men's Clothing</option>
-                    <option value="womens clothings">Women's Clothing</option>
-                    <option value="kid's clothing">Kid's Clothing</option>
-                    <option value="furniture">Furniture</option>
-                    <option value="women jwellery">Women's Jwellery</option>
-                    <option value="laptop">Laptop</option>
-                    <option value="mobile">Mobile</option>
-                    <option value="laptop accessories">
-                      Laptop Accessories
-                    </option>
-                    <option value="Mobile accessories">
-                      Mobile Accessories
-                    </option>
-                    <option value="Other">Other</option>
+                    {SubCategory.map((_sub, i) => (
+                      <option key={i} value={_sub.value}>
+                        {_sub.name}
+                      </option>
+                    ))}
                   </select>
                 </div>
-                {FormRef.current === "Other" && (
-                  <div className="col-span-7">
-                    <FormInputIcon
-                      variant="sm-outlined"
-                      className=" text-personal-800 placeholder:text-personal-900/50 border-personal-300"
-                      type="text"
-                      name="subCategory"
-                      // onChange={handleOnChange}
-                      placeholder="Enter Your Sub Category"
-                      passwordClassName="text-personal-900"
-                      iconClassName="text-personal-900"
-                      label="Other Sub Category"
-                    />
-                  </div>
-                )}
               </div>
               <div className="grid grid-cols-4 gap-4">
                 <div className="col-span-4 lg:col-span-3">

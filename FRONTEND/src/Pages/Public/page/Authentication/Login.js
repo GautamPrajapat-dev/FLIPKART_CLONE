@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import FormInputIcon from "../../../../Components/Inputs/FormInputIcon";
 import { LuUser } from "react-icons/lu";
 import { IoLockClosedOutline } from "react-icons/io5";
@@ -6,7 +6,10 @@ import Button from "../../../../Components/Buttons/Button";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
-import { setLocalStorage } from "../../../../Utils/LocalStorage";
+import {
+  getTokenLocalStorage,
+  setLocalStorage,
+} from "../../../../Utils/LocalStorage";
 const Login = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
@@ -68,6 +71,11 @@ const Login = () => {
       setLoading(false);
     }
   };
+  useEffect(() => {
+    if (getTokenLocalStorage("-token-x-public")) {
+      navigate("/");
+    }
+  }, [navigate]);
   return (
     <>
       <ToastContainer />
