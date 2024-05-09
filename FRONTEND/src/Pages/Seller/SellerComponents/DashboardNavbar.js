@@ -4,7 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import Button from "../../../Components/Buttons/Button";
 import { useDispatch, useSelector } from "react-redux";
 import { SELLER_PROFILE_SAGA } from "../../../Stores/Slice/Seller.Auth.Slice";
-import { clearTokenLocalStorage } from "../../../Utils/LocalStorage";
+import { clearTokenLocalStorageSeller } from "../../../Utils/LocalStorage";
 
 const DashboardNavbar = ({ name, subname }) => {
   const navigate = useNavigate();
@@ -19,10 +19,11 @@ const DashboardNavbar = ({ name, subname }) => {
     if (avatar?.status === true) {
       dispatch(SELLER_PROFILE_SAGA());
     }
+    return () => dispatch(SELLER_PROFILE_SAGA());
   }, [dispatch, avatar.status]);
 
   const handleOnClickLogout = () => {
-    clearTokenLocalStorage();
+    clearTokenLocalStorageSeller();
     window.location.href = "/seller";
   };
   return (

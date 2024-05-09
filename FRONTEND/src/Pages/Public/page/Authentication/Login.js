@@ -1,16 +1,76 @@
-import React from "react";
+import React, { useRef, useState } from "react";
 import FormInputIcon from "../../../../Components/Inputs/FormInputIcon";
 import { LuUser } from "react-icons/lu";
 import { IoLockClosedOutline } from "react-icons/io5";
 import Button from "../../../../Components/Buttons/Button";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { ToastContainer, toast } from "react-toastify";
+import { setLocalStorage } from "../../../../Utils/LocalStorage";
 const Login = () => {
   const navigate = useNavigate();
-  const handleSubmit = (e) => {
+  const [loading, setLoading] = useState(false);
+
+  const loginRef = useRef();
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    const formData = {
+      emailPhone: loginRef.current.emailPhone.value,
+      password: loginRef.current.password.value,
+    };
+
+    setLoading(true);
+    try {
+      const res = await axios.post(
+        "http://localhost:3031/public/signin",
+        formData
+      );
+      if (res.data.status !== true) {
+        toast.warn(res.data.errorMessage, {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "dark",
+        });
+      } else {
+        const user = await res.data;
+        setLocalStorage("-token-x-public", user._token__);
+        toast.success(user.successMessage, {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "dark",
+        });
+
+        window.location.href = "/";
+      }
+    } catch (error) {
+      toast.error(error.response.data.errorMessage, {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+      });
+    } finally {
+      setLoading(false);
+    }
   };
   return (
     <>
+      <ToastContainer />
       <section className="relative w-full">
         <div className="flex my-6">
           <div className="grid justify-center w-full grid-cols-12">
@@ -32,12 +92,17 @@ const Login = () => {
                   />
                 </div>
                 <div className="flex flex-col justify-between col-span-12 px-4 py-8 lg:col-span-7 bg-daintree-800 ">
-                  <form action="" className="flex flex-col gap-6 px-9">
+                  <form
+                    method="POST"
+                    ref={loginRef}
+                    onSubmit={handleSubmit}
+                    className="flex flex-col gap-6 px-9"
+                  >
                     <FormInputIcon
                       className="text-personal-20"
                       variant="sm-outlined"
                       type="text"
-                      name="email"
+                      name="emailPhone"
                       icon={<LuUser />}
                       placeholder="Email"
                       iconClassName="text-personal-10"
@@ -54,18 +119,24 @@ const Login = () => {
                     />
                     <Button
                       type="submit"
-                      onClick={handleSubmit}
-                      className="py-2 bg-emerald-900 text-white"
+                      disabled={loading ? true : false}
+                      className="bg-mariner-900 py-2.5 text-white"
                     >
-                      Login
+                      {loading ? (
+                        <div className="loading">
+                          <div className="loading-spinner"></div>
+                        </div>
+                      ) : (
+                        "Login"
+                      )}
                     </Button>
                   </form>
-                  <div
+                  <divx
                     onClick={() => navigate("/signup")}
                     className="mt-3 text-blue-400 cursor-pointer px-9 text-end lg:text-center"
                   >
                     New to Flipkart? Create an account
-                  </div>
+                  </divx>
                 </div>
               </div>
             </div>

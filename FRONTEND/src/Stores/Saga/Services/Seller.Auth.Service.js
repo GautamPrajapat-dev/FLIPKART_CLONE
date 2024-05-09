@@ -1,5 +1,6 @@
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
+import { clearTokenLocalStorageSeller } from "../../../Utils/LocalStorage";
 
 // import { toast } from "react-toastify";
 const URL = "http://localhost:3031/seller";
@@ -13,7 +14,7 @@ if (token !== "") {
     if (Date.now() >= decodedToken.exp * 1000) {
       window.location.href = "/login";
       console.log("Token expired.");
-      localStorage.clear();
+      clearTokenLocalStorageSeller();
     }
   } catch (error) {
     console.log("");

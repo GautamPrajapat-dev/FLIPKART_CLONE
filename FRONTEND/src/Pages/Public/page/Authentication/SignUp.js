@@ -4,15 +4,71 @@ import { LuUser } from "react-icons/lu";
 import { IoLockClosedOutline } from "react-icons/io5";
 import Button from "../../../../Components/Buttons/Button";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { ToastContainer, toast } from "react-toastify";
 const SignUp = () => {
   const navigate = useNavigate();
   const formRef = useRef();
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
+    // const data = new FormData(formRef.current);
     e.preventDefault();
-    const data = new FormData(formRef.current);
+
+    try {
+      const formData = {
+        firstname: formRef.current.firstname.value,
+        surname: formRef.current.surname.value,
+        mobile: formRef.current.mobile.value,
+        email: formRef.current.email.value,
+        password: formRef.current.password.value,
+      };
+
+      const res = await axios.post(
+        "http://localhost:3031/public/signup",
+        formData
+      );
+
+      if (res.data.status !== true) {
+        toast.warn(res.data.errorMessage, {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "dark",
+        });
+      } else {
+        const user = await res.data;
+        toast.success(user.successMessage, {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "dark",
+        });
+
+        window.location.href = "/login";
+      }
+    } catch (error) {
+      toast.error(error.response.data.errorMessage, {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+      });
+    }
   };
   return (
     <>
+      <ToastContainer />
       <section className="relative w-full">
         <div className="flex my-6">
           <div className="grid justify-center w-full grid-cols-12">
@@ -35,6 +91,7 @@ const SignUp = () => {
                 </div>
                 <div className="flex flex-col justify-between col-span-12 px-4 py-8 lg:col-span-7 bg-mariner-200 ">
                   <form
+                    method="POST"
                     onSubmit={handleSubmit}
                     ref={formRef}
                     className="flex flex-col gap-6 px-9"
@@ -43,18 +100,18 @@ const SignUp = () => {
                       className="!text-personal-800 placeholder:text-personal-900 border-personal-300"
                       variant="sm-outlined"
                       type="text"
-                      name="firstName"
+                      name="firstname"
                       icon={<LuUser />}
-                      placeholder="firstName"
+                      placeholder="firstname"
                       iconClassName="text-personal-900"
                     />
                     <FormInputIcon
                       className="!text-personal-800 placeholder:text-personal-900 border-personal-300"
                       variant="sm-outlined"
                       type="text"
-                      name="surrname"
+                      name="surname"
                       icon={<LuUser />}
-                      placeholder="surrname"
+                      placeholder="surname"
                       iconClassName="text-personal-900"
                     />
                     <FormInputIcon
@@ -69,10 +126,10 @@ const SignUp = () => {
                     <FormInputIcon
                       className="!text-personal-800 placeholder:text-personal-900 border-personal-300"
                       variant="sm-outlined"
-                      type="text"
+                      type="email"
                       name="email"
                       icon={<LuUser />}
-                      placeholder="Email"
+                      placeholder="email"
                       iconClassName="text-personal-900"
                     />
                     <FormInputIcon
@@ -85,15 +142,15 @@ const SignUp = () => {
                       passwordClassName="text-personal-900"
                       iconClassName="text-personal-900"
                     />
-                    <button
+                    <Button
                       type="submit"
                       className="py-2.5 bg-mariner-900 text-white"
                     >
                       SignUp
-                    </button>
+                    </Button>
                     <Button
                       onClick={() => navigate("/login")}
-                      className="py-2.5 text-white "
+                      className="py-2.5 text-personal-700 "
                     >
                       Existing User? Log in
                     </Button>

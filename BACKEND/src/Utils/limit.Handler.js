@@ -2,7 +2,7 @@ const { rateLimit } = require("express-rate-limit");
 
 const limit = {
   loginlimit: rateLimit({
-    max: 3,
+    // max: 3,
     windowMs: 60 * 60 * 1000,
     handler: function (req, res) {
       res.status(429).json({

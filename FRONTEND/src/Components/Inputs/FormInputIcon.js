@@ -17,7 +17,7 @@ const FormInputIcon = (props, ref) => {
     labelClass,
     message,
     label,
-    onChange,
+    //onChange,
   } = props;
 
   return (
@@ -41,6 +41,7 @@ const FormInputIcon = (props, ref) => {
             </div>
             <input
               ref={ref}
+              //onChange={(e) => onChange(e)}
               type={type === "password" && !showPassword ? "text" : type}
               id={name}
               name={name}
@@ -89,6 +90,7 @@ const FormInputIcon = (props, ref) => {
             )}
             <input
               ref={ref}
+              //onChange={(e) => onChange(e)}
               type={type === "password" && !showPassword ? "text" : type}
               id={name}
               name={name}
@@ -135,6 +137,7 @@ const FormInputIcon = (props, ref) => {
             </div>
             <input
               ref={ref}
+              //onChange={(e) => onChange(e)}
               type={type === "password" && !showPassword ? "text" : type}
               id={name}
               autoComplete={type === "password" ? "false" : "true"}
@@ -180,6 +183,7 @@ const FormInputIcon = (props, ref) => {
             </div>
             <input
               ref={ref}
+              //onChange={(e) => onChange(e)}
               type={type === "password" && !showPassword ? "text" : type}
               id={name}
               value={value}
@@ -226,6 +230,7 @@ const FormInputIcon = (props, ref) => {
             </div>
             <input
               ref={ref}
+              //onChange={(e) => onChange(e)}
               type={type === "password" && !showPassword ? "text" : type}
               id={name}
               autoComplete={type === "password" ? "false" : "true"}
@@ -272,6 +277,7 @@ const FormInputIcon = (props, ref) => {
             </div>
             <input
               ref={ref}
+              //onChange={(e) => onChange(e)}
               type={type === "password" && !showPassword ? "text" : type}
               id={name}
               value={value}

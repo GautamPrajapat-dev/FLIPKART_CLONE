@@ -3,7 +3,7 @@ import Button from "../../../../Components/Buttons/Button";
 import { IoLocate, IoLockClosedOutline, IoMailOutline } from "react-icons/io5";
 import FormInputIcon from "../../../../Components/Inputs/FormInputIcon";
 import { LuUser } from "react-icons/lu";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import useDebounce from "../../../../Hooks/useDebounce.Hook";
 import axios from "axios";
@@ -25,7 +25,9 @@ const Signup = () => {
   };
   const FromVal = useDebounce(input, 500);
   axios.defaults.withCredentials = true;
-  const Signup = async () => {
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
     const res = await axios.post(
       `http://localhost:3031/seller/register`,
       FromVal
@@ -60,11 +62,6 @@ const Signup = () => {
     }
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    Signup();
-  };
-
   return (
     <>
       <ToastContainer />
@@ -73,7 +70,11 @@ const Signup = () => {
           <div className="w-full col-span-12 px-3 py-8 lg:rounded-lg lg:col-start-4 lg:col-span-6 bg-mariner-50 ">
             <div className="flex justify-center text-2xl font-bold">SignUp</div>
             <div className="flex flex-col justify-between col-span-12 px-4 py-8 pb-12">
-              <form action="" className="flex flex-col gap-6 px-9">
+              <form
+                onSubmit={handleSubmit}
+                method="POST"
+                className="flex flex-col gap-6 px-9"
+              >
                 <div className="grid gap-5 lg:grid-cols-2">
                   <FormInputIcon
                     className="!text-personal-800 placeholder:text-personal-900/50 border-personal-300"
@@ -150,18 +151,16 @@ const Signup = () => {
                 />
                 <Button
                   type="submit"
-                  onClick={handleSubmit}
                   className="py-2.5 text-white bg-mariner-900"
                 >
                   SignUp
                 </Button>
-                <Button
-                  type="submit"
-                  onClick={() => navigate("/seller/login")}
-                  className="py-2.5 text-white"
+                <Link
+                  to="/seller/login"
+                  className="py-2.5 rounded-md bg-black text-center text-white"
                 >
                   Existing User? Log in
-                </Button>
+                </Link>
               </form>
             </div>
           </div>

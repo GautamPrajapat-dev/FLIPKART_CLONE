@@ -1,123 +1,40 @@
-import React, { useCallback, useRef, useState } from "react";
+import React, { useRef } from "react";
 import DashBoardNavbar from "../../SellerComponents/DashboardNavbar";
 import FormInputIcon from "../../../../Components/Inputs/FormInputIcon";
 
 import Button from "../../../../Components/Buttons/Button";
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
 import { AddNewProductSellerSaga } from "../../../../Stores/Slice/Seller.Product.Slice";
 const SellerAddProducts = () => {
   const distpatch = useDispatch();
   const { isLoading } = useSelector((state) => state.loading);
 
-  const [images, SetImages] = useState([]);
-  // const [product, setProduct] = useState([
-  //   {
-  //     title: "",
-  //     description: "",
-  //     qty: 0,
-  //     name: "",
-  //     mrp: 0,
-  //     cost: 0,
-  //     discount: 0,
-  //   },
-  // ]);
+  // const uploadMultipleFiles = (e) => {
+  //   if (Array.from(e.target.files).length > 4) {
+  //     e.preventDefault();
+  //     toast.warn(`Cannot upload files more than 4`, {
+  //       position: "top-right",
+  //       autoClose: 5000,
+  //       hideProgressBar: false,
+  //       closeOnClick: true,
+  //       pauseOnHover: true,
+  //       draggable: true,
+  //       progress: undefined,
+  //       theme: "dark",
+  //     });
 
-  // const titleRef = useRef();
-  // const descriptionRef = useRef();
-  // const qtyRef = useRef(0);
-  // const mrpRef = useRef(0);
-  // const costRef = useRef(0);
-  // const discountRef = useRef(0);
-  // const nameRef = useRef();
-
-  // title,description,category{category,subCategory},price{mrp,cost, discount,thumbnail,images logo=brandLogo
-
-  // const handleSelectCategory = (e) => {
-  //   setCategory(e.target.value);
-  // };
-  // const handleSubCategory = (e) => {
-  //   setSubCategory(e.target.value);
-  // };
-  // const handleBrandLogo = (e) => {
-  //   SetBrandLogo(e.target.files[0]);
-  // };
-  // const handleThumbnail = (e) => {
-  //   SetThumbnail(e.target.files[0]);
-  // };
-  // const handleOnChange = useCallback(
-  //   (e) => {
-  //     const name = e.target.name;
-  //     const value = e.target.value;
-  //     setProduct({ ...product, [name]: value });
-  //   },
-  //   [product]
-  // );
-  const uploadMultipleFiles = (e) => {
-    if (Array.from(e.target.files).length > 4) {
-      e.preventDefault();
-      toast.warn(`Cannot upload files more than 4`, {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "dark",
-      });
-      SetImages(e.target.files);
-      return;
-    }
-  };
-
-  // formdata.append("images", allimages);
-  // const data = {
-  //   title: product.title || "",
-  //   description: product.description || "",
-  //   qty: product.qty || 0,
-  //   brand: {
-  //     name: product.name || "",
-  //     logo: brandlogo,
-  //   },
-  //   category: {
-  //     category: category,
-  //     subCategory: subCategory,
-  //   },
-  //   price: {
-  //     mrp: product.mrp || 0,
-  //     cost: product.cost || 0,
-  //     discount: product.discount || 0,
-  //   },
-  //   thumbnail: thumbnail,
-  //   images: images,
+  //     return;
+  //   }
   // };
 
   const FormRef = useRef();
-  const imageRef = useRef();
+
   const handleOnClickSubmit = (e) => {
     let formdata = new FormData(FormRef.current);
-    for (let i = 0; i < imageRef.length; i++) {
-      formdata.append("images", images[i]);
-    }
 
-    console.log(...formdata);
-    // formdata.append("title", product.title || "");
-    // formdata.append("description", product.description || "");
-    // formdata.append("price[mrp]", product.mrp || 0);
-    // formdata.append("price[cost]", product.cost || 0);
-    // formdata.append("price[discount]", product.discount || 0);
-    // formdata.append("qty", product.qty || 0);
-    // formdata.append("category[category]", category || "");
-    // formdata.append("category[subCategory]", subCategory || "");
-    // formdata.append("brand[name]", product.name || "");
-    // formdata.append("brandLogo", brandlogo);
-    // formdata.append("thumbnail", thumbnail);
-    // for (let i = 0; i < images.length; i++) {
-    //   formdata.append("images", images[i]);
-    // }
     e.preventDefault();
-    // distpatch(AddNewProductSellerSaga(formdata));
+    distpatch(AddNewProductSellerSaga(formdata));
   };
 
   return (
@@ -128,6 +45,7 @@ const SellerAddProducts = () => {
       <section className="dark:text-white">
         <div className="flex flex-col gap-6 mt-5">
           <form
+            method="POST"
             onSubmit={handleOnClickSubmit}
             ref={FormRef}
             className="flex flex-col gap-6 "
@@ -324,8 +242,6 @@ const SellerAddProducts = () => {
                     type="file"
                     name="images"
                     maxLength={4}
-                    ref={imageRef}
-                    onChange={uploadMultipleFiles}
                     className="file-input-bordered file-input"
                     multiple
                   />
@@ -342,7 +258,7 @@ const SellerAddProducts = () => {
                   "Add Product"
                 )
               }
-              className="py-2 text-white"
+              className="py-2 text-white bg-black"
             />
           </form>
         </div>

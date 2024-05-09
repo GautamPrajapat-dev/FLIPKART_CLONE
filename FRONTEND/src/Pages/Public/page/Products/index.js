@@ -7,7 +7,7 @@ const Products = () => {
   return (
     <div>
       <div className="container w-4/5 mx-auto divide-y-2">
-        {[0, 0, 0, 0].map((i) => {
+        {Array.from({ length: 5 }).map((i) => {
           return (
             <div className="grid grid-cols-1 gap-5 py-2 lg:gap-2 md:grid-cols-4 ">
               <div className="relative flex items-center justify-center ">
