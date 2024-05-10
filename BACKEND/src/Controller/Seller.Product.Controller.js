@@ -340,12 +340,6 @@ const SellerProduct = {
     }).countDocuments();
     const total = Math.ceil(count / req.query.limit || 3);
     if (products) {
-      if (products.length === 0) {
-        return res.status(400).json({
-          status: false,
-          errorMessage: "Not found",
-        });
-      }
       res.status(200).json({
         status: true,
         totalProduct: count,

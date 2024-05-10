@@ -1,7 +1,6 @@
 import React, { useRef } from "react";
 import DashBoardNavbar from "../../SellerComponents/DashboardNavbar";
 import FormInputIcon from "../../../../Components/Inputs/FormInputIcon";
-
 import Button from "../../../../Components/Buttons/Button";
 import { ToastContainer, toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
@@ -12,6 +11,7 @@ const SellerAddProducts = () => {
   const { isLoading } = useSelector((state) => state.loading);
   const FormRef = useRef();
   const handleOnClickSubmit = (e) => {
+    e.preventDefault();
     if (FormRef.current.images.length > 4) {
       toast.warn(`Cannot upload files more than 4`, {
         position: "top-right",
@@ -25,10 +25,7 @@ const SellerAddProducts = () => {
       });
       return;
     }
-
     let formdata = new FormData(FormRef.current);
-
-    e.preventDefault();
     distpatch(AddNewProductSellerSaga(formdata));
   };
 

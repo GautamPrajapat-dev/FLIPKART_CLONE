@@ -2,22 +2,25 @@ import React, { useCallback, useEffect, useState } from "react";
 import DashBoardNavbar from "../../SellerComponents/DashboardNavbar";
 import { useDispatch, useSelector } from "react-redux";
 import { GET_ALL_PRODUCTS_SAGA } from "../../../../Stores/Slice/Seller.Product.Slice";
-import { IoArrowDown, IoArrowUp } from "react-icons/io5";
 import { ToastContainer } from "react-toastify";
 import { Link } from "react-router-dom";
 import { SortFilter } from "../../../../Utils/SellerFilters";
 import { HiMiniChevronUpDown } from "react-icons/hi2";
+import useDebounce from "../../../../Hooks/useDebounce.Hook";
 const SellerProducts = () => {
   const dispatch = useDispatch();
   const [currentPage, setCurrentPage] = useState(1);
   const [sort, setSortFilter] = useState("-createdAt");
-
+  const [searchVal, setsearchVal] = useState("");
   // const [product_id, setIDProduct] = useState("");
+  const handleOnchange = (e) => {
+    e.preventDefault();
+    setsearchVal(e.target.value);
+  };
+  const search = useDebounce(searchVal);
   const products = useSelector((state) => state.SellerProduct);
-
   const { isLoading } = useSelector((state) => state.loading);
   //MARK:Pagination
-
   const handleOnPrev = useCallback(() => {
     if (currentPage === 1) {
       setCurrentPage(currentPage);
@@ -26,22 +29,21 @@ const SellerProducts = () => {
     }
   }, [currentPage]);
 
-  const handleOnNext = useCallback(() => {
+  const handleOnNext = () => {
     if (products?.products?.totalPage > currentPage) {
       setCurrentPage(currentPage + 1);
     }
-  }, [currentPage, products?.products?.totalPage]);
+  };
 
   useEffect(() => {
     const config = {
       currentPage,
       sort,
+      search,
     };
-    if (products?.products?.products?.length !== 0) {
-      dispatch(GET_ALL_PRODUCTS_SAGA(config));
-    }
-    return () => dispatch(GET_ALL_PRODUCTS_SAGA());
-  }, [dispatch, products?.products?.products?.length, currentPage, sort]);
+
+    dispatch(GET_ALL_PRODUCTS_SAGA(config));
+  }, [dispatch, search, currentPage, sort]);
   // MARK:return
   return (
     <>
@@ -53,7 +55,7 @@ const SellerProducts = () => {
         {/* SEE ALL PRODUCT  */}
         <section className="flex flex-col">
           {/* FILTER */}
-          <div className="w-full my-7">
+          {/* <div className="w-full my-7">
             <div>
               <ul className="flex flex-wrap gap-4 ">
                 {SortFilter.map((sortFilterVal, i) => {
@@ -83,11 +85,11 @@ const SellerProducts = () => {
                 })}
               </ul>
             </div>
-          </div>
+          </div> */}
           {/* MARK:allproducts in table */}
-          <div className="">
-            <div className=" grid lg:grid-cols-3 sm:grid-cols-12 justify-end">
-              <form className="md:max-w-md w-full lg:col-start-3 sm:col-start-1  ">
+          <div className="mt-5">
+            <div className="grid justify-end lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1">
+              <div className="w-full md:max-w-md lg:col-start-3 sm:col-start-1 ">
                 <label
                   htmlFor="default-search"
                   className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white"
@@ -95,7 +97,7 @@ const SellerProducts = () => {
                   Search
                 </label>
                 <div className="relative">
-                  <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+                  <div className="absolute inset-y-0 flex items-center pointer-events-none start-0 ps-3">
                     <svg
                       className="w-4 h-4 text-gray-500 dark:text-gray-400"
                       aria-hidden="true"
@@ -114,19 +116,21 @@ const SellerProducts = () => {
                   </div>
                   <input
                     type="search"
-                    id="default-search"
-                    className="block w-full px-4 py-3 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    placeholder="Search Mockups, Logos..."
-                    required
+                    name="Search"
+                    onChange={(e) => handleOnchange(e)}
+                    value={searchVal}
+                    id="search"
+                    className="block w-full px-4 py-3 text-sm text-gray-900 border border-gray-300 rounded-lg ps-10 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    placeholder="Search..."
                   />
-                  <button
-                    type="submit"
+                  {/* <button
+                    onClick={handleonck}
                     className="text-white absolute end-1 bottom-1.5 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                   >
                     Search
-                  </button>
+                  </button> */}
                 </div>
-              </form>
+              </div>
             </div>
 
             <div className="overflow-x-auto ">
@@ -136,11 +140,10 @@ const SellerProducts = () => {
                   <tr className="">
                     {SortFilter.map((sortFilterVal, i) => {
                       return (
-                        // queryStr
                         <th
                           key={i}
                           onClick={() => setSortFilter(sortFilterVal.filter)}
-                          className="  cursor-pointer"
+                          className="cursor-pointer "
                         >
                           <span className="flex items-center gap-1">
                             {sortFilterVal.name}

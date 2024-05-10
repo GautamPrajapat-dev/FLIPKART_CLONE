@@ -4,23 +4,23 @@ import { Link, useNavigate } from "react-router-dom";
 import Button from "../../../Components/Buttons/Button";
 import { useDispatch, useSelector } from "react-redux";
 import { SELLER_PROFILE_SAGA } from "../../../Stores/Slice/Seller.Auth.Slice";
-import { clearTokenLocalStorageSeller } from "../../../Utils/LocalStorage";
+import {
+  clearTokenLocalStorageSeller,
+  getTokenLocalStorageSeller,
+} from "../../../Utils/LocalStorage";
 
 const DashboardNavbar = ({ name, subname }) => {
   const navigate = useNavigate();
 
-  const { profile, avatar } = useSelector((state) => state.Seller);
+  const { profile } = useSelector((state) => state.Seller);
 
   const dispatch = useDispatch();
+
   useEffect(() => {
-    dispatch(SELLER_PROFILE_SAGA());
-  }, [dispatch]);
-  useEffect(() => {
-    if (avatar?.status === true) {
+    if (!!getTokenLocalStorageSeller()) {
       dispatch(SELLER_PROFILE_SAGA());
     }
-    return () => dispatch(SELLER_PROFILE_SAGA());
-  }, [dispatch, avatar.status]);
+  }, [dispatch]);
 
   const handleOnClickLogout = () => {
     clearTokenLocalStorageSeller();
@@ -37,7 +37,7 @@ const DashboardNavbar = ({ name, subname }) => {
         </div>
       </div>
       <section className="flex items-center">
-        <div className="flex justify-center items-center flex-1 gap-5 text-2xl ">
+        <div className="flex items-center justify-center flex-1 gap-5 text-2xl ">
           <button
             onClick={() => navigate("/dashboard/inbox")}
             className="bg-transparent btn btn-circle"

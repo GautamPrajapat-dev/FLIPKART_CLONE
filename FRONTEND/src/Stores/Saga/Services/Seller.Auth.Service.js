@@ -1,15 +1,17 @@
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
-import { clearTokenLocalStorageSeller } from "../../../Utils/LocalStorage";
+import {
+  clearTokenLocalStorageSeller,
+  getTokenLocalStorageSeller,
+} from "../../../Utils/LocalStorage";
 
 // import { toast } from "react-toastify";
 const URL = "http://localhost:3031/seller";
 
-const token = localStorage?.getItem("_token") || "";
-if (token !== "") {
+const token = getTokenLocalStorageSeller();
+if (!!token) {
   try {
     let decodedToken = jwtDecode(token);
-
     // JWT exp is in seconds
     if (Date.now() >= decodedToken.exp * 1000) {
       window.location.href = "/login";
@@ -52,6 +54,9 @@ axios.interceptors.response.use(
 
 export const getDetails = async () => {
   try {
+    if (!token) {
+      return;
+    }
     const res = await axios.get(`${URL}/seller-profile`, {
       headers: {
         Authorization: `Bearer ${token}`,

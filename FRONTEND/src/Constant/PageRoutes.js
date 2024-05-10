@@ -4,6 +4,8 @@ const SIGNUP_ROUTE = "/signup";
 const CART_ROUTE = "/cart";
 const ALL_PRODUCTS_ROUTE = "/products";
 const SINGLE_PRODUCT_ROUTE = "/products/:SingleProduct";
+const PublicWhiteList = "/whitelist";
+
 const SELLER_ROUTE = "/seller";
 const SELLER_SIGNUP_ROUTE = "signup";
 const SELLER_SIGNIN_ROUTE = "login";
@@ -16,6 +18,7 @@ const SELLER_DASHBOARD_ADD_NEW_PRODUCTS = "/dashboard/addnewproducts";
 const SELLER_DASHBOARD_PROFILE = "/dashboard/profile";
 
 export const PageRouts = {
+  PublicWhiteList,
   MAIN_ROUTE,
   LOGIN_ROUTE,
   SIGNUP_ROUTE,

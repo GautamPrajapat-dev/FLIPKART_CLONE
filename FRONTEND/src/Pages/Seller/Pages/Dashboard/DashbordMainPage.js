@@ -11,7 +11,6 @@ const DashbordMainPage = () => {
   useEffect(() => {
     const currentPage = 1;
     dispatch(GET_ALL_PRODUCTS_SAGA(currentPage));
-    return () => dispatch(GET_ALL_PRODUCTS_SAGA());
   }, [dispatch]);
   return (
     <main className="px-3">

@@ -7,18 +7,6 @@ import Footer from "./SellerComponents/Footer";
 // import Footer from "./SellerComponents/Footer";
 
 const AdminLayout = () => {
-  // const { isAuthantiCate } = useSelector((state) => state.Seller);
-  // const token = !!localStorage?.getItem("_token");
-
-  // const navigate = useNavigate();
-  // useEffect(() => {
-  //   if (token !== null) {
-  //     navigate("/seller/dasboard/main");
-  //   }
-  //   return () => {
-  //     navigate("/seller");
-  //   };
-  // }, [token, navigate]);
   return (
     <div>
       <NavbarSeller />

@@ -1,8 +1,16 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { LuHeart } from "react-icons/lu";
 import Button from "../../../Components/Buttons/Button";
+import { useNavigate } from "react-router-dom";
+import { getTokenLocalStoragePublic } from "../../../Utils/LocalStorage";
 
 const Cart = () => {
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (!getTokenLocalStoragePublic()) {
+      navigate("/");
+    }
+  }, [navigate]);
   return (
     <div className="container py-6 mx-auto px-7 lg:px-auto ">
       <div className="grid grid-cols-6 lg:divide-x-2 lg:h-screen ">

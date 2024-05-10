@@ -21,7 +21,6 @@ export const SortFilter = [
     filter: "-createdAt",
   },
 ];
-// ["-createdAt", "-price", "-qty", "-title", "-views"];
 
 export const Category = [
   { value: "electronics", name: "Electronics" },

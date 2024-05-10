@@ -22,9 +22,9 @@ app.use(express.urlencoded({ extended: false }));
 const httpServer = createServer(app);
 
 app.use(function (req, res, next) {
-  res.set(
+  res.setHeader(
     "Cache-Control",
-    "no-cache,private,no-store,must-revalidate,max-stale=0,post-check=0,pre-check=0"
+    "no-cache,private,no-store,must-revalidate,max-stale=0,post-check=0,pre-check=0, max-age=3600"
   );
   next();
 });

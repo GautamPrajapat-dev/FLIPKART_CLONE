@@ -11,16 +11,13 @@ import {
 
 const SellerProfile = () => {
   const dispatch = useDispatch();
-
   const [modelprofile, setUpdateProfile] = useState(false);
   const [sellerProfile, setSellerProfile] = useState();
   const [profileImg, setProfileImg] = useState("");
   const profile = useSelector((state) => state.Seller);
   const avatar = useSelector((state) => state.Seller.avatar);
   const { isLoading } = useSelector((state) => state.loading);
-
   const user = profile?.profile;
-
   const updateProfile = (e) => {
     setSellerProfile(e.target.files[0]);
     setProfileImg(URL.createObjectURL(e.target.files[0]));
@@ -28,16 +25,15 @@ const SellerProfile = () => {
   const updateProfileSeller = () => {
     const from = new FormData();
     from.append("avatar", sellerProfile);
-
     dispatch(UPDATE_PROFILE_SAGA(from));
   };
 
   useEffect(() => {
-    if (avatar?.status === true) {
+    if (avatar && avatar?.status === true) {
       dispatch(SELLER_PROFILE_SAGA());
       setUpdateProfile(false);
     }
-  }, [avatar?.status, dispatch, setUpdateProfile]);
+  }, [avatar?.status, avatar, dispatch, setUpdateProfile]);
 
   return (
     <>

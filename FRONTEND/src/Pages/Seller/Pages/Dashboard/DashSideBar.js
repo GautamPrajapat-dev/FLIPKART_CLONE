@@ -1,11 +1,12 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   BiBox,
   BiHomeAlt2,
   BiNotification,
   BiSolidInbox,
 } from "react-icons/bi";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
+import { getTokenLocalStorageSeller } from "../../../../Utils/LocalStorage";
 const links = [
   {
     to: "main",
@@ -28,7 +29,15 @@ const links = [
     icon: <BiSolidInbox />,
   },
 ];
+
 const DashSideBar = () => {
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!!getTokenLocalStorageSeller() === false) {
+      navigate("/seller");
+    }
+  }, [navigate]);
   return (
     <>
       <main className="">

@@ -23,21 +23,14 @@ const PublicHomePage = () => {
           <div className="carousel-item">
             <Card
               onClick={() => navigate("/products")}
-              img="https://daisyui.com/images/stock/photo-1559703248-dcaaec9fab78.jpg"
+              img="https://rukminim2.flixcart.com/image/312/312/xif0q/mobile/d/3/g/-original-imagy2v5ggthbvfe.jpeg?q=70"
               name={"electronic"}
               price={"3493/-"}
             />
           </div>
           <div className="carousel-item">
             <Card
-              img="https://daisyui.com/images/stock/photo-1559703248-dcaaec9fab78.jpg"
-              name={"pizza"}
-              price={"3493/-"}
-            />
-          </div>
-          <div className="carousel-item">
-            <Card
-              img="https://daisyui.com/images/stock/photo-1572635148818-ef6fd45eb394.jpg"
+              img="https://rukminim2.flixcart.com/image/312/312/xif0q/mobile/d/3/g/-original-imagy2v5ggthbvfe.jpeg?q=70"
               name={"pizza"}
               price={"3493/-"}
             />
@@ -51,21 +44,28 @@ const PublicHomePage = () => {
           </div>
           <div className="carousel-item">
             <Card
-              img="https://daisyui.com/images/stock/photo-1550258987-190a2d41a8ba.jpg"
+              img="https://rukminim2.flixcart.com/image/312/312/xif0q/mobile/d/3/g/-original-imagy2v5ggthbvfe.jpeg?q=70"
               name={"pizza"}
               price={"3493/-"}
             />
           </div>
           <div className="carousel-item">
             <Card
-              img="https://daisyui.com/images/stock/photo-1559181567-c3190ca9959b.jpg"
+              img="https://rukminim2.flixcart.com/image/312/312/xif0q/mobile/d/3/g/-original-imagy2v5ggthbvfe.jpeg?q=70"
               name={"pizza"}
               price={"3493/-"}
             />
           </div>
           <div className="carousel-item">
             <Card
-              img="https://daisyui.com/images/stock/photo-1601004890684-d8cbf643f5f2.jpg"
+              img="https://rukminim2.flixcart.com/image/312/312/xif0q/mobile/d/3/g/-original-imagy2v5ggthbvfe.jpeg?q=70"
+              name={"pizza"}
+              price={"3493/-"}
+            />
+          </div>
+          <div className="carousel-item">
+            <Card
+              img="https://rukminim2.flixcart.com/image/312/312/xif0q/mobile/d/3/g/-original-imagy2v5ggthbvfe.jpeg?q=70"
               name={"pizza"}
               price={"3493/-"}
             />
@@ -75,21 +75,14 @@ const PublicHomePage = () => {
           <div className="carousel-item">
             <Card
               onClick={() => navigate("/products")}
-              img="https://daisyui.com/images/stock/photo-1559703248-dcaaec9fab78.jpg"
+              img="https://rukminim2.flixcart.com/image/312/312/xif0q/mobile/d/3/g/-original-imagy2v5ggthbvfe.jpeg?q=70"
               name={"electronic"}
               price={"3493/-"}
             />
           </div>
           <div className="carousel-item">
             <Card
-              img="https://daisyui.com/images/stock/photo-1559703248-dcaaec9fab78.jpg"
-              name={"pizza"}
-              price={"3493/-"}
-            />
-          </div>
-          <div className="carousel-item">
-            <Card
-              img="https://daisyui.com/images/stock/photo-1572635148818-ef6fd45eb394.jpg"
+              img="https://rukminim2.flixcart.com/image/312/312/xif0q/mobile/d/3/g/-original-imagy2v5ggthbvfe.jpeg?q=70"
               name={"pizza"}
               price={"3493/-"}
             />
@@ -103,21 +96,28 @@ const PublicHomePage = () => {
           </div>
           <div className="carousel-item">
             <Card
-              img="https://daisyui.com/images/stock/photo-1550258987-190a2d41a8ba.jpg"
+              img="https://rukminim2.flixcart.com/image/312/312/xif0q/mobile/d/3/g/-original-imagy2v5ggthbvfe.jpeg?q=70"
               name={"pizza"}
               price={"3493/-"}
             />
           </div>
           <div className="carousel-item">
             <Card
-              img="https://daisyui.com/images/stock/photo-1559181567-c3190ca9959b.jpg"
+              img="https://rukminim2.flixcart.com/image/312/312/xif0q/mobile/d/3/g/-original-imagy2v5ggthbvfe.jpeg?q=70"
               name={"pizza"}
               price={"3493/-"}
             />
           </div>
           <div className="carousel-item">
             <Card
-              img="https://daisyui.com/images/stock/photo-1601004890684-d8cbf643f5f2.jpg"
+              img="https://rukminim2.flixcart.com/image/312/312/xif0q/mobile/d/3/g/-original-imagy2v5ggthbvfe.jpeg?q=70"
+              name={"pizza"}
+              price={"3493/-"}
+            />
+          </div>
+          <div className="carousel-item">
+            <Card
+              img="https://rukminim2.flixcart.com/image/312/312/xif0q/mobile/d/3/g/-original-imagy2v5ggthbvfe.jpeg?q=70"
               name={"pizza"}
               price={"3493/-"}
             />

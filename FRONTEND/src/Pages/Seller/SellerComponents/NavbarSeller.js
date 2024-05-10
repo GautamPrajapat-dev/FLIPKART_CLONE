@@ -3,19 +3,17 @@ import Dropdown from "./Dropdown";
 import { NavLink, useNavigate } from "react-router-dom";
 import { IoClose, IoMenuOutline } from "react-icons/io5";
 import useToggle from "../../../Hooks/useToggle";
-import { useSelector } from "react-redux";
+import { getTokenLocalStorageSeller } from "../../../Utils/LocalStorage";
 
 const NavbarSeller = () => {
   const navigate = useNavigate();
-  const { isAuthantiCate } = useSelector((state) => state.Seller);
 
   const [toggle, setToggle] = useToggle(false);
-
   useEffect(() => {
-    if (isAuthantiCate) {
+    if (!!getTokenLocalStorageSeller()) {
       navigate("/dashboard/main");
     }
-  }, [isAuthantiCate, navigate]);
+  }, [navigate]);
 
   return (
     <>
@@ -26,10 +24,11 @@ const NavbarSeller = () => {
       <div className="sticky top-0 z-10 flex justify-between px-5 bg-white shadow">
         <div className="flex items-center justify-between py-2 lg:py-3">
           <div className="flex items-center gap-5">
-            <div className="">
+            <div className="cursor-pointer">
               <img
                 src="https://static-assets-web.flixcart.com/fk-sp-static/images/flipkart_logo_color_revamp.svg"
-                alt=""
+                onClick={() => navigate("/")}
+                alt="home"
               />
             </div>
             {toggle && (

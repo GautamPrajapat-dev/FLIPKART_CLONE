@@ -8,6 +8,7 @@ import {
   IoMenu,
   IoNewspaperOutline,
 } from "react-icons/io5";
+import { HiOutlineDotsVertical } from "react-icons/hi";
 import { CiBoxes } from "react-icons/ci";
 import { LuSearch, LuUser2 } from "react-icons/lu";
 import { MdOutlineDiscount, MdOutlineLocalOffer } from "react-icons/md";
@@ -16,11 +17,7 @@ import useToggle from "../../../../Hooks/useToggle";
 import Button from "../../../../Components/Buttons/Button";
 
 import { Link, NavLink, useNavigate } from "react-router-dom";
-import {
-  IoIosArrowForward,
-  IoMdHeart,
-  IoMdNotificationsOutline,
-} from "react-icons/io";
+import { IoMdHeart, IoMdNotificationsOutline } from "react-icons/io";
 const Navbar = () => {
   const navigate = useNavigate();
   const [toggle, toggler] = useToggle(false);
@@ -100,7 +97,7 @@ const Navbar = () => {
             onClick={() => navigate("/")}
             src="https://static-assets-web.flixcart.com/batman-returns/batman-returns/p/images/fkheaderlogo_exploreplus-44005d.svg"
             alt="logo"
-            className="cursor-pointer -ml-9 lg:m-auto"
+            className="z-40 cursor-pointer -ml-9 lg:m-auto"
           />
         </div>
 
@@ -109,7 +106,7 @@ const Navbar = () => {
             <LuSearch />
           </div>
           <input
-            className="w-full py-2 pl-8 rounded-md focus:outline-none"
+            className="w-full px-1 py-1.5 pl-8 rounded-md focus:outline-none"
             type="search"
             placeholder="type a search"
           />
@@ -122,29 +119,38 @@ const Navbar = () => {
             >
               <NavLink
                 to="/login"
-                className={`flex hover:text-personal-10 hover:bg-personal-900  rounded items-center  gap-2  pl-2`}
+                className={`flex hover:text-personal-10 hover:bg-personal-900  rounded items-center   `}
               >
-                <div className="text-2xl">
-                  <LuUser2 />
-                </div>
-                <div className="px-3 py-2 rounded dropdown dropdown-end dropdown-hover">
+                <div className="px-1 py-1.5 rounded dropdown dropdown-end dropdown-hover">
                   <div
                     tabIndex={0}
                     role="button"
-                    className="relative flex items-center m-1 text-lg peer-hover:-rotate-90 hover:text-personal-10"
+                    className="relative flex items-center mx-1 text-lg peer-hover:-rotate-90 hover:text-personal-10"
                   >
+                    <div className="pr-2">
+                      <LuUser2 />
+                    </div>
                     Login
-                    <IoIosArrowForward className="rotate-90 peer" />
                   </div>
                   <ul
                     tabIndex={0}
-                    className="dropdown-content bg-mariner-100 text-black z-[1] menu p-2 shadow   rounded-box w-52 "
+                    className="dropdown-content  bg-mariner-100 text-black z-[1] menu p-2 w-52 "
                   >
-                    <li>
-                      <Link to={"/login"}>SignIn</Link>
+                    <li className="">
+                      <Link
+                        to={"/login"}
+                        className="hover:bg-personal-50 hover:transition-colors"
+                      >
+                        SignIn
+                      </Link>
                     </li>
                     <li>
-                      <Link to={"/signup"}>Signup</Link>
+                      <Link
+                        to={"/signup"}
+                        className="hover:bg-personal-50 hover:transition-colors"
+                      >
+                        Signup
+                      </Link>
                     </li>
                   </ul>
                 </div>
@@ -158,7 +164,7 @@ const Navbar = () => {
                 to="/cart"
                 className={`flex items-center gap-2 text-lg `}
               >
-                <div className="text-2xl">
+                <div className="">
                   <IoCartOutline />
                 </div>
                 <div className="hidden md:block">Cart</div>
@@ -174,12 +180,37 @@ const Navbar = () => {
                   to="/seller"
                   className={`flex items-center gap-2 text-lg `}
                 >
-                  <div className="text-2xl">
+                  <div className="">
                     <AiOutlineShop />
                   </div>
                   <div className="hidden md:block ">Become a Seller</div>
                 </NavLink>
               </li>
+            </div>
+
+            <div className="hidden lg:block dropdown dropdown-hover dropdown-end">
+              <li>
+                <div tabIndex={0} role="button" className="">
+                  <HiOutlineDotsVertical />
+                </div>
+              </li>
+              <div className="dropdown-content  bg-mariner-100  z-[1] menu p-2  w-56 mt-4">
+                <ul tabIndex={0} className="">
+                  {navList.map((item, index) => {
+                    return (
+                      <li
+                        key={index}
+                        className=" even:divide-y divide-personal-900/20"
+                      >
+                        <NavLink className="" to={item.to}>
+                          <span className="font-semibold">{item.icon}</span>
+                          {item.link}
+                        </NavLink>
+                      </li>
+                    );
+                  })}
+                </ul>
+              </div>
             </div>
 
             {toggle && (
@@ -226,14 +257,15 @@ const Navbar = () => {
                   <nav className="flex flex-col gap-4 ml-3 text-lg capitalize">
                     {navList.map((item, index) => {
                       return (
-                        <>
-                          <ul className="flex items-center even:divide-y divide-personal-900/20">
-                            <span className="font-semibold">{item.icon}</span>
-                            <NavLink className="pl-3 " to={item.to}>
-                              {item.link}
-                            </NavLink>
-                          </ul>
-                        </>
+                        <ul
+                          key={index}
+                          className="flex items-center even:divide-y divide-personal-900/20"
+                        >
+                          <span className="font-semibold">{item.icon}</span>
+                          <NavLink className="pl-3 " to={item.to}>
+                            {item.link}
+                          </NavLink>
+                        </ul>
                       );
                     })}
                   </nav>

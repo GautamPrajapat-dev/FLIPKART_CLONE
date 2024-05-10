@@ -16,15 +16,15 @@ const NotFound = () => {
               >
                 <text
                   kerning="auto"
-                  font-family="Myriad Pro"
+                  fontFamily="Myriad Pro"
                   fill="rgb(0, 0, 0)"
                   transform="matrix( 1.78243691500789, 0, 0, 1.78243691500789,0.07278366276488, 104.3872675026855)"
                   font-size="80.697px"
                 >
                   <tspan
-                    font-size="80.697px"
-                    font-family="Arial"
-                    font-weight="bold"
+                    fontSize="80.697px"
+                    fontFamily="Arial"
+                    fontWeight="bold"
                     fill="#000000"
                   >
                     &#52;&#48;&#52;
