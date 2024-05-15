@@ -4,6 +4,27 @@ import { NavLink, useNavigate } from "react-router-dom";
 import { IoClose, IoMenuOutline } from "react-icons/io5";
 import useToggle from "../../../Hooks/useToggle";
 import { getTokenLocalStorageSeller } from "../../../Utils/LocalStorage";
+const navbarSellerDropdown = [
+  {
+    trigger: "Sell Online",
+
+    navlist: [
+      { to: "Signup", name: "Create an account" },
+      { to: "login", name: "Login Seller Account" },
+      { to: "SignIn", name: "Seller App" },
+      { to: "SignIn", name: "Help and Support" },
+    ],
+  },
+  {
+    trigger: "Fees and Commission",
+    navlist: [
+      { to: "SignIn", name: "Gst Per Commission" },
+      { to: "SignIn", name: "Charges" },
+      { to: "SignIn", name: "Without Gst Selle" },
+      { to: "SignIn", name: "Help and Support" },
+    ],
+  },
+];
 
 const NavbarSeller = () => {
   const navigate = useNavigate();
@@ -49,36 +70,23 @@ const NavbarSeller = () => {
                     />
                   </div>
                   <div className="flex flex-col gap-4 text-sm divide-y lg:flex">
-                    <Dropdown trigger="Sell Online" className="py-1 lg:py-auto">
-                      <NavLink to="signup">Create an account</NavLink>
-                      <NavLink to="signup">List Product</NavLink>
-                      <NavLink to="signup">Seller App</NavLink>
-                      <NavLink to="signup">Help and Support </NavLink>
-                    </Dropdown>
-
-                    <Dropdown
-                      trigger="Fees and Commission"
-                      className="py-1 lg:py-auto"
-                    >
-                      <NavLink to="signup">Create an account</NavLink>
-                      <NavLink to="signup">List Product</NavLink>
-                      <NavLink to="signup">Seller App</NavLink>
-                      <NavLink to="signup">Help and Support </NavLink>
-                    </Dropdown>
-
-                    <Dropdown trigger="Grow" className="py-1 lg:py-auto">
-                      <NavLink to="signup">Create an account</NavLink>
-                      <NavLink to="signup">List Product</NavLink>
-                      <NavLink to="signup">Seller App</NavLink>
-                      <NavLink to="signup">Help and Support </NavLink>
-                    </Dropdown>
-
-                    <Dropdown trigger="Learn" className="py-1 lg:py-auto">
-                      <NavLink to="signup">Create an account</NavLink>
-                      <NavLink to="signup">List Product</NavLink>
-                      <NavLink to="signup">Seller App</NavLink>
-                      <NavLink to="signup">Help and Support </NavLink>
-                    </Dropdown>
+                    {navbarSellerDropdown.map((_list, i) => {
+                      return (
+                        <Dropdown
+                          className="py-1 lg:py-auto"
+                          key={i}
+                          trigger={_list.trigger}
+                        >
+                          {_list.navlist.map((_navlist, i) => {
+                            return (
+                              <NavLink key={i} to={_navlist.to}>
+                                {_navlist.name}
+                              </NavLink>
+                            );
+                          })}
+                        </Dropdown>
+                      );
+                    })}
 
                     <NavLink className="px-3" to="/">
                       Shopsy
@@ -92,31 +100,19 @@ const NavbarSeller = () => {
               </>
             )}
             <div className="hidden gap-4 text-sm lg:flex">
-              <Dropdown trigger="Sell Online">
-                <NavLink to="signup">Create an account</NavLink>
-                <NavLink to="signup">List Product</NavLink>
-                <NavLink to="signup">Seller App</NavLink>
-                <NavLink to="signup">Help and Support </NavLink>
-              </Dropdown>
-
-              <Dropdown trigger="Fees and Commission">
-                <NavLink to="signup">Create an account</NavLink>
-                <NavLink to="signup">List Product</NavLink>
-                <NavLink to="signup">Seller App</NavLink>
-                <NavLink to="signup">Help and Support </NavLink>
-              </Dropdown>
-              <Dropdown trigger="Grow">
-                <NavLink to="signup">Create an account</NavLink>
-                <NavLink to="signup">List Product</NavLink>
-                <NavLink to="signup">Seller App</NavLink>
-                <NavLink to="signup">Help and Support </NavLink>
-              </Dropdown>
-              <Dropdown trigger="Learn">
-                <NavLink to="signup">Create an account</NavLink>
-                <NavLink to="signup">List Product</NavLink>
-                <NavLink to="signup">Seller App</NavLink>
-                <NavLink to="signup">Help and Support </NavLink>
-              </Dropdown>
+              {navbarSellerDropdown.map((_list, i) => {
+                return (
+                  <Dropdown key={i} trigger={_list.trigger}>
+                    {_list.navlist.map((_navlist, i) => {
+                      return (
+                        <NavLink key={i} to={_navlist.to}>
+                          {_navlist.name}
+                        </NavLink>
+                      );
+                    })}
+                  </Dropdown>
+                );
+              })}
               <NavLink to="/">Shopsy</NavLink>
             </div>
           </div>

@@ -2,6 +2,7 @@ const ProductSchema = require("../Schema/Seller.Product.Schema");
 const SellerAuhSchema = require("../Schema/Seller.Auth.Schema");
 const ApiFeature = require("../Utils/ApiFeatures");
 const asyncHandler = require("../Utils/asyncHandler");
+const calculatePagination = require("../Utils/calculatePagination");
 const cloudinary = require("cloudinary").v2;
 const SellerProduct = {
   addNewProduct: asyncHandler(async (req, res) => {
@@ -324,6 +325,8 @@ const SellerProduct = {
     //   }
   }),
   getAllproducts: asyncHandler(async (req, res) => {
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 3;
     const api = new ApiFeature(
       ProductSchema.find(),
       req?.query,
@@ -338,15 +341,33 @@ const SellerProduct = {
     const count = await ProductSchema.find({
       sellerId: res?.Seller?.sellerId,
     }).countDocuments();
-    const total = Math.ceil(count / req.query.limit || 3);
+    const total = Math.ceil(count / limit || 3);
+    const { prevPages, nextPages, hasOwnPage } = calculatePagination(
+      page,
+      total,
+      products
+    );
+
+    const pageval = `Showing ${(page - 1) * limit + 1} to ${Math.min(
+      page * limit,
+      count
+    )} of ${count} results`;
     if (products) {
       res.status(200).json({
+        pageval,
+        path: req.url,
+        totalProducts: count,
+        productperPage: products.length,
+        pagePerLimit: (page - 1) * limit + 1,
+        productsPageTo: Math.min(page * limit, count),
+        totalPages: total,
+        prevPages: prevPages,
+        nextPages: nextPages,
+        prevPage: page === 1 ? 1 : page - 1,
+        nextPage: page + 1,
+        page: page,
+        hasOwnPage,
         status: true,
-        totalProduct: count,
-        totalPage: total,
-        path: req.path,
-        length: products.length,
-        next: Number(req.query.page) + 1,
         products,
       });
     } else {
@@ -397,7 +418,6 @@ const SellerProduct = {
     const sellerFind = await SellerAuhSchema.findById({
       _id: res.Seller.sellerId,
     });
-
     if (!sellerFind) {
       return res.status(401).json({
         status: false,

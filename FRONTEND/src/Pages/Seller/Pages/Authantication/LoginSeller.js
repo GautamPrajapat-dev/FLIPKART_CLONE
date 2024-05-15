@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
-import Button from "../../../../Components/Buttons/Button";
+import Button from "../../../../Components/Button";
 import { IoLockClosedOutline, IoMailOutline } from "react-icons/io5";
-import FormInputIcon from "../../../../Components/Inputs/FormInputIcon";
+import FormInputIcon from "../../../../Components/FormInputIcon";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import axios from "axios";
@@ -40,7 +40,7 @@ const LoginSeller = () => {
       } else {
         const user = await res.data;
         localStorage.setItem("_token", user._token__);
-        toast.success(user.successMessage, {
+        toast.warn(user.successMessage, {
           position: "top-right",
           autoClose: 5000,
           hideProgressBar: false,
@@ -50,7 +50,6 @@ const LoginSeller = () => {
           progress: undefined,
           theme: "dark",
         });
-
         window.location.href = PageRouts.SELLER_MAIN_DASHBOARD_ROUTE;
       }
     } catch (error) {
@@ -135,7 +134,7 @@ const LoginSeller = () => {
                 </button>
                 <Button
                   onClick={() => navigate("/seller/signup")}
-                  className="py-2.5 text-white"
+                  className="py-2.5 bg-black text-white"
                 >
                   Create an New Account
                 </Button>

@@ -2,7 +2,7 @@ import axios from "axios";
 
 import { toast } from "react-toastify";
 import { getTokenLocalStorageSeller } from "../../../Utils/LocalStorage";
-const URL = "http://localhost:3031/seller";
+const URL = process.env.REACT_APP_URL;
 const token = getTokenLocalStorageSeller();
 
 const config = {
@@ -13,28 +13,26 @@ const config = {
 };
 
 export const Signup = async () => {
-  const res = await axios.post(`${URL}/register`);
+  const res = await axios.post(`${URL}/seller/register`);
   const user = await res.data;
   return user;
 };
 
-export const getSeller = async () => {
-  try {
-    const res = await axios.get(
-      "http://localhost:3031/seller/sellerDetails",
-      config
-    );
-    const data = await res.data.id;
-    return data;
-  } catch (error) {
-    console.warn(error);
-  }
-};
+// export const getSeller = async () => {
+//   try {
+//     const res = await axios.get(`${URL}/seller/sellerDetails`, config);
+//     const data = await res.data.id;
+//     console.log(data);
+//     return data;
+//   } catch (error) {
+//     console.warn(error);
+//   }
+// };
 
 export const postNewProduct = async (productData) => {
   try {
     const res = await axios.post(
-      `${URL}/products/v1/add-product`,
+      `${URL}/seller/products/v1/add-product`,
       productData,
       {
         headers: {
@@ -49,24 +47,25 @@ export const postNewProduct = async (productData) => {
       toast.success(data.successMessage, {
         position: "top-right",
         autoClose: 5000,
-        hideProgressBar: false,
+        hideProgressBar: true,
         closeOnClick: true,
         pauseOnHover: true,
         draggable: true,
         progress: undefined,
-        theme: "dark",
+        theme: "light",
       });
+
       return data;
     } else {
       toast.warn(data.errorMessage, {
         position: "top-right",
         autoClose: 5000,
-        hideProgressBar: false,
+        hideProgressBar: true,
         closeOnClick: true,
         pauseOnHover: true,
         draggable: true,
         progress: undefined,
-        theme: "dark",
+        theme: "light",
       });
     }
   } catch (error) {
@@ -76,7 +75,7 @@ export const postNewProduct = async (productData) => {
 export const getAllProduct = async ({ currentPage, search, sort }) => {
   try {
     const res = await axios?.get(
-      `${URL}/products/v1/products/?fields=price,title,qty,thumbnail,brand,category,views,updatedAt&page=${currentPage}&limit=5&sort=${sort}`,
+      `${URL}/seller/products/v1/products/?fields=price,title,qty,thumbnail,brand,category,views,updatedAt&page=${currentPage}&limit=5&sort=${sort}&search=${search}`,
       config
     );
     const data = await res.data;
@@ -86,12 +85,12 @@ export const getAllProduct = async ({ currentPage, search, sort }) => {
       toast.warn(data.errorMessage, {
         position: "top-right",
         autoClose: 5000,
-        hideProgressBar: false,
+        hideProgressBar: true,
         closeOnClick: true,
         pauseOnHover: true,
         draggable: true,
         progress: undefined,
-        theme: "dark",
+        theme: "light",
       });
     }
   } catch (error) {
@@ -103,7 +102,10 @@ export const getSingleProductService = async (id) => {
   if (!id) {
     return;
   }
-  const res = await axios?.get(`${URL}/products/v1/products/${id}`, config);
+  const res = await axios?.get(
+    `${URL}/seller/products/v1/products/${id}`,
+    config
+  );
   const data = await res.data;
   if (data.status === true) {
     return data;
@@ -115,12 +117,16 @@ export const updateProductService = async ({ id, formData }) => {
   if (!id) {
     return;
   }
-  const res = await axios?.put(`${URL}/products/v1/products/${id}`, formData, {
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-    },
-  });
+  const res = await axios?.put(
+    `${URL}/seller/products/v1/products/${id}`,
+    formData,
+    {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
 
   const data = await res.data;
 
@@ -128,24 +134,26 @@ export const updateProductService = async ({ id, formData }) => {
     toast.success(data.successMessage, {
       position: "top-right",
       autoClose: 5000,
-      hideProgressBar: false,
+      hideProgressBar: true,
       closeOnClick: true,
       pauseOnHover: true,
       draggable: true,
       progress: undefined,
-      theme: "dark",
+      theme: "light",
     });
+    window.location.href = "/dashboard/products";
+
     return data;
   } else {
     toast.warn(data.errorMessage, {
       position: "top-right",
       autoClose: 5000,
-      hideProgressBar: false,
+      hideProgressBar: true,
       closeOnClick: true,
       pauseOnHover: true,
       draggable: true,
       progress: undefined,
-      theme: "dark",
+      theme: "light",
     });
   }
 };
@@ -154,7 +162,7 @@ export const updateBrandLogoService = async ({ id, brandLogo }) => {
     return;
   }
   const res = await axios?.put(
-    `${URL}/products/v1/brandlogo/${id}`,
+    `${URL}/seller/products/v1/brandlogo/${id}`,
     brandLogo,
     config
   );
@@ -165,24 +173,24 @@ export const updateBrandLogoService = async ({ id, brandLogo }) => {
     toast.success(data.successMessage, {
       position: "top-right",
       autoClose: 5000,
-      hideProgressBar: false,
+      hideProgressBar: true,
       closeOnClick: true,
       pauseOnHover: true,
       draggable: true,
       progress: undefined,
-      theme: "dark",
+      theme: "light",
     });
     return data;
   } else {
     toast.warn(data.errorMessage, {
       position: "top-right",
       autoClose: 5000,
-      hideProgressBar: false,
+      hideProgressBar: true,
       closeOnClick: true,
       pauseOnHover: true,
       draggable: true,
       progress: undefined,
-      theme: "dark",
+      theme: "light",
     });
   }
 };
@@ -191,7 +199,7 @@ export const updateImageService = async ({ id, images }) => {
     return;
   }
   const res = await axios?.put(
-    `${URL}/products/v1/updateImage/${id}`,
+    `${URL}/seller/products/v1/updateImage/${id}`,
     images,
     config
   );
@@ -202,24 +210,24 @@ export const updateImageService = async ({ id, images }) => {
     toast.success(data.successMessage, {
       position: "top-right",
       autoClose: 5000,
-      hideProgressBar: false,
+      hideProgressBar: true,
       closeOnClick: true,
       pauseOnHover: true,
       draggable: true,
       progress: undefined,
-      theme: "dark",
+      theme: "light",
     });
     return data;
   } else {
     toast.warn(data.errorMessage, {
       position: "top-right",
       autoClose: 5000,
-      hideProgressBar: false,
+      hideProgressBar: true,
       closeOnClick: true,
       pauseOnHover: true,
       draggable: true,
       progress: undefined,
-      theme: "dark",
+      theme: "light",
     });
   }
 };
@@ -228,7 +236,7 @@ export const updateThumbnailService = async ({ id, thumb }) => {
     return;
   }
   const res = await axios?.put(
-    `${URL}/products/v1/thumbnail/${id}`,
+    `${URL}/seller/products/v1/thumbnail/${id}`,
     thumb,
     config
   );
@@ -239,24 +247,24 @@ export const updateThumbnailService = async ({ id, thumb }) => {
     toast.success(data.successMessage, {
       position: "top-right",
       autoClose: 5000,
-      hideProgressBar: false,
+      hideProgressBar: true,
       closeOnClick: true,
       pauseOnHover: true,
       draggable: true,
       progress: undefined,
-      theme: "dark",
+      theme: "light",
     });
     return data;
   } else {
     toast.warn(data.errorMessage, {
       position: "top-right",
       autoClose: 5000,
-      hideProgressBar: false,
+      hideProgressBar: true,
       closeOnClick: true,
       pauseOnHover: true,
       draggable: true,
       progress: undefined,
-      theme: "dark",
+      theme: "light",
     });
   }
 };
@@ -264,7 +272,10 @@ export const deleteProductService = async (id) => {
   if (!id) {
     return;
   }
-  const res = await axios?.delete(`${URL}/products/v1/products/${id}`, config);
+  const res = await axios?.delete(
+    `${URL}/seller/products/v1/products/${id}`,
+    config
+  );
 
   const data = await res.data;
 
@@ -272,24 +283,24 @@ export const deleteProductService = async (id) => {
     toast.success(data.successMessage, {
       position: "top-right",
       autoClose: 5000,
-      hideProgressBar: false,
+      hideProgressBar: true,
       closeOnClick: true,
       pauseOnHover: true,
       draggable: true,
       progress: undefined,
-      theme: "dark",
+      theme: "light",
     });
     return data;
   } else {
     toast.warn(data.errorMessage, {
       position: "top-right",
       autoClose: 5000,
-      hideProgressBar: false,
+      hideProgressBar: true,
       closeOnClick: true,
       pauseOnHover: true,
       draggable: true,
       progress: undefined,
-      theme: "dark",
+      theme: "light",
     });
   }
 };

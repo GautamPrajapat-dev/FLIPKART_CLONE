@@ -3,9 +3,12 @@ const SellerAuhSchema = require("../../Schema/Seller.Auth.Schema");
 const ProductSchema = require("../../Schema/Seller.Product.Schema");
 const ApiFeature = require("../../Utils/ApiFeatures");
 const asyncHandler = require("../../Utils/asyncHandler");
+const calculatePagination = require("../../Utils/calculatePagination");
 
 const Product = {
   AllProduct: asyncHandler(async (req, res) => {
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 3;
     const products = new ApiFeature(ProductSchema, req.query)
       .search()
       .filter()
@@ -13,20 +16,47 @@ const Product = {
       .limitFields()
       .paginate();
     const product = await products.query;
-    if (!product) {
-      return res.status(404).json({
-        status: false,
-        errorMessage: "not found",
-      });
-    }
+
+    const totalProductsCount = await ProductSchema.find({}).countDocuments();
+    const totalPage = Math.ceil(totalProductsCount / limit);
+    const { prevPages, nextPages, hasOwnPage } = calculatePagination(
+      page,
+      totalPage,
+      product
+    );
+
+    // path: req.url,
+    // totalProducts: count,
+    // productperPage: products.length,
+    // pagePerLimit: limit,
+    // totalPages: total,
+    // prevPages: prevPages,
+    // nextPages: nextPages,
+    // prevPage: page === 1 ? 1 : page - 1,
+    // nextPage: page + 1,
+    // page: page,
+    // hasOwnPage,
+    // products,
     res.status(200).json({
+      path: req.url,
+      totalProducts: totalProductsCount,
+      productperPage: product.length,
+      pagePerLimit: limit,
+      totalPages: totalPage,
+      prevPages: prevPages,
+      nextPages: nextPages,
+      prevPage: page === 1 ? 1 : page - 1,
+      nextPage: page + 1,
+      page: page,
+      hasOwnPage,
       status: true,
-      length: product.length,
-      data: product,
+      products: product,
     });
   }),
   getProduct: asyncHandler(async (req, res) => {
-    const product = await ProductSchema.findById({ _id: req.params.id });
+    const product = await ProductSchema.findById({
+      _id: req.params.id,
+    });
 
     if (!product) {
       return res.status(404).json({

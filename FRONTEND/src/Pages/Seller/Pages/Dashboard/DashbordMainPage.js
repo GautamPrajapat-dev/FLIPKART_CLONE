@@ -80,7 +80,7 @@ const DashbordMainPage = () => {
               </svg>
             </div>
             <div className="stat-title">Toal Products</div>
-            <div className="stat-value">{details?.totalProduct}</div>
+            <div className="stat-value">{details?.totalProducts}</div>
             {/* <div className="stat-desc">↘︎ 90 (14%)</div> */}
           </div>
         </div>

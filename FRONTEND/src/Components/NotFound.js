@@ -1,5 +1,5 @@
 import React from "react";
-import Button from "../Buttons/Button";
+import Button from "./Button";
 import { useNavigate } from "react-router-dom";
 const NotFound = () => {
   const navigate = useNavigate();

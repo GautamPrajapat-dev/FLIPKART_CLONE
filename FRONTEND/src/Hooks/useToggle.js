@@ -1,8 +1,12 @@
 import { useState } from "react";
 
-const useToggle = ({ defaultChecked }) => {
-  const [toggle, seToggle] = useState(defaultChecked || false);
-  const toggler = () => seToggle(!toggle);
+const useToggle = ({ defaultValue }) => {
+  const [toggle, setToggle] = useState(defaultValue || false);
+  const toggler = () => {
+    console.log("object");
+    setToggle(!toggle);
+  };
+
   return [toggle, toggler];
 };
 

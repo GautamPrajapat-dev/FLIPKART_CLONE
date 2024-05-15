@@ -1,7 +1,7 @@
 import React, { memo, useEffect } from "react";
 import { BiMessage } from "react-icons/bi";
 import { Link, useNavigate } from "react-router-dom";
-import Button from "../../../Components/Buttons/Button";
+import Button from "../../../Components/Button";
 import { useDispatch, useSelector } from "react-redux";
 import { SELLER_PROFILE_SAGA } from "../../../Stores/Slice/Seller.Auth.Slice";
 import {

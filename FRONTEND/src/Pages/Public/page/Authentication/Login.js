@@ -1,8 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
-import FormInputIcon from "../../../../Components/Inputs/FormInputIcon";
+import FormInputIcon from "../../../../Components/FormInputIcon";
 import { LuUser } from "react-icons/lu";
 import { IoLockClosedOutline } from "react-icons/io5";
-import Button from "../../../../Components/Buttons/Button";
+import Button from "../../../../Components/Button";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
@@ -42,7 +42,6 @@ const Login = () => {
         });
       } else {
         const user = await res.data;
-        setLocalStorage("-token-x-public", user._token__);
         toast.success(user.successMessage, {
           position: "top-right",
           autoClose: 5000,
@@ -53,7 +52,7 @@ const Login = () => {
           progress: undefined,
           theme: "dark",
         });
-
+        setLocalStorage("-token-x-public", user._token__);
         window.location.href = "/";
       }
     } catch (error) {
@@ -117,7 +116,7 @@ const Login = () => {
                     />
                     <FormInputIcon
                       variant="sm-outlined"
-                      className="mb-4"
+                      className="mb-4 text-white"
                       type="password"
                       name="password"
                       icon={<IoLockClosedOutline />}

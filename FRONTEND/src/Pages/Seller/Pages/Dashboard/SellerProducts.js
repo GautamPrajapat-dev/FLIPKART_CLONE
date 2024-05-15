@@ -3,6 +3,11 @@ import DashBoardNavbar from "../../SellerComponents/DashboardNavbar";
 import { useDispatch, useSelector } from "react-redux";
 import { GET_ALL_PRODUCTS_SAGA } from "../../../../Stores/Slice/Seller.Product.Slice";
 import { ToastContainer } from "react-toastify";
+
+import {
+  MdOutlineKeyboardArrowLeft,
+  MdOutlineKeyboardArrowRight,
+} from "react-icons/md";
 import { Link } from "react-router-dom";
 import { SortFilter } from "../../../../Utils/SellerFilters";
 import { HiMiniChevronUpDown } from "react-icons/hi2";
@@ -10,14 +15,14 @@ import useDebounce from "../../../../Hooks/useDebounce.Hook";
 const SellerProducts = () => {
   const dispatch = useDispatch();
   const [currentPage, setCurrentPage] = useState(1);
-  const [sort, setSortFilter] = useState("-createdAt");
+  const [sort, setSortFilter] = useState("title");
   const [searchVal, setsearchVal] = useState("");
   // const [product_id, setIDProduct] = useState("");
   const handleOnchange = (e) => {
     e.preventDefault();
     setsearchVal(e.target.value);
   };
-  const search = useDebounce(searchVal);
+  const search = useDebounce(searchVal, 1000);
   const products = useSelector((state) => state.SellerProduct);
   const { isLoading } = useSelector((state) => state.loading);
   //MARK:Pagination
@@ -30,7 +35,7 @@ const SellerProducts = () => {
   }, [currentPage]);
 
   const handleOnNext = () => {
-    if (products?.products?.totalPage > currentPage) {
+    if (products?.products?.totalPages > currentPage) {
       setCurrentPage(currentPage + 1);
     }
   };
@@ -49,11 +54,11 @@ const SellerProducts = () => {
     <>
       <ToastContainer />
 
-      <div className="md:px-3 ">
+      <div className="relative md:px-3 ">
         <DashBoardNavbar name="All Products" />
 
         {/* SEE ALL PRODUCT  */}
-        <section className="flex flex-col">
+        <section className="relative flex flex-col">
           {/* FILTER */}
           {/* <div className="w-full my-7">
             <div>
@@ -88,8 +93,8 @@ const SellerProducts = () => {
           </div> */}
           {/* MARK:allproducts in table */}
           <div className="mt-5">
-            <div className="grid justify-end lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1">
-              <div className="w-full md:max-w-md lg:col-start-3 sm:col-start-1 ">
+            <div className="grid mb-5 lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1 md:justify-end">
+              <div className="w-full md:max-w-md lg:col-start-3 ">
                 <label
                   htmlFor="default-search"
                   className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white"
@@ -204,7 +209,7 @@ const SellerProducts = () => {
                               <div className="flex items-center gap-3 animate-pulse bg-black/20 skeleton">
                                 <div className="avatar">
                                   <div className="w-12 h-12 mask mask-squircle">
-                                    .
+                                    .z
                                   </div>
                                 </div>
                               </div>
@@ -219,7 +224,7 @@ const SellerProducts = () => {
                       })}
                   </tbody>
                 ) : (
-                  <tbody className="relative ">
+                  <tbody className="relative">
                     {products?.products?.products &&
                       products?.products?.products.map((product, i) => {
                         return (
@@ -313,25 +318,96 @@ const SellerProducts = () => {
             />
           </div>
         ) : (
-          products?.products?.products && (
-            <div className="flex justify-end gap-4">
-              <div className="grid grid-cols-2 join">
-                <button
-                  className="join-item btn btn-outline"
-                  onClick={handleOnPrev}
+          <div className="fixed bottom-0 flex items-center justify-between px-4 py-3 bg-white border-t border-gray-200 w-[82%] sm:px-6">
+            <div className="flex justify-between flex-1 sm:hidden">
+              <button
+                onClick={handleOnPrev}
+                className={`relative inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md btn hover:bg-gray-50 ${
+                  products?.products?.page === 1 ? "btn-disabled" : ""
+                }`}
+              >
+                Previous
+              </button>
+              <button
+                onClick={handleOnNext}
+                className={`relative  inline-flex items-center px-4 py-2 ml-3 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md btn hover:bg-gray-50 ${
+                  products?.products?.page === products?.products?.totalPages
+                    ? "btn-disabled"
+                    : ""
+                }`}
+              >
+                Next
+              </button>
+            </div>
+            <div className="hidden sm:flex sm:flex-1 sm:items-center sm:justify-between">
+              <div>
+                <p className="flex gap-1 text-sm text-gray-700">
+                  Showing
+                  <span className="font-medium">
+                    {products?.products?.pagePerLimit}
+                  </span>
+                  to
+                  <span className="font-medium">
+                    {products?.products?.productsPageTo}
+                  </span>
+                  of
+                  <span className="font-medium">
+                    {products?.products?.totalProducts}
+                  </span>
+                  results
+                </p>
+              </div>
+              <div>
+                <nav
+                  className="inline-flex -space-x-px rounded-md shadow-sm isolate"
+                  aria-label="Pagination"
                 >
-                  Prev
-                </button>
-
-                <button
-                  onClick={handleOnNext}
-                  className="join-item btn btn-outline"
-                >
-                  Next
-                </button>
+                  <button
+                    onClick={handleOnPrev}
+                    className="relative inline-flex items-center px-2 py-2 text-gray-400 rounded-l-md ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"
+                  >
+                    <span className="sr-only">Previous</span>
+                    <MdOutlineKeyboardArrowLeft className="text-xl" />
+                  </button>
+                  {/* Current: "z-10 bg-gray-900 text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600", Default: "text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:outline-offset-0" */}
+                  {products?.products?.prevPages &&
+                    products?.products?.prevPages.map((page, i) => {
+                      return (
+                        <button
+                          key={i}
+                          onClick={() => setCurrentPage(page)}
+                          className="relative z-10 inline-flex items-center px-4 py-2 text-sm font-semibold text-black ring-1 ring-gray-300 focus:z-20 ring-inset focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                        >
+                          {page}
+                        </button>
+                      );
+                    })}
+                  <span className="relative inline-flex items-center px-4 py-2 text-sm font-semibold text-gray-700 bg-personal-50 ring-1 ring-inset ring-gray-300 focus:outline-offset-0">
+                    {products?.products?.page}
+                  </span>
+                  {products?.products?.nextPages &&
+                    products?.products?.nextPages.map((page, i) => {
+                      return (
+                        <button
+                          onClick={() => setCurrentPage(page)}
+                          key={i}
+                          className="relative z-10 inline-flex items-center px-4 py-2 text-sm font-semibold text-black ring-1 ring-inset ring-gray-300 focus:z-20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-400"
+                        >
+                          {page}
+                        </button>
+                      );
+                    })}
+                  <button
+                    onClick={handleOnNext}
+                    className="relative inline-flex items-center px-2 py-2 text-gray-400 rounded-r-md ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"
+                  >
+                    <span className="sr-only">Next</span>
+                    <MdOutlineKeyboardArrowRight className="text-xl" />
+                  </button>
+                </nav>
               </div>
             </div>
-          )
+          </div>
         )}
       </div>
     </>
@@ -339,3 +415,43 @@ const SellerProducts = () => {
 };
 
 export default SellerProducts;
+
+// products?.products?.products && (
+//   <div className="flex justify-end gap-4">
+//     <div className="join">
+//       <button className="join-item btn btn-outline" onClick={handleOnPrev}>
+//         Prev
+//       </button>
+
+//       {products?.products?.prevPages &&
+//         products?.products?.prevPages.map((page, i) => {
+//           return (
+//             <button
+//               key={i}
+//               onClick={() => setCurrentPage(page)}
+//               className="join-item btn-outline btn"
+//             >
+//               {page}
+//             </button>
+//           );
+//         })}
+//       <button className="join-item btn-outline btn btn-disabled">...</button>
+
+//       {products?.products?.nextPages &&
+//         products?.products?.nextPages.map((page, i) => {
+//           return (
+//             <button
+//               onClick={() => setCurrentPage(page)}
+//               key={i}
+//               className="join-item btn-outline btn"
+//             >
+//               {page}
+//             </button>
+//           );
+//         })}
+//       <button onClick={handleOnNext} className="join-item btn btn-outline">
+//         Next
+//       </button>
+//     </div>
+//   </div>
+// );

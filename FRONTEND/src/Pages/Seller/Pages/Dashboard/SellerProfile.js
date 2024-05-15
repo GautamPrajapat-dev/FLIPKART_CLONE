@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import DashboardNavbar from "../../SellerComponents/DashboardNavbar";
 
 import { useDispatch, useSelector } from "react-redux";
-import ModalOutsideClick from "../../../../Components/Dialoag/ModalOutsideClick";
+import ModalOutsideClick from "../../../../Components/ModalOutsideClick";
 // import useToggle from "../../../../../Hooks/useToggle";
 import {
   SELLER_PROFILE_SAGA,

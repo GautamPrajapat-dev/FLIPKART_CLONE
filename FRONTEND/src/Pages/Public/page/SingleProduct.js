@@ -1,6 +1,6 @@
 import React from "react";
 import { LuHeart } from "react-icons/lu";
-import Button from "../../../Components/Buttons/Button";
+import Button from "../../../Components/Button";
 // import { useNavigate } from "react-router-dom";
 
 const SingleProduct = () => {

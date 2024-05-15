@@ -26,8 +26,8 @@ export const Category = [
   { value: "electronics", name: "Electronics" },
   { value: "faishion", name: "Faishion" },
   { value: "beauty", name: "Beauty" },
+  { value: "furniture", name: "Furniture" },
   { value: "Other", name: "Other" },
-  { value: "furniture", name: "furniture" },
 ];
 export const SubCategory = [
   { value: "mens clothings", name: "Men's Clothing" },

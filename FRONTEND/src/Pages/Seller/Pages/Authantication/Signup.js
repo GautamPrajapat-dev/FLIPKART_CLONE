@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import Button from "../../../../Components/Buttons/Button";
+import Button from "../../../../Components/Button";
 import { IoLocate, IoLockClosedOutline, IoMailOutline } from "react-icons/io5";
-import FormInputIcon from "../../../../Components/Inputs/FormInputIcon";
+import FormInputIcon from "../../../../Components/FormInputIcon";
 import { LuUser } from "react-icons/lu";
 import { Link, useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";

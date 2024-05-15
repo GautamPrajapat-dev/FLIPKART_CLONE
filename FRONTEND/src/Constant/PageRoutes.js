@@ -17,6 +17,12 @@ const SELLER_DASHBOARD_SINGLEPRODUCT = "/dashboard/products/:id";
 const SELLER_DASHBOARD_ADD_NEW_PRODUCTS = "/dashboard/addnewproducts";
 const SELLER_DASHBOARD_PROFILE = "/dashboard/profile";
 
+// export const PUBLIC_ROUTE = [
+//   {
+//     rout_name: "",
+//   },
+// ];
+
 export const PageRouts = {
   PublicWhiteList,
   MAIN_ROUTE,

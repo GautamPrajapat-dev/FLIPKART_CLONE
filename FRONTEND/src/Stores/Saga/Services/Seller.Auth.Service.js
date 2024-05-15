@@ -6,7 +6,7 @@ import {
 } from "../../../Utils/LocalStorage";
 
 // import { toast } from "react-toastify";
-const URL = "http://localhost:3031/seller";
+const URL = process.env.REACT_APP_URL + "/seller";
 
 const token = getTokenLocalStorageSeller();
 if (!!token) {
@@ -35,19 +35,6 @@ axios.interceptors.response.use(
     return response;
   },
   (error) => {
-    // Handle the error
-    // toast.error(error.message, {
-    //   position: "top-right",
-    //   autoClose: 5000,
-    //   hideProgressBar: false,
-    //   closeOnClick: true,
-    //   pauseOnHover: true,
-    //   draggable: true,
-    //   progress: undefined,
-    //   theme: "dark",
-    // });
-    // console.log("error in response :" + error);
-
     return Promise.reject(error);
   }
 );
@@ -63,7 +50,6 @@ export const getDetails = async () => {
       },
     });
     const data = await res.data;
-
     return data;
   } catch (error) {
     // console.log(error);
@@ -77,7 +63,6 @@ export const updateSellerProfile = async (img) => {
         Authorization: `Bearer ${token}`,
       },
     });
-
     const data = await res.data;
 
     return data;

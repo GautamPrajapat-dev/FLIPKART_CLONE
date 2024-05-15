@@ -13,8 +13,9 @@ import Signup from "./Pages/Seller/Pages/Authantication/Signup.js";
 import LoginSeller from "./Pages/Seller/Pages/Authantication/LoginSeller.js";
 import DashBordLayout from "./Pages/Seller/Pages/Dashboard/Layout.js";
 import DashbordMainPage from "./Pages/Seller/Pages/Dashboard/DashbordMainPage.js";
-import NotFound from "./Components/404/index.js";
+import NotFound from "./Components/NotFound.js";
 import { PageRouts } from "./Constant/PageRoutes.js";
+import OfflineStatus from "./Components/Offline-Status.js";
 // import whitelist from "./Pages/Public/page/whitelist.JS";
 // const SellOnlineMainPage = lazy(() =>
 //   import("./Pages/Seller/Pages/SellOnline")
@@ -42,20 +43,11 @@ const App = () => {
   return (
     <>
       {!window.navigator.onLine ? (
-        <>
-          <div className="flex items-center justify-center w-full h-screen">
-            <div className="flex flex-col items-center gap-3">
-              <img src="/image/emptyList.png" alt="" width={250} />
-              <span className="text-3xl font-extrabold">
-                You're Offine Please Go Back Oline
-              </span>
-            </div>
-          </div>
-        </>
+        <OfflineStatus />
       ) : (
         <Suspense
           fallback={
-            <div className="absolute z-50 flex items-center justify-center w-full h-screen bg-white bg-opacity-40 ">
+            <div className="absolute z-50 flex items-center justify-center w-full h-screen bg-gray-50 bg-opacity-40 ">
               <div className="w-12 loading">
                 <div className="bg-purple-500 loading-spinner"></div>
               </div>

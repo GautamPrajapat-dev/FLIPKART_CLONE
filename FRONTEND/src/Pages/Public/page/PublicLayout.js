@@ -8,7 +8,9 @@ const PublicLayout = () => {
     <div>
       <main className="h-screen overflow-y-scroll no-scroll">
         <Navbar />
-        <Outlet />
+        <div className="container mx-auto">
+          <Outlet />
+        </div>
         <Footer />
       </main>
     </div>

@@ -8,12 +8,13 @@ import {
   UPDATE_SELLER_PRODUCTS_SAGA,
   UPDATE_SELLER_THUMBNAIL_SAGA,
 } from "../../../../Stores/Slice/Seller.Product.Slice";
-import FormInput from "../../../../Components/Inputs/FormInput";
+import FormInput from "../../../../Components/FormInput";
 import { ReactSearchAutocomplete } from "react-search-autocomplete";
 import DashboardNavbar from "../../SellerComponents/DashboardNavbar";
 import { useParams, useNavigate } from "react-router-dom";
-import ModalOutsideClick from "../../../../Components/Dialoag/ModalOutsideClick";
+import ModalOutsideClick from "../../../../Components/ModalOutsideClick";
 import { ToastContainer } from "react-toastify";
+import { Category, SubCategory } from "../../../../Utils/SellerFilters";
 
 const ProductDetails = () => {
   const FormatResult = (item) => {
@@ -24,68 +25,6 @@ const ProductDetails = () => {
       </>
     );
   };
-  const categoryList = [
-    {
-      id: 1,
-      name: "mens clothings",
-    },
-    {
-      id: 2,
-      name: "womens clothings",
-    },
-    {
-      id: 3,
-      name: "kid's clothing",
-    },
-    {
-      id: 4,
-      name: "furniture",
-    },
-    {
-      id: 5,
-      name: "women jwellery",
-    },
-    {
-      id: 6,
-      name: "laptop",
-    },
-    {
-      id: 7,
-      name: "mobile",
-    },
-    {
-      id: 8,
-      name: "mobile accessories",
-    },
-    {
-      id: 9,
-      name: "laptop accessories",
-    },
-    { other: 10, name: "other" },
-  ];
-
-  const categoryListMain = [
-    {
-      id: 1,
-      name: "electronics",
-    },
-    {
-      id: 2,
-      name: "faishion",
-    },
-    {
-      id: 3,
-      name: "beauty",
-    },
-    {
-      id: 4,
-      name: "furniture",
-    },
-    {
-      id: 5,
-      name: "other",
-    },
-  ];
 
   const { id } = useParams();
   const dispatch = useDispatch();
@@ -111,10 +50,10 @@ const ProductDetails = () => {
   const priceDiscount = useRef(null);
   const brandName = useRef(null);
   const handleOnSelectSubCategory = (item) => {
-    setSubCategoryVal(item.name);
+    setSubCategoryVal(item.value);
   };
   const handleOnSelectCategory = (item) => {
-    setCategoryVal(item.name);
+    setCategoryVal(item.value);
   };
   useLayoutEffect(() => {
     if (id) {
@@ -243,7 +182,6 @@ const ProductDetails = () => {
       setShowDeletModal(false);
       dispatch(GET_SINGLE_PRODUCT_SAGA(id));
     }
-    return () => dispatch(DELETE_SELLER_PRODUCT_SAGA());
   }, [
     brand?.Brand_logo?.status,
     id,
@@ -387,7 +325,7 @@ const ProductDetails = () => {
               <div className="grid items-center grid-cols-12 gap-3 place-content-center">
                 <div className="relative col-span-6 border rounded-lg peer border-personal-300 focus-within:ring-1">
                   <ReactSearchAutocomplete
-                    className="z-40 dark:bg-gray-900"
+                    className="z-50 dark:bg-gray-900"
                     id="category"
                     showIcon={false}
                     styling={{
@@ -397,7 +335,7 @@ const ProductDetails = () => {
                       backgroundColor: "rgba(255, 255, 255, 0)",
                     }}
                     maxResults={3}
-                    items={categoryListMain}
+                    items={Category}
                     placeholder={product?.product?.category?.category}
                     inputDebounce={300}
                     // onSearch={handleOnSelect}
@@ -444,7 +382,7 @@ const ProductDetails = () => {
                       backgroundColor: "rgba(255, 255, 255, 0)",
                     }}
                     maxResults={3}
-                    items={categoryList}
+                    items={SubCategory}
                     placeholder={product?.product?.category?.subCategory}
                     // onSearch={handleOnSelectSubCategory}
                     // onHover={handleOnHover}

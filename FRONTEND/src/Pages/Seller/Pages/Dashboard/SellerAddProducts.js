@@ -1,7 +1,7 @@
 import React, { useRef } from "react";
 import DashBoardNavbar from "../../SellerComponents/DashboardNavbar";
-import FormInputIcon from "../../../../Components/Inputs/FormInputIcon";
-import Button from "../../../../Components/Buttons/Button";
+import FormInputIcon from "../../../../Components/FormInputIcon";
+import Button from "../../../../Components/Button";
 import { ToastContainer, toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
 import { AddNewProductSellerSaga } from "../../../../Stores/Slice/Seller.Product.Slice";

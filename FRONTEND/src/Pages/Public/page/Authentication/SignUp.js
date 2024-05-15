@@ -1,8 +1,8 @@
 import React, { useRef } from "react";
-import FormInputIcon from "../../../../Components/Inputs/FormInputIcon";
+import FormInputIcon from "../../../../Components/FormInputIcon";
 import { LuUser } from "react-icons/lu";
 import { IoLockClosedOutline } from "react-icons/io5";
-import Button from "../../../../Components/Buttons/Button";
+import Button from "../../../../Components/Button";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
