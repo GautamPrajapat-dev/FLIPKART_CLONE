@@ -89,7 +89,7 @@ const SignUp = () => {
                     alt=""
                   />
                 </div>
-                <div className="flex flex-col justify-between col-span-12 px-4 py-8 lg:col-span-7 bg-mariner-200 ">
+                <div className="flex flex-col justify-between col-span-12 px-4 py-8 lg:col-span-7 bg-mariner-200 dark:text-white dark:bg-gray-900 ">
                   <form
                     method="POST"
                     onSubmit={handleSubmit}
@@ -97,50 +97,50 @@ const SignUp = () => {
                     className="flex flex-col gap-6 px-9"
                   >
                     <FormInputIcon
-                      className="!text-personal-800 placeholder:text-personal-900 border-personal-300"
+                      className="text-personal-900 dark:text-white placeholder:text-personal-500 border-personal-300"
                       variant="sm-outlined"
                       type="text"
                       name="firstname"
                       icon={<LuUser />}
                       placeholder="firstname"
-                      iconClassName="text-personal-900"
+                      iconClassName="text-personal-900 dark:text-personal-100"
                     />
                     <FormInputIcon
-                      className="!text-personal-800 placeholder:text-personal-900 border-personal-300"
+                      className="text-personal-800 dark:text-white placeholder:text-personal-900 border-personal-300"
                       variant="sm-outlined"
                       type="text"
                       name="surname"
                       icon={<LuUser />}
                       placeholder="surname"
-                      iconClassName="text-personal-900"
+                      iconClassName="text-personal-900 dark:text-personal-100"
                     />
                     <FormInputIcon
-                      className="!text-personal-800 placeholder:text-personal-900 border-personal-300"
+                      className="text-personal-800 dark:text-white placeholder:text-personal-900 border-personal-300"
                       variant="sm-outlined"
                       type="text"
                       name="mobile"
                       icon={<LuUser />}
                       placeholder="mobile"
-                      iconClassName="text-personal-900"
+                      iconClassName="text-personal-900 dark:text-personal-100"
                     />
                     <FormInputIcon
-                      className="!text-personal-800 placeholder:text-personal-900 border-personal-300"
+                      className="text-personal-800 dark:text-white placeholder:text-personal-900 border-personal-300"
                       variant="sm-outlined"
                       type="email"
                       name="email"
                       icon={<LuUser />}
                       placeholder="email"
-                      iconClassName="text-personal-900"
+                      iconClassName="text-personal-900  dark:text-white dark:text-personal-100"
                     />
                     <FormInputIcon
                       variant="sm-outlined"
-                      className="!text-personal-800 placeholder:text-personal-900 border-personal-300"
+                      className="text-personal-800 dark:text-white placeholder:text-personal-900 border-personal-300"
                       type="password"
                       name="password"
                       icon={<IoLockClosedOutline />}
                       placeholder="****"
-                      passwordClassName="text-personal-900"
-                      iconClassName="text-personal-900"
+                      passwordClassName="text-personal-900 dark:text-personal-100"
+                      iconClassName="text-personal-900 dark:text-personal-100"
                     />
                     <Button
                       type="submit"

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   IoBagAddOutline,
   IoBagOutline,
@@ -14,17 +14,20 @@ import { CiBoxes } from "react-icons/ci";
 import { LuSearch, LuUser2 } from "react-icons/lu";
 import { MdOutlineDiscount, MdOutlineLocalOffer } from "react-icons/md";
 import { AiOutlineShop } from "react-icons/ai";
-import useToggle from "../../../../Hooks/useToggle";
-import Button from "../../../../Components/Button";
-
+import useToggle from "../../../Hooks/useToggle";
+import Button from "../../../Components/Button";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import { IoMdHeart, IoMdNotificationsOutline } from "react-icons/io";
 import {
   clearTokenLocalStoragePublic,
   getTokenLocalStoragePublic,
-} from "../../../../Utils/LocalStorage";
+} from "../../../Utils/LocalStorage";
+import { PUBLIC_PROFILE_SAGA } from "../../../Stores/Slice/Public.Auth.Slce";
+import { useDispatch, useSelector } from "react-redux";
 const Navbar = () => {
   const navigate = useNavigate();
+  const { profile } = useSelector((state) => state.User);
+  console.log(profile);
   const [istoggle, toggler] = useToggle(false);
 
   const navList = [
@@ -89,11 +92,14 @@ const Navbar = () => {
       to: "/legal",
     },
   ];
+  const dispatch = useDispatch();
   const handleOnClickLogout = () => {
     clearTokenLocalStoragePublic();
     window.location.reload();
   };
-
+  useEffect(() => {
+    dispatch(PUBLIC_PROFILE_SAGA());
+  }, [dispatch]);
   return (
     <>
       <header className="relative dark:bg-daintree-500 text-daintree-950 bg-mariner-100 dark:text-daintree-50">
@@ -147,12 +153,12 @@ const Navbar = () => {
                       </div>
                       <ul
                         tabIndex={0}
-                        className="dropdown-content  bg-mariner-100 text-black z-[1] menu p-2 w-52 "
+                        className="dropdown-content dark:bg-gray-900 dark:text-white bg-mariner-100 text-black z-[1] menu p-2 w-52 "
                       >
                         <li className="">
                           <Link
                             to={"/login"}
-                            className="hover:bg-personal-50 hover:transition-colors"
+                            className="hover:bg-personal-50 dark:hover:bg-personal-400 hover:transition-colors"
                           >
                             SignIn
                           </Link>
@@ -160,7 +166,7 @@ const Navbar = () => {
                         <li>
                           <Link
                             to={"/signup"}
-                            className="hover:bg-personal-50 hover:transition-colors"
+                            className="hover:bg-personal-50 dark:hover:bg-personal-400 hover:transition-colors"
                           >
                             Signup
                           </Link>
@@ -209,7 +215,7 @@ const Navbar = () => {
                     <HiOutlineDotsVertical />
                   </div>
                 </li>
-                <div className="dropdown-content  bg-mariner-100  z-[1] menu p-2  w-56 mt-4">
+                <div className="dropdown-content dark:bg-gray-900  bg-mariner-100  z-[1] menu p-2  w-56 mt-4">
                   <div className="flex items-center gap-2 px-2 py-2 border-b border-gray-400 ">
                     <div className="flex items-center gap-3 overflow-hidden avatar">
                       <div className="rounded-full">
@@ -227,7 +233,9 @@ const Navbar = () => {
                     {/* sidebar text or list */}
                     <div>
                       <h1 className="font-semibold text-[100%]">
-                        Gautam Prajapat
+                        {profile?.user?.fullname
+                          ? profile?.user?.fullname && profile?.user?.fullname
+                          : "Hello User"}
                       </h1>
                     </div>
                   </div>
@@ -270,7 +278,7 @@ const Navbar = () => {
                     className="fixed top-0 left-0 z-10 w-full h-screen bg-personal-910/60"
                   ></div>
                   <div
-                    className={`fixed  top-0 left-0  h-screen bg-mariner-100   
+                    className={`fixed  top-0 left-0  h-screen bg-mariner-100    dark:bg-gray-900
              border-r-2 ease-in duration-1000  delay-1000 rounded-r-xl shadow-2xl border-personal-900/40 z-20 ${
                istoggle ? "w-80  transition" : "w-0"
              }`}
@@ -298,7 +306,7 @@ const Navbar = () => {
                       {/* sidebar text or list */}
                       <div>
                         <h1 className="text-xl font-semibold">
-                          Gautam Prajapat
+                          {profile?.user?.fullname && profile?.user?.fullname}
                         </h1>
                       </div>
                     </div>
@@ -308,10 +316,10 @@ const Navbar = () => {
                         return (
                           <ul
                             key={index}
-                            className="flex items-center even:divide-y divide-personal-900/20"
+                            className="flex items-center dark:divide-blue-100 even:divide-y divide-personal-900/20"
                           >
                             <span className="font-semibold">{item.icon}</span>
-                            <NavLink className="pl-3 " to={item.to}>
+                            <NavLink className="pl-3" to={item.to}>
                               {item.link}
                             </NavLink>
                           </ul>

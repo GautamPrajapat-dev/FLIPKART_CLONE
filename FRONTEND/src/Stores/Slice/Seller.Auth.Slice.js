@@ -5,6 +5,7 @@ const SellerAuthSlice = createSlice({
   initialState: {
     profile: [],
     avatar: {},
+    details: [],
   },
   reducers: {
     SELLER_PROFILE_SAGA: (state, action) => {},
@@ -19,6 +20,10 @@ const SellerAuthSlice = createSlice({
     GET_SINGLE_DETAILS_REDUX: (state, action) => {
       state.avatar = action.payload;
     },
+    UPDATE_SELLER_DETAILS_SAGA: (state, action) => {},
+    UPDATE_SELLER_DETAILS_REDUX: (state, action) => {
+      state.details = action.payload;
+    },
   },
 });
 export const {
@@ -26,5 +31,7 @@ export const {
   SELLER_PROFILE_SAGA,
   UPDATE_PROFILE_REDUX,
   UPDATE_PROFILE_SAGA,
+  UPDATE_SELLER_DETAILS_REDUX,
+  UPDATE_SELLER_DETAILS_SAGA,
 } = SellerAuthSlice.actions;
 export default SellerAuthSlice.reducer;

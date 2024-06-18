@@ -44,6 +44,7 @@ export const getDetails = async () => {
     if (!token) {
       return;
     }
+
     const res = await axios.get(`${URL}/seller-profile`, {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -59,6 +60,20 @@ export const getDetails = async () => {
 export const updateSellerProfile = async (img) => {
   try {
     const res = await axios.put(`${URL}/upload-avatar`, img, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    const data = await res.data;
+
+    return data;
+  } catch (error) {
+    // console.log(error);
+  }
+};
+export const updateSellerDetails = async (fromdata) => {
+  try {
+    const res = await axios.put(`${URL}/update-details`, fromdata, {
       headers: {
         Authorization: `Bearer ${token}`,
       },

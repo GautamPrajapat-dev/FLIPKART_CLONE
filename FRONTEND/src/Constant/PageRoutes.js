@@ -16,7 +16,7 @@ const SELLER_DASHBOARD_PRODUCT = "/dashboard/products";
 const SELLER_DASHBOARD_SINGLEPRODUCT = "/dashboard/products/:id";
 const SELLER_DASHBOARD_ADD_NEW_PRODUCTS = "/dashboard/addnewproducts";
 const SELLER_DASHBOARD_PROFILE = "/dashboard/profile";
-
+const SELER_UPDATE_PERSONAL_DETAILS = "/dashboard/update_your_details";
 // export const PUBLIC_ROUTE = [
 //   {
 //     rout_name: "",
@@ -24,6 +24,7 @@ const SELLER_DASHBOARD_PROFILE = "/dashboard/profile";
 // ];
 
 export const PageRouts = {
+  SELER_UPDATE_PERSONAL_DETAILS,
   PublicWhiteList,
   MAIN_ROUTE,
   LOGIN_ROUTE,

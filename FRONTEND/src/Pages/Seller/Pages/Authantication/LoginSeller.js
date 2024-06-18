@@ -39,7 +39,10 @@ const LoginSeller = () => {
         });
       } else {
         const user = await res.data;
-        localStorage.setItem("_token", user._token__);
+        localStorage.setItem(
+          "H8k3dKmrC6patm3qmaJd03kAmybeTLVfFGJeieqWbg86ArtH044BhU0VMjEDXcqQEhSiA7ETxyae317rkrLDjqWLWWRddYzeD5sA75B94o0jiQPIj8PHhqlUFAj3s5Js0TsoIIhOT5HOeazZc4T5uI3hC327cWxUrR7OYLEBdsho8fFVRqrpVgvk0x8JB9Q9ZLJvWxT1wEDuf55gYY1akimsO1xHTEus4kEBc5qzkapC3pcHhpkW4z5eQtPetCUrUMEoERXWq39exYWXM9FePTBGvgFjIf38IBA3D9iI9EPvRtZpjFSDz9O27JkB03Zyxyi96l3H6p09PVeALy3o56Qa79GsTgTxjm3iwcG2QkaiyVC9mYd62oadhuUmp8mqPTCUxHrewhZzIIEul2L7dg9oiy7y4FOuFgTDqDCvA4lUPyicS8pWQd4d3rT3GrPD7YFMhX1Db3cocOXi70p0dI3RfRtJsBiD1myq1FopWJAgIjt9R89GAaXGJOCEiVTJfRv",
+          user._token__
+        );
         toast.warn(user.successMessage, {
           position: "top-right",
           autoClose: 5000,

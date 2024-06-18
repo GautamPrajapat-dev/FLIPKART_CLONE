@@ -15,7 +15,6 @@ import { useParams, useNavigate } from "react-router-dom";
 import ModalOutsideClick from "../../../../Components/ModalOutsideClick";
 import { ToastContainer } from "react-toastify";
 import { Category, SubCategory } from "../../../../Utils/SellerFilters";
-
 const ProductDetails = () => {
   const FormatResult = (item) => {
     return (
@@ -195,6 +194,7 @@ const ProductDetails = () => {
   return (
     <>
       <ToastContainer />
+
       <div className="px-3 overflow-y-scroll bg-white dark:bg-gray-900 no-scroll">
         <DashboardNavbar name="Product Details/Update" />
 

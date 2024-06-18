@@ -59,7 +59,7 @@ const SellerAddProducts = () => {
                 </label>
                 <textarea
                   name="description"
-                  className="w-full px-3 py-2 pb-3 text-sm text-gray-900 bg-transparent border-2 border-blue-600 rounded-lg appearance-none dark:bg-gray-700 dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0"
+                  className="w-full px-3 py-2 pb-3 text-sm text-gray-900 bg-transparent border-2 border-blue-600 rounded-lg appearance-none dark:bg-gray-900 dark:text-white dark:border-gray-100 dark:focus:border-blue-500 focus:outline-none focus:ring-0 dark:placeholder:text-personal-100/50"
                   id="Description"
                   cols="30"
                   placeholder="Description"
@@ -114,7 +114,7 @@ const SellerAddProducts = () => {
                     Select Category
                   </label>
                   <select
-                    className="bg-transparent border-2 outline-none dark:bg-gray-600 dark:text-white border-personal-300 select select-primary focus:outline-none focus:ring-0"
+                    className="bg-transparent border-2 outline-none dark:bg-gray-900 dark:text-white border-personal-300 select select-primary focus:outline-none focus:ring-0"
                     name="category[category]"
                     id="category"
                   >
@@ -134,7 +134,7 @@ const SellerAddProducts = () => {
                     Select Sub Category
                   </label>
                   <select
-                    className="bg-transparent border-2 outline-none dark:bg-gray-600 dark:text-white border-personal-300 select select-primary focus:outline-none focus:ring-0"
+                    className="bg-transparent border-2 outline-none dark:bg-gray-900 dark:text-white border-personal-300 select select-primary focus:outline-none focus:ring-0"
                     name="category[subCategory]"
                     id="subcategory"
                   >

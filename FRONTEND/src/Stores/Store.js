@@ -3,6 +3,7 @@ import reducer from "./CombineReducers";
 import createSagaMiddleware from "redux-saga";
 import { rootSellerAuthSaga } from "./Saga/RootSaga/Root.Seller.Auth";
 import { sellerProductsRootSaga } from "./Saga/RootSaga/Root.Seller.Product";
+import { rootPublicAuthSaga } from "./Saga/RootSaga/Root.Public.Auth";
 const sagaMiddleware = createSagaMiddleware();
 const Store = configureStore({
   reducer,
@@ -13,6 +14,7 @@ const Store = configureStore({
 });
 sagaMiddleware.run(rootSellerAuthSaga);
 sagaMiddleware.run(sellerProductsRootSaga);
+sagaMiddleware.run(rootPublicAuthSaga);
 
 export default Store;
 

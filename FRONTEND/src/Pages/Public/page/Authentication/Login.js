@@ -52,7 +52,10 @@ const Login = () => {
           progress: undefined,
           theme: "dark",
         });
-        setLocalStorage("-token-x-public", user._token__);
+        setLocalStorage(
+          "vT6sGzIEYbcjDaZX8Xt7TO74lWKrw9W2hmCYgwaIrUCBpjzOPV0DdpJ7Prmkj7Tr50QMELWdlwDWcWjY30CH2W4Jah41vXM0XbzdBH1fsEBqL3qZaORQZctYQt1sxaem89f9HicjvmfDYOLx3WSCjRB8E9RxJUMgTHvPo6P3x5Tovktj7HR7YYiOfv8UxAqh2pvQp88Wzcb6kt63sGrCW8kVBLp33UFictHLoTsodGl9LJBFgv7xj7VTJWCMF6otxTGQ7UDjST4BL",
+          user._token__
+        );
         window.location.href = "/";
       }
     } catch (error) {

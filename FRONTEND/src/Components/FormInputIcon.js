@@ -97,7 +97,7 @@ const FormInputIcon = (props, ref) => {
               autoComplete={type === "password" ? "false" : "true"}
               className={`block ${icon && "px-9"} ${
                 !icon && "px-3"
-              } pb-2.5 py-2.5 w-full text-sm  bg-transparent rounded-lg border-2 border-gray-200 appearance-none dark:text-white dark:border-white/30 dark:focus:border-blue-500 focus:outline-none focus:ring-0 dark:placeholder:text-personal-10/40 focus:border-blue-600 ${className} peer`}
+              } pb-2.5 py-2.5 w-full text-sm  bg-transparent rounded-lg border-2 border-gray-200 dark:border-gray-200 appearance-none dark:text-white dark:border-white/30 dark:focus:border-blue-500 focus:outline-none focus:ring-0 dark:placeholder:text-personal-300/60 focus:border-blue-600 ${className} peer`}
               placeholder={placeholder || ""}
             />
 
@@ -144,7 +144,7 @@ const FormInputIcon = (props, ref) => {
               value={value}
               className={`block w-full ${icon && "px-9"} ${
                 !icon && "px-3"
-              } pb-2 py-2 text-sm bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white  dark:border-white/30  dark:focus:border-blue-500 dark:placeholder:text-personal-10/40 focus:outline-none focus:ring-0 focus:border-blue-600 peer ${className}`}
+              } pb-2 py-2 text-sm bg-transparent border-0 border-b-2 dark:border-gray-100 border-gray-300 appearance-none dark:text-white  dark:border-white/30  dark:focus:border-blue-500 dark:placeholder:text-personal-10/40 focus:outline-none focus:ring-0 focus:border-blue-600 peer ${className}`}
               placeholder={placeholder || ""}
             />
             {type === "password" && (
@@ -238,7 +238,7 @@ const FormInputIcon = (props, ref) => {
               name={name}
               className={`block ${icon && "px-9"} ${
                 !icon && "px-3"
-              } pb-3.5 py-4 w-full text-base bg-transparent rounded-lg border-2 border-gray-200 appearance-none dark:text-white  dark:border-white/30 dark:placeholder:text-personal-10/40  dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer ${className}`}
+              } pb-3.5 py-4 w-full text-base bg-transparent rounded-lg border-2 dark:border-gray-100 border-gray-200 appearance-none dark:text-white  dark:border-white/30 dark:placeholder:text-personal-10/40  dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer ${className}`}
               placeholder={placeholder || ""}
             />
             {type === "password" && (
@@ -285,7 +285,7 @@ const FormInputIcon = (props, ref) => {
               autoComplete={type === "password" ? "false" : "true"}
               className={`block ${icon && "px-9"} ${
                 !icon && "px-3"
-              } pb-3 py-3.5 w-full text-base bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:placeholder:text-personal-10/40 dark:text-white  dark:border-white/30  dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer ${className}`}
+              } pb-3 py-3.5 w-full text-base bg-transparent dark:border-gray-100 border-0 border-b-2 border-gray-300 appearance-none dark:placeholder:text-personal-10/40 dark:text-white  dark:border-white/30  dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer ${className}`}
               placeholder={placeholder || ""}
             />
             {type === "password" && (

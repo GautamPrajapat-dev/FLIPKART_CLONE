@@ -318,11 +318,11 @@ const SellerProducts = () => {
             />
           </div>
         ) : (
-          <div className="fixed bottom-0 flex items-center justify-between px-4 py-3 bg-white border-t border-gray-200 w-[82%] sm:px-6">
+          <div className="fixed bottom-0 flex items-center justify-between px-4 py-3 dark:bg-gray-800 bg-white border-t border-gray-200 w-[82%] sm:px-6">
             <div className="flex justify-between flex-1 sm:hidden">
               <button
                 onClick={handleOnPrev}
-                className={`relative inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md btn hover:bg-gray-50 ${
+                className={`relative inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 dark:bg-gray-900 bg-white border border-gray-300 rounded-md btn hover:bg-gray-50 ${
                   products?.products?.page === 1 ? "btn-disabled" : ""
                 }`}
               >
@@ -330,7 +330,7 @@ const SellerProducts = () => {
               </button>
               <button
                 onClick={handleOnNext}
-                className={`relative  inline-flex items-center px-4 py-2 ml-3 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md btn hover:bg-gray-50 ${
+                className={`relative  inline-flex items-center px-4 py-2 ml-3 text-sm font-medium text-gray-700  dark:bg-gray-900  bg-white border border-gray-300 rounded-md btn hover:bg-gray-50 ${
                   products?.products?.page === products?.products?.totalPages
                     ? "btn-disabled"
                     : ""
@@ -341,7 +341,7 @@ const SellerProducts = () => {
             </div>
             <div className="hidden sm:flex sm:flex-1 sm:items-center sm:justify-between">
               <div>
-                <p className="flex gap-1 text-sm text-gray-700">
+                <p className="flex gap-1 text-sm text-gray-700 dark:text-white">
                   Showing
                   <span className="font-medium">
                     {products?.products?.pagePerLimit}

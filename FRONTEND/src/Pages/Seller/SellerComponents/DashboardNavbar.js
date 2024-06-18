@@ -32,7 +32,7 @@ const DashboardNavbar = ({ name, subname }) => {
         <div className="text-xl font-semibold tracking-wide dark:text-white ">
           {name}
         </div>
-        <div className="text-sm text-personal-900/70 dark:text-personal-20/70">
+        <div className="text-sm text-personal-900/70 dark:text-personal-100">
           {subname}
         </div>
       </div>
@@ -71,11 +71,20 @@ const DashboardNavbar = ({ name, subname }) => {
                   </Link>
                 </li>
                 <li>
+                  <Link
+                    to="/dashboard/update_your_details"
+                    className="justify-between"
+                  >
+                    Update Your Details
+                    {/* <span className="badge">New</span> */}
+                  </Link>
+                </li>
+                <li>
                   <Link to="/">Home Page</Link>
                 </li>
                 <li>
                   <Button
-                    className="py-1 bg-white"
+                    className="py-1 bg-white dark:bg-gray-600"
                     onClick={handleOnClickLogout}
                   >
                     Logout

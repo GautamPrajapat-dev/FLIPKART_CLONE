@@ -8,7 +8,7 @@ import PublicHomePage from "./Pages/Public/page/PublicHomePage.js";
 import AllProducts from "./Pages/Public/page/AllProducts.js";
 import SingleProduct from "./Pages/Public/page/SingleProduct.js";
 import Cart from "./Pages/Public/page/Cart.js";
-import SellOnlineMainPage from "./Pages/Seller/Pages/SellOnline";
+import SellOnlineMainPage from "./Pages/Seller/Pages/Dashboard/SellOnline.js";
 import Signup from "./Pages/Seller/Pages/Authantication/Signup.js";
 import LoginSeller from "./Pages/Seller/Pages/Authantication/LoginSeller.js";
 import DashBordLayout from "./Pages/Seller/Pages/Dashboard/Layout.js";
@@ -16,6 +16,7 @@ import DashbordMainPage from "./Pages/Seller/Pages/Dashboard/DashbordMainPage.js
 import NotFound from "./Components/NotFound.js";
 import { PageRouts } from "./Constant/PageRoutes.js";
 import OfflineStatus from "./Components/Offline-Status.js";
+import UpdateUserDetails from "./Pages/Seller/Pages/Dashboard/UpdateUserDetails.js";
 // import whitelist from "./Pages/Public/page/whitelist.JS";
 // const SellOnlineMainPage = lazy(() =>
 //   import("./Pages/Seller/Pages/SellOnline")
@@ -47,7 +48,7 @@ const App = () => {
       ) : (
         <Suspense
           fallback={
-            <div className="absolute z-50 flex items-center justify-center w-full h-screen bg-gray-50 bg-opacity-40 ">
+            <div className="absolute z-50 flex items-center justify-center w-full h-screen dark:bg-gray-900 bg-gray-50 bg-opacity-40 ">
               <div className="w-12 loading">
                 <div className="bg-purple-500 loading-spinner"></div>
               </div>
@@ -81,6 +82,7 @@ const App = () => {
                 element={<LoginSeller />}
               />
             </Route>
+
             <Route
               path={PageRouts.SELLER_DASHBOARD_ROUTE}
               element={<DashBordLayout />}
@@ -93,6 +95,10 @@ const App = () => {
               <Route
                 path={PageRouts.SELLER_DASHBOARD_INBOX}
                 element={<SellerInbox />}
+              />
+              <Route
+                path={PageRouts.SELER_UPDATE_PERSONAL_DETAILS}
+                element={<UpdateUserDetails />}
               />
               <Route
                 path={PageRouts.SELLER_DASHBOARD_PRODUCT}

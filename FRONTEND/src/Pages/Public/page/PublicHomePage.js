@@ -1,5 +1,5 @@
 import React from "react";
-import HorizontalCarousel from "../PublicComponents/Carusel/HorizontalCarousel";
+import HorizontalCarousel from "../PublicComponents/HorizontalCarousel";
 import { IoIosArrowForward } from "react-icons/io";
 import Card from "../PublicComponents/Card";
 import { useNavigate } from "react-router-dom";

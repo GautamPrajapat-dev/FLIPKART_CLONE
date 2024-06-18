@@ -13,6 +13,7 @@ const { Server } = require("socket.io");
 const { createServer } = require("http");
 const NotificationRoutes = require("./src/Routes/Notification.Routes");
 const socketServer = require("./src/Utils/Socket.io.Server");
+const errorHandler = require("./src/Middleware/error.MiddkerWare");
 
 const app = express();
 app.use(helmet());
@@ -48,7 +49,7 @@ app.use("/seller/products/v1", SellerProductRoutes);
 // Notificatios Routes
 app.use("/notificatios", NotificationRoutes);
 // listion server on port 3031
-
+app.use(errorHandler);
 db().then(() => {
   httpServer.listen(config.get("_PORT"), () =>
     console.log(

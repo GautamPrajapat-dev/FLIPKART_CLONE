@@ -4,9 +4,14 @@ const PublicRouter = require("express").Router();
 const limit = require("../Utils/limit.Handler");
 const { upload } = require("../Middleware/image.upload");
 
-PublicRouter.route("/all-user").get(
+PublicRouter.route("/getDetails").get(
   PublicAuthMiddleware.validUser,
-  PublicAuthController.allUsers
+  PublicAuthController.userDetails
+);
+
+PublicRouter.route("/getUserId").get(
+  PublicAuthMiddleware.validUser,
+  PublicAuthController.userId
 );
 
 PublicRouter.route("/signup").post(

@@ -152,7 +152,6 @@ const SellerAuthController = {
             $set: {
               fname: seller.firstname,
               lname: seller.surname,
-              fullname: seller.firstname + " " + seller.surname,
               email: seller.email,
               mobile: seller.mobile,
               fullAddress: seller.fullAddress,

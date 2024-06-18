@@ -46,7 +46,15 @@ const schema = new Schema(
       subCategory: { type: String, trim: true, lowercase: true },
       for: { type: String, trim: true, lowercase: true },
       age: { type: Number, trim: true, lowercase: true },
+      gender: {
+        type: String,
+        enum: ["men", "women", "unisex"], // assuming three options
+      },
+      targetAudiences: {
+        type: String,
+      },
     },
+
     features: { type: Boolean, default: false },
     price: {
       mrp: { type: Number },

@@ -3,139 +3,125 @@ const crypto = require("crypto");
 const jwt = require("jsonwebtoken");
 const PublicAuthSchema = require("../Schema/Public.Auth.Schema");
 const sendMail = require("../Utils/sendMail");
+const asyncHandler = require("../Utils/asyncHandler");
 
 const cloudinary = require("cloudinary").v2;
 
 const PublicAuthController = {
-  async allUsers(req, res) {
-    try {
-      const user = await PublicAuthSchema.findById(
-        { _id: res.user.userId },
-        {
-          password: 0,
-          resetoken: 0,
-          updatedAt: 0,
-          avatar: {
-            public_id: 0,
-          },
-        }
-      );
-      res.json({
-        status: true,
-        length: user.length,
-        user,
-      });
-    } catch (error) {
-      console.log(error);
-    }
-  },
-  // Register Users
-  async signUp(req, res) {
-    const data = req.body;
-    try {
-      // check user type empty string or not
-
-      // check user exits first
-      const isUserExist = await PublicAuthSchema.findOne({
-        email: { $regex: `^${data.email}$`, $options: "i" },
-      });
-      const MobileExist = await PublicAuthSchema.findOne({
-        mobile: { $regex: `^${data.mobile}$`, $options: "i" },
-      });
-      // if user not existing
-      if (isUserExist || MobileExist) {
-        res
-          .status(409)
-          .json({ status: false, errorMessage: "User Already Exist" });
-      } else {
-        const user = await PublicAuthSchema({
-          fname: data.firstname,
-          lname: data.surname,
-          fullname: data.firstname + " " + data.surname,
-          email: data.email,
-          mobile: data.mobile,
-          password: data.password,
-        });
-        if (user) {
-          // save user to database
-          await user.save();
-          res.status(201).json({
-            status: true,
-            successMessage: "user create sucessfully",
-          });
-        } else {
-          res.status(400).json({
-            status: true,
-            errorMessage: "user create Unsucessfull",
-          });
-        }
+  userId: asyncHandler(async (req, res) => {
+    res.status(200).json({ id: res.user.userId });
+  }),
+  userDetails: asyncHandler(async (req, res) => {
+    const user = await PublicAuthSchema.findById(
+      { _id: res.user.userId },
+      {
+        password: 0,
+        resetoken: 0,
+        updatedAt: 0,
+        avatar: {
+          public_id: 0,
+        },
       }
-    } catch (error) {
+    );
+    res.status(200).json({
+      status: true,
+      user,
+    });
+  }),
+  // Register Users
+  signUp: asyncHandler(async (req, res) => {
+    const data = req.body;
+
+    // check user type empty string or not
+
+    // check user exits first
+    const isUserExist = await PublicAuthSchema.findOne({
+      email: { $regex: `^${data.email}$`, $options: "i" },
+    });
+    const MobileExist = await PublicAuthSchema.findOne({
+      mobile: { $regex: `^${data.mobile}$`, $options: "i" },
+    });
+    // if user not existing
+    if (isUserExist || MobileExist) {
       res
-        .status(500)
-        .json({ status: false, errorMessage: "Internal Server Error" });
+        .status(409)
+        .json({ status: false, errorMessage: "User Already Exist" });
+    } else {
+      const user = await PublicAuthSchema({
+        fname: data.firstname,
+        lname: data.surname,
+        fullname: data.firstname + " " + data.surname,
+        email: data.email,
+        mobile: data.mobile,
+        password: data.password,
+      });
+      if (user) {
+        // save user to database
+        await user.save();
+        res.status(201).json({
+          status: true,
+          successMessage: "user create sucessfully",
+        });
+      } else {
+        res.status(400).json({
+          status: true,
+          errorMessage: "user create Unsucessfull",
+        });
+      }
     }
-  },
+  }),
 
   // login user
-  async SignIn(req, res) {
+  SignIn: asyncHandler(async (req, res, next) => {
     const data = req.body;
 
-    try {
-      // check user exits first
-      const isUserEmail = await PublicAuthSchema.findOne({
-        email: { $regex: `^${data.emailPhone}$`, $options: "i" },
-      });
-      const isUserMobile = await PublicAuthSchema.findOne({
-        mobile: { $regex: `^${data.emailPhone}$`, $options: "i" },
-      });
-      const isUser = isUserEmail || isUserMobile;
+    // check user exits first
+    const isUserEmail = await PublicAuthSchema.findOne({
+      email: { $regex: `^${data.emailPhone}$`, $options: "i" },
+    });
+    const isUserMobile = await PublicAuthSchema.findOne({
+      mobile: { $regex: `^${data.emailPhone}$`, $options: "i" },
+    });
+    const isUser = isUserEmail || isUserMobile;
 
-      // if user not existing
-      if (!isUser) {
-        res.status(401).json({
-          status: false,
-          errorMessage: "invalid user email or password",
-        });
-        return false;
-      }
-
-      // match password
-      const comapre = await isUser.comparePassword(data.password);
-      if (!comapre) {
-        return res.status(401).json({
-          status: false,
-          errorMessage: "invalid Credentials",
-        });
-      }
-      const user = await PublicAuthSchema.findOne(
-        {
-          _id: isUser._id,
-        },
-        { password: 0 }
-      );
-      const token = await user.genToken();
-      if (user) {
-        // user login sucessfull user login
-        res.status(200).json({
-          status: true,
-          _token__: token,
-          successMessage: "Login Sucessfully",
-        });
-      } else {
-        res.status(401).json({
-          status: false,
-          errorMessage: "Invalid Credential",
-        });
-      }
-    } catch (error) {
-      res.status(500).json({
+    // if user not existing
+    if (!isUser) {
+      res.status(401).json({
         status: false,
-        errorMessage: "Internal Server Error",
+        errorMessage: "invalid user email or password",
+      });
+      return false;
+    }
+
+    // match password
+    const comapre = await isUser.comparePassword(data.password);
+    if (!comapre) {
+      return res.status(401).json({
+        status: false,
+        errorMessage: "invalid Credentials",
       });
     }
-  },
-
+    const user = await PublicAuthSchema.findOne(
+      {
+        _id: isUser._id,
+      },
+      { password: 0 }
+    );
+    const token = await user.genToken();
+    if (user) {
+      // user login sucessfull user login
+      res.status(200).json({
+        status: true,
+        _token__: token,
+        successMessage: "Login Sucessfully",
+      });
+    } else {
+      res.status(401).json({
+        status: false,
+        errorMessage: "Invalid Credential",
+      });
+    }
+  }),
   // update user credentials
   async updateUserDetails(req, res) {
     const user = req.body;
