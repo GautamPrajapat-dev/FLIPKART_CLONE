@@ -1,13 +1,6 @@
 import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  DELETE_SELLER_PRODUCT_SAGA,
-  GET_SINGLE_PRODUCT_SAGA,
-  UPDATE_SELLER_BRAND_LOGO_SAGA,
-  UPDATE_SELLER_MULTIPLE_IMAGES_SAGA,
-  UPDATE_SELLER_PRODUCTS_SAGA,
-  UPDATE_SELLER_THUMBNAIL_SAGA,
-} from "../../../../Stores/Slice/Seller.Product.Slice";
+
 import FormInput from "../../../../Components/FormInput";
 import { ReactSearchAutocomplete } from "react-search-autocomplete";
 import DashboardNavbar from "../../SellerComponents/DashboardNavbar";
@@ -15,6 +8,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import ModalOutsideClick from "../../../../Components/ModalOutsideClick";
 import { ToastContainer } from "react-toastify";
 import { Category, SubCategory } from "../../../../Utils/SellerFilters";
+import { SellerProductAction } from "../../../../Stores/Saga/Actions/SellerProductsAction";
 const ProductDetails = () => {
   const FormatResult = (item) => {
     return (
@@ -64,7 +58,10 @@ const ProductDetails = () => {
       priceDiscount.current.value = product?.product?.price?.discount;
       qty.current.value = product?.product?.qty;
     }
-    dispatch(GET_SINGLE_PRODUCT_SAGA(id));
+    dispatch({
+      type: SellerProductAction.GET_SINGLE_PRODUCT_SAGA,
+      payload: id,
+    });
   }, [
     dispatch,
     id,
@@ -97,7 +94,10 @@ const ProductDetails = () => {
     for (let i = 0; i < multipleImage.length; i++) {
       images.append("images", multipleImage[i]);
     }
-    dispatch(UPDATE_SELLER_MULTIPLE_IMAGES_SAGA({ id, images }));
+    dispatch({
+      type: SellerProductAction.UPDATE_SELLER_MULTIPLE_IMAGES_SAGA,
+      payload: { id, images },
+    });
   };
   const handleOnUpdateDetails = () => {
     const formData = new FormData();
@@ -122,12 +122,13 @@ const ProductDetails = () => {
       );
     }
 
-    dispatch(
-      UPDATE_SELLER_PRODUCTS_SAGA({
+    dispatch({
+      type: SellerProductAction.UPDATE_SELLER_PRODUCTS_SAGA,
+      payload: {
         id,
         formData,
-      })
-    );
+      },
+    });
   };
 
   const handleOnClickBrandLogo = () => {
@@ -143,7 +144,10 @@ const ProductDetails = () => {
   const UpdateBrandLogo = () => {
     const brandLogo = new FormData();
     brandLogo.append("brandLogo", brandlogo);
-    dispatch(UPDATE_SELLER_BRAND_LOGO_SAGA({ id, brandLogo }));
+    dispatch({
+      type: SellerProductAction.UPDATE_SELLER_BRAND_LOGO_SAGA,
+      payload: { id, brandLogo },
+    });
   };
 
   const [thubnailSeller, setThumbnail] = useState();
@@ -157,29 +161,47 @@ const ProductDetails = () => {
   const UpdateThumbnail = () => {
     const thumb = new FormData();
     thumb.append("thumbnail", thubnailSeller);
-    dispatch(UPDATE_SELLER_THUMBNAIL_SAGA({ id, thumb }));
+    dispatch({
+      type: SellerProductAction.UPDATE_SELLER_THUMBNAIL_SAGA,
+      payload: { id, thumb },
+    });
   };
 
   const handleOnProductDelete = () => {
-    dispatch(DELETE_SELLER_PRODUCT_SAGA(id));
+    dispatch({
+      type: SellerProductAction.DELETE_SELLER_PRODUCT_SAGA,
+      payload: id,
+    });
   };
   useEffect(() => {
     if (brand?.Brand_logo?.status === true) {
       setOpenModel(false);
-      dispatch(GET_SINGLE_PRODUCT_SAGA(id));
+      dispatch({
+        type: SellerProductAction.GET_SINGLE_PRODUCT_SAGA,
+        payload: id,
+      });
     }
     if (brand?.thumbnail?.status === true) {
       setThumbnailModel(false);
-      dispatch(GET_SINGLE_PRODUCT_SAGA(id));
+      dispatch({
+        type: SellerProductAction.GET_SINGLE_PRODUCT_SAGA,
+        payload: id,
+      });
     }
     if (brand?.Images?.status === true) {
       setMultipleImageModel(false);
-      dispatch(GET_SINGLE_PRODUCT_SAGA(id));
+      dispatch({
+        type: SellerProductAction.GET_SINGLE_PRODUCT_SAGA,
+        payload: id,
+      });
     }
     if (brand?.delete?.status === true) {
       navigate("/dashboard/products");
       setShowDeletModal(false);
-      dispatch(GET_SINGLE_PRODUCT_SAGA(id));
+      dispatch({
+        type: SellerProductAction.GET_SINGLE_PRODUCT_SAGA,
+        payload: id,
+      });
     }
   }, [
     brand?.Brand_logo?.status,

@@ -2,6 +2,7 @@ import { call, put } from "redux-saga/effects";
 import {
   deleteProductService,
   getAllProduct,
+  getDashBoardDetails,
   getSingleProductService,
   postNewProduct,
   updateBrandLogoService,
@@ -12,6 +13,7 @@ import {
 import {
   AddNewProductRedux,
   DELETE_SELLER_PRODUCT_REDUX,
+  GET_DASHBOARD_DETAILS_REDUX,
   GET_SINGLE_PRODUCT_REDUX,
   UPDATE_SELLER_BRAND_LOGO_REDUX,
   UPDATE_SELLER_MULTIPLE_IMAGES_REDUX,
@@ -20,6 +22,19 @@ import {
   getAllProdctsRedux,
 } from "../../Slice/Seller.Product.Slice";
 import { startLoading, stopLoading } from "../../Slice/loading.Slice";
+
+export function* getDashBoardDetailsHandler() {
+  yield put(startLoading());
+  try {
+    const getdata = yield call(getDashBoardDetails);
+    console.log(getdata);
+    yield put(stopLoading());
+    yield put(GET_DASHBOARD_DETAILS_REDUX(getdata));
+  } catch (error) {
+    yield put(stopLoading());
+    console.log(error);
+  }
+}
 
 export function* addNewProductHandler(action) {
   yield put(startLoading());

@@ -21,7 +21,7 @@ const SellerAuthController = {
         gstNum: 0,
         resetoken: 0,
         _id: 0,
-        bussinessDetail: { panNum: 0 },
+        // bussinessDetail: { panNum: 0 },
         createdAt: 0,
         updatedAt: 0,
       }
@@ -78,397 +78,358 @@ const SellerAuthController = {
       }
     }
   }),
-  async loginSeller(req, res) {
+  loginSeller: asyncHandler(async (req, res) => {
     const data = req.body;
 
-    try {
-      // check user exits first
-      const isUserEmail = await SellerAuhSchema.findOne({
-        email: { $regex: `^${data.emailPhone}$`, $options: "i" },
-      });
-      const isUserMobile = await SellerAuhSchema.findOne({
-        mobile: { $regex: `^${data.emailPhone}$`, $options: "i" },
-      });
-      const isUser = isUserEmail || isUserMobile;
+    // check user exits first
+    const isUserEmail = await SellerAuhSchema.findOne({
+      email: { $regex: `^${data.emailPhone}$`, $options: "i" },
+    });
+    const isUserMobile = await SellerAuhSchema.findOne({
+      mobile: { $regex: `^${data.emailPhone}$`, $options: "i" },
+    });
+    const isUser = isUserEmail || isUserMobile;
 
-      // if user not existing
-      if (!isUser) {
-        res.status(403).json({
-          status: false,
-          errorMessage: "Invalid Seller Email Or Password",
-        });
-        return false;
-      }
-
-      // match password
-      const comapre = await isUser.comparePassword(data.password);
-      if (!comapre) {
-        return res.status(403).json({
-          status: false,
-          errorMessage: "invalid Credentials",
-        });
-      }
-      const user = await SellerAuhSchema.findOne(
-        {
-          _id: isUser._id,
-        },
-        { password: 0 }
-      );
-      const token = await user.genToken();
-      if (user) {
-        // user login sucessfull user login
-        res.status(200).json({
-          status: true,
-          successMessage: "Login Sucessfully",
-          _token__: token,
-        });
-      } else {
-        res.status(403).json({
-          status: false,
-          errorMessage: "Invalid Credentials",
-        });
-      }
-    } catch (error) {
-      console.log(error);
-      res.status(500).json({
+    // if user not existing
+    if (!isUser) {
+      res.status(403).json({
         status: false,
-        errorMessage: "Internal Server Error",
+        errorMessage: "Invalid Seller Email Or Password",
+      });
+      return false;
+    }
+
+    // match password
+    const comapre = await isUser.comparePassword(data.password);
+    if (!comapre) {
+      return res.status(403).json({
+        status: false,
+        errorMessage: "invalid Credentials",
       });
     }
-  },
+    const user = await SellerAuhSchema.findOne(
+      {
+        _id: isUser._id,
+      },
+      { password: 0 }
+    );
+    const token = await user.genToken();
+    if (user) {
+      // user login sucessfull user login
+      res.status(200).json({
+        status: true,
+        successMessage: "Login Sucessfully",
+        _token__: token,
+      });
+    } else {
+      res.status(403).json({
+        status: false,
+        errorMessage: "Invalid Credentials",
+      });
+    }
+  }),
+
   // update user credentials
-  async updateUserDetails(req, res) {
+  updateUserDetails: asyncHandler(async (req, res) => {
     const seller = req.body;
 
-    try {
-      const id = res.Seller.sellerId;
-      if (id) {
-        // update seller details from client side
-        const updateDetails = await SellerAuhSchema.updateOne(
-          {
-            _id: id,
-          },
-          {
-            $set: {
-              fname: seller.firstname,
-              lname: seller.surname,
-              email: seller.email,
-              mobile: seller.mobile,
-              fullAddress: seller.fullAddress,
-              bussinessDetail: seller.bussinessDetail,
-            },
-          },
-          { new: true }
-        );
-        // check seller update or not updated
-        if (updateDetails) {
-          res.status(201).json({
-            status: true,
-            path: req.path,
-            successMessage: "seller details updated successfully",
-          });
-        } else {
-          res.status(400).json({
-            status: false,
-            errorMessage: "seller details Unsucessfull updated",
-          });
-        }
-      } else {
-        res.status(403).json({
-          status: false,
-          errorMessage: "seller details cnnot be updated",
-        });
-      }
-    } catch (error) {
-      res.status(500).json({
-        status: false,
-        errorMessage: "Internal Server Error",
-      });
-    }
-  },
-  // change Seller password
-  async changeSellerPassword(req, res) {
-    const usrDetail = req.body;
-
-    try {
-      //if check user pervious password same or different
-      if (usrDetail.oldpassword !== usrDetail.newpassword) {
-        const user = await SellerAuhSchema.findOne({
-          email: { $regex: `^${res.Seller.email}$`, $options: "i" },
-        });
-        // compare user password
-        const comapre = await user.comparePassword(usrDetail.oldpassword);
-        // check password true or false
-
-        if (!comapre) {
-          return res.status(403).json({
-            status: false,
-            errorMessage: "Your old password is incorrected.",
-          });
-        }
-
-        // user find
-        if (user) {
-          // encrypt password for send db
-          const hash_password = await user.generatePassword(
-            usrDetail.newpassword
-          );
-
-          // update password
-          const updatPass = await SellerAuhSchema.updateOne(
-            { _id: user._id },
-            {
-              $set: { password: hash_password },
-            },
-            { new: true }
-          );
-          if (updatPass) {
-            // sending sucess response
-            res.status(200).json({
-              status: true,
-              successMessage: "password has been changed",
-            });
-          } else {
-            res.status(304).json({
-              status: false,
-              successMessage: "password has been failed to change",
-            });
-          }
-        }
-      } else {
-        res.json({
-          status: false,
-          errorMessage:
-            "you old password has been matched Please enter another password ",
-        });
-      }
-    } catch (error) {
-      res.status(500).json({
-        status: false,
-        errorMessage: "Internal Server Error",
-      });
-    }
-  },
-  // forget password token gererate from request
-  async forgetpassword(req, res) {
-    const data = req.body;
-    try {
-      // generate randome string for rest password request
-      const rendomStr = crypto.randomBytes(16).toString("hex");
-
-      const token = jwt.sign({ rendomStr }, process.env.SECRET_KEY, {
-        expiresIn: 2 * 60,
-      });
-
-      const seller = await SellerAuhSchema.findOneAndUpdate(
+    const id = res.Seller.sellerId;
+    if (id) {
+      // update seller details from client side
+      const updateDetails = await SellerAuhSchema.updateOne(
         {
-          email: { $regex: `^${data.email}$`, $options: "i" },
+          _id: id,
         },
-        { $set: { resetoken: token } },
         {
-          new: true,
-        }
+          $set: {
+            fname: seller.firstname,
+            lname: seller.surname,
+            fullname: seller.firstname + " " + seller.surname,
+            email: seller.email,
+            mobile: seller.mobile,
+            fullAddress: seller.fullAddress,
+            bussinessDetail: seller.bussinessDetail,
+          },
+        },
+        { new: true }
       );
-
-      if (seller) {
-        await sendMail(
-          seller.email,
-          "Reset Your Password",
-          `Rest Password to Clikd the link below <a href="http://localhost:3031/public/reset-password/?uid=${seller._id}&resetuid=${token}">Reset Your Password</a>`
-        );
-
-        res.status(220).json({
+      // check seller update or not updated
+      if (updateDetails) {
+        res.status(201).json({
           status: true,
-          token: token,
-          successMessage: `Email has beed sent on ${seller.email}`,
+          path: req.path,
+          successMessage: "seller details updated successfully",
         });
       } else {
         res.status(400).json({
           status: false,
-          successMessage: `Email Was InValid, Please Confirm your Email`,
+          errorMessage: "seller details Unsucessfull updated",
         });
       }
-    } catch (error) {
-      res.status(500).json({
+    } else {
+      res.status(403).json({
         status: false,
-        errorMessage: "Internal Server Error",
+        errorMessage: "seller details cnnot be updated",
       });
     }
-  },
-  async passwordReset(req, res) {
-    const detail = req.query;
-    const pass = req.body;
-    try {
-      // if (!pass.npassword || !pass.cpassword) {
-      //   return res.json({
-      //     status: false,
-      //     errorMessage: "please enter your new password",
-      //   });
-      // }
+  }),
+  // change Seller password
+  changeSellerPassword: asyncHandler(async (req, res) => {
+    const usrDetail = req.body;
 
-      // if (pass.npassword !== pass.cpassword) {
-      //   return res.json({
-      //     status: false,
-      //     errorMessage: "password does not match",
-      //   });
-      // }
-      const checkPassword = await SellerAuhSchema.findOne({ _id: detail.uid });
-      const npass = await checkPassword.comparePassword(pass.npassword);
+    //if check user pervious password same or different
+    if (usrDetail.oldpassword !== usrDetail.newpassword) {
+      const user = await SellerAuhSchema.findOne({
+        email: { $regex: `^${res.Seller.email}$`, $options: "i" },
+      });
+      // compare user password
+      const comapre = await user.comparePassword(usrDetail.oldpassword);
+      // check password true or false
 
-      if (npass) {
-        return res.json({
+      if (!comapre) {
+        return res.status(403).json({
           status: false,
-          errorMessage: "old password are not allowed",
+          errorMessage: "Your old password is incorrected.",
         });
       }
-      const token = jwt.verify(
-        checkPassword.resetoken,
-        process.env.SECRET_KEY,
-        async (err) => {
-          if (err) {
-            const check = await SellerAuhSchema.findOneAndUpdate(
-              { resetoken: { $regex: `^${detail.resetuid}$`, $options: "i" } },
-              {
-                $set: {
-                  resetoken: "",
-                },
-              },
-              { new: true }
-            );
-            if (check) {
-              res.json({
-                status: false,
-                errorMessage: "Rest Token Has Been Expired",
-              });
-            }
-          }
-        }
-      );
 
-      if (checkPassword.resetoken !== "") {
-        const npass = await bcrypt.hash(pass.npassword, 10);
-        const user = await SellerAuhSchema.updateOne(
-          { resetoken: { $regex: `^${detail.resetuid}$`, $options: "i" } },
+      // user find
+      if (user) {
+        // encrypt password for send db
+        const hash_password = await user.generatePassword(
+          usrDetail.newpassword
+        );
+
+        // update password
+        const updatPass = await SellerAuhSchema.updateOne(
+          { _id: user._id },
           {
-            $set: {
-              password: npass,
-              resetoken: "",
-            },
+            $set: { password: hash_password },
           },
           { new: true }
         );
-        if (user) {
+        if (updatPass) {
+          // sending sucess response
           res.status(200).json({
             status: true,
-            successMessage: "Your Password Has been reset",
+            successMessage: "password has been changed",
           });
         } else {
-          res.status(403).json({
-            status: true,
-            errorMessage: "Your Password Not Be Reseted",
+          res.status(304).json({
+            status: false,
+            successMessage: "password has been failed to change",
           });
         }
-      } else {
-        res.status(401).json({
-          successMessage: "reset token has been expired",
-        });
       }
-    } catch (error) {
-      console.log(error);
-      res.status(500).json({
+    } else {
+      res.json({
         status: false,
-        errorMessage: "Internal Server Error",
+        errorMessage:
+          "you old password has been matched Please enter another password ",
       });
     }
-  },
+  }),
+  // forget password token gererate from request
+  forgetpassword: asyncHandler(async (req, res) => {
+    const data = req.body;
+
+    // generate randome string for rest password request
+    const rendomStr = crypto.randomBytes(16).toString("hex");
+
+    const token = jwt.sign({ rendomStr }, process.env.SECRET_KEY, {
+      expiresIn: 2 * 60,
+    });
+
+    const seller = await SellerAuhSchema.findOneAndUpdate(
+      {
+        email: { $regex: `^${data.email}$`, $options: "i" },
+      },
+      { $set: { resetoken: token } },
+      {
+        new: true,
+      }
+    );
+
+    if (seller) {
+      await sendMail(
+        seller.email,
+        "Reset Your Password",
+        `Rest Password to Clikd the link below <a href="http://localhost:3031/public/reset-password/?uid=${seller._id}&resetuid=${token}">Reset Your Password</a>`
+      );
+
+      res.status(220).json({
+        status: true,
+        token: token,
+        successMessage: `Email has beed sent on ${seller.email}`,
+      });
+    } else {
+      res.status(400).json({
+        status: false,
+        successMessage: `Email Was InValid, Please Confirm your Email`,
+      });
+    }
+  }),
+  passwordReset: asyncHandler(async (req, res) => {
+    const detail = req.query;
+    const pass = req.body;
+
+    // if (!pass.npassword || !pass.cpassword) {
+    //   return res.json({
+    //     status: false,
+    //     errorMessage: "please enter your new password",
+    //   });
+    // }
+
+    // if (pass.npassword !== pass.cpassword) {
+    //   return res.json({
+    //     status: false,
+    //     errorMessage: "password does not match",
+    //   });
+    // }
+    const checkPassword = await SellerAuhSchema.findOne({ _id: detail.uid });
+    const npass = await checkPassword.comparePassword(pass.npassword);
+
+    if (npass) {
+      return res.json({
+        status: false,
+        errorMessage: "old password are not allowed",
+      });
+    }
+    const token = jwt.verify(
+      checkPassword.resetoken,
+      process.env.SECRET_KEY,
+      async (err) => {
+        if (err) {
+          const check = await SellerAuhSchema.findOneAndUpdate(
+            { resetoken: { $regex: `^${detail.resetuid}$`, $options: "i" } },
+            {
+              $set: {
+                resetoken: "",
+              },
+            },
+            { new: true }
+          );
+          if (check) {
+            res.json({
+              status: false,
+              errorMessage: "Rest Token Has Been Expired",
+            });
+          }
+        }
+      }
+    );
+
+    if (checkPassword.resetoken !== "") {
+      const npass = await bcrypt.hash(pass.npassword, 10);
+      const user = await SellerAuhSchema.updateOne(
+        { resetoken: { $regex: `^${detail.resetuid}$`, $options: "i" } },
+        {
+          $set: {
+            password: npass,
+            resetoken: "",
+          },
+        },
+        { new: true }
+      );
+      if (user) {
+        res.status(200).json({
+          status: true,
+          successMessage: "Your Password Has been reset",
+        });
+      } else {
+        res.status(403).json({
+          status: true,
+          errorMessage: "Your Password Not Be Reseted",
+        });
+      }
+    } else {
+      res.status(401).json({
+        successMessage: "reset token has been expired",
+      });
+    }
+  }),
   // profile picture link generate for ther user
-  async uploadAvatar(req, res) {
+  uploadAvatar: asyncHandler(async (req, res) => {
     // get image file path
 
     // user id get
     const sellerID = res.Seller.sellerId;
-    try {
-      // is file true
-      if (req.file === undefined || !req.file) {
-        res.status(400).json({
-          status: false,
-          errorMessage: "please upload avatar form user file",
-        });
-      } else {
-        const file = req.file.path;
-        // fined user id from user authontication
-        const userfind = await SellerAuhSchema.findById({ _id: sellerID });
-        // check avatar true or false
-        if (userfind.avatar) {
-          // if user path not undifined. we delete pervious avatar from db and claudinary
-          if (userfind.avatar.path !== undefined) {
-            // we using destroy methods
-            const deleteAvatar = await cloudinary.uploader.destroy(
-              userfind.avatar.public_id
-            );
-            // if coludinary destroy avatar to cloudinary delete it from mongodb database
-            if (deleteAvatar) {
-              userfind.avatar = "";
-              await userfind.save();
-            }
+
+    // is file true
+    if (req.file === undefined || !req.file) {
+      res.status(400).json({
+        status: false,
+        errorMessage: "please upload avatar form user file",
+      });
+    } else {
+      const file = req.file.path;
+      // fined user id from user authontication
+      const userfind = await SellerAuhSchema.findById({ _id: sellerID });
+      // check avatar true or false
+      if (userfind.avatar) {
+        // if user path not undifined. we delete pervious avatar from db and claudinary
+        if (userfind.avatar.path !== undefined) {
+          // we using destroy methods
+          const deleteAvatar = await cloudinary.uploader.destroy(
+            userfind.avatar.public_id
+          );
+          // if coludinary destroy avatar to cloudinary delete it from mongodb database
+          if (deleteAvatar) {
+            userfind.avatar = "";
+            await userfind.save();
           }
-        }
-        // user find or not
-        if (userfind) {
-          // upload avatar on cloudinary using uploader method and save in public/avatar folder
-          const fileupload = await cloudinary.uploader.upload(file, {
-            folder: "seller/avatar",
-            resource_type: "image",
-          });
-          //conver image to avatar using url and transformation method in caludinary
-          const image = cloudinary.url(fileupload.public_id, {
-            transformation: [
-              {
-                gravity: "auto:body",
-                radius: "max",
-                quality: "auto",
-                width: 240,
-                height: 240,
-                crop: "fill",
-              },
-              { background: "#00000000" },
-            ],
-          });
-          // if avatar upload check succes or not
-          if (fileupload) {
-            // update avatar in mongodb database
-            const avatarUpload = await SellerAuhSchema.updateOne(
-              { _id: sellerID },
-              {
-                $set: {
-                  avatar: {
-                    public_id: fileupload.public_id,
-                    path: image,
-                  },
-                },
-              },
-              { new: true }
-            );
-            // send status in client for success
-            if (avatarUpload) {
-              res.status(200).json({
-                status: true,
-                successMessage: "uploaded",
-              });
-            }
-          }
-        } else {
-          res.status(400).json({
-            status: false,
-            errorMessage: "user not logged in please logged in ",
-          });
         }
       }
-    } catch (error) {
-      res.status(500).json({
-        status: false,
-        errorMessage: "Internal Server Error",
-      });
+      // user find or not
+      if (userfind) {
+        // upload avatar on cloudinary using uploader method and save in public/avatar folder
+        const fileupload = await cloudinary.uploader.upload(file, {
+          folder: "seller/avatar",
+          resource_type: "image",
+        });
+        //conver image to avatar using url and transformation method in caludinary
+        const image = cloudinary.url(fileupload.public_id, {
+          transformation: [
+            {
+              gravity: "auto:body",
+              radius: "max",
+              quality: "auto",
+              width: 240,
+              height: 240,
+              crop: "fill",
+            },
+            { background: "#00000000" },
+          ],
+        });
+        // if avatar upload check succes or not
+        if (fileupload) {
+          // update avatar in mongodb database
+          const avatarUpload = await SellerAuhSchema.updateOne(
+            { _id: sellerID },
+            {
+              $set: {
+                avatar: {
+                  public_id: fileupload.public_id,
+                  path: image,
+                },
+              },
+            },
+            { new: true }
+          );
+          // send status in client for success
+          if (avatarUpload) {
+            res.status(200).json({
+              status: true,
+              successMessage: "uploaded",
+            });
+          }
+        }
+      } else {
+        res.status(400).json({
+          status: false,
+          errorMessage: "user not logged in please logged in ",
+        });
+      }
     }
 
     //   "file": {
@@ -493,6 +454,6 @@ const SellerAuthController = {
     //     "original_filename": "woman",
     //     "api_key": "586169286421356"
     // },
-  },
+  }),
 };
 module.exports = SellerAuthController;

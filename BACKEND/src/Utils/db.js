@@ -3,7 +3,7 @@ const config = require("./config");
 
 const db = async () => {
   try {
-    const api = config.get("_URI");
+    const api = config.get("_URLLocal");
     const clientOptions = {
       serverApi: { version: "1", strict: true, deprecationErrors: true },
     };

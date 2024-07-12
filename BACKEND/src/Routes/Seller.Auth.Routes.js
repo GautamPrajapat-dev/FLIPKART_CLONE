@@ -27,6 +27,7 @@ SellerRoutes.route("/change-password").put(
   SellerAuthController.changeSellerPassword
 );
 SellerRoutes.route("/update-details").put(
+  SellerauthMiddleware.Seller_Update_Details,
   SellerauthMiddleware.SellerValidUser,
   SellerAuthController.updateUserDetails
 );

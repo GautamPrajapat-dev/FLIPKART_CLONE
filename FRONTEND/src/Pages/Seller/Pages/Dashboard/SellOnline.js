@@ -22,6 +22,7 @@ const SellOnlineMainPage = () => {
             src="https://static-assets-web.flixcart.com/fk-sp-static/images/prelogin/banner/Banner_Desktop_1280x545_1.webp"
             alt="https://static-assets-web.flixcart.com/fk-sp-static/images/prelogin/banner/Banner_Desktop_1280x545_1.webp"
             width="90%"
+            loading="lazy"
           />
           <div className="absolute w-1/2 md:text-4xl top-14 lg:top-40 md:left-20 ">
             <span className="font-semibold"> Become a Flipkart Seller</span>
@@ -71,6 +72,7 @@ const SellOnlineMainPage = () => {
                       src="https://static-assets-web.flixcart.com/fk-sp-static/images/prelogin/icons/__Opportunity.svg"
                       alt="icon"
                       width="15%"
+                      loading="lazy"
                     />
                     Opportunity
                   </div>
@@ -85,6 +87,7 @@ const SellOnlineMainPage = () => {
                       src="https://static-assets-web.flixcart.com/fk-sp-static/images/prelogin/icons/__Ease.svg"
                       alt="icon"
                       width="15%"
+                      loading="lazy"
                     />
                     Ease of Doing Business
                   </div>
@@ -99,6 +102,7 @@ const SellOnlineMainPage = () => {
                       src="https://static-assets-web.flixcart.com/fk-sp-static/images/prelogin/icons/__Growth.svg"
                       alt="icon"
                       width="15%"
+                      loading="lazy"
                     />
                     Growth
                   </div>
@@ -112,6 +116,7 @@ const SellOnlineMainPage = () => {
                   <div className="text-[20px] flex gap-3 items-center font-semibold">
                     <img
                       src="https://static-assets-web.flixcart.com/fk-sp-static/images/prelogin/icons/__Support.svg"
+                      loading="lazy"
                       alt="icon"
                       width="15%"
                     />
@@ -129,6 +134,7 @@ const SellOnlineMainPage = () => {
                 src="https://static-assets-web.flixcart.com/fk-sp-static/images/prelogin/images/shopsy_1_1.webp"
                 alt="img"
                 width={250}
+                loading="lazy"
               />
             </div>
           </div>

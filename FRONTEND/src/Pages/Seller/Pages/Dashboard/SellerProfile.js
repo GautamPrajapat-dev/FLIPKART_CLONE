@@ -125,12 +125,12 @@ const SellerProfile = () => {
 
         <div className="col-span-12 mt-6 divide-y max-sm:flex-col max-sm:items-center md:col-span-6">
           <div className="max-sm:items-center max-sm:flex max-sm:flex-col ">
-            <div className="text-4xl font-semibold">{user.user?.fullname}</div>
+            <div className="text-4xl font-semibold">{user?.user?.fullname}</div>
             <div>
-              Phone : <span>{user.user?.mobile}</span>
+              Phone : <span>{user?.user?.mobile}</span>
             </div>
             <div>
-              Email : <span>{user.user?.email}</span>
+              Email : <span>{user?.user?.email}</span>
             </div>
           </div>
           <div className="pt-3 mt-3">

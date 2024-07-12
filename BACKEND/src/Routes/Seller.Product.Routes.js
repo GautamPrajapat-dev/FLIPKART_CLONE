@@ -18,9 +18,9 @@ SellerProductRoutes.route("/products").get(
   ProductValidation.ValidUser,
   SellerProduct.getAllproducts
 );
-SellerProductRoutes.route("/getAllproductsDetails").get(
+SellerProductRoutes.route("/getDashbordDetails").get(
   ProductValidation.ValidUser,
-  SellerProduct.getAllproductsDetails
+  SellerProduct.getDashBoardDetails
 );
 SellerProductRoutes.route("/products/:id")
   .get(ProductValidation.ValidUser, SellerProduct.getProduct)

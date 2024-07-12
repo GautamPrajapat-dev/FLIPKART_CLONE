@@ -19,7 +19,6 @@ const Notification = new Schema({
   title: { type: String },
   read: { type: Boolean, default: false },
   readAll: { type: Boolean, default: false },
-
   userId: { type: Schema.Types.ObjectId, ref: "pulbicuser" },
   productId: { type: Schema.Types.ObjectId, ref: "products" },
 });

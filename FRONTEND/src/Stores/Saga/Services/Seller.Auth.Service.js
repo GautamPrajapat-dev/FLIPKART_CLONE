@@ -1,9 +1,10 @@
-import axios from "axios";
+import axios, { formToJSON } from "axios";
 import { jwtDecode } from "jwt-decode";
 import {
   clearTokenLocalStorageSeller,
   getTokenLocalStorageSeller,
 } from "../../../Utils/LocalStorage";
+import { toast } from "react-toastify";
 
 // import { toast } from "react-toastify";
 const URL = process.env.REACT_APP_URL + "/seller";
@@ -73,15 +74,40 @@ export const updateSellerProfile = async (img) => {
 };
 export const updateSellerDetails = async (fromdata) => {
   try {
-    const res = await axios.put(`${URL}/update-details`, fromdata, {
+    const details = formToJSON(fromdata);
+
+    const res = await axios.put(`${URL}/update-details`, details, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
     });
     const data = await res.data;
 
-    return data;
+    if (data.status === true) {
+      toast.success(data.successMessage, {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
+      return data;
+    } else {
+      toast.warn(data.errorMessage, {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
+    }
   } catch (error) {
-    // console.log(error);
+    console.log(error);
   }
 };

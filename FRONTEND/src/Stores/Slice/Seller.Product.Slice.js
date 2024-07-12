@@ -9,37 +9,35 @@ const SellerProductSlice = createSlice({
     Brand_logo: {},
     thumbnail: {},
     Images: {},
+    dashboard: {},
     delete: {},
   },
 
   reducers: {
     AddNewProductSellerSaga: (state, action) => {},
     AddNewProductRedux: (state, action) => {},
-    GET_ALL_PRODUCTS_SAGA: (state, action) => {},
+    GET_DASHBOARD_DETAILS_REDUX: (state, action) => {
+      state.dashboard = action.payload;
+    },
     getAllProdctsRedux: (state, action) => {
       state.products = action.payload;
     },
-    GET_SINGLE_PRODUCT_SAGA: (state, action) => {},
     GET_SINGLE_PRODUCT_REDUX: (state, action) => {
       state.product = action.payload;
     },
-    UPDATE_SELLER_PRODUCTS_SAGA: (state, action) => {},
     UPDATE_SELLER_PRODUCTS_REDUX: (state, action) => {
       state.updateProducts = action.payload;
     },
-    UPDATE_SELLER_BRAND_LOGO_SAGA: (state, action) => {},
     UPDATE_SELLER_BRAND_LOGO_REDUX: (state, action) => {
       state.Brand_logo = action.payload;
     },
-    UPDATE_SELLER_THUMBNAIL_SAGA: (state, action) => {},
     UPDATE_SELLER_THUMBNAIL_REDUX: (state, action) => {
       state.thumbnail = action.payload;
     },
-    UPDATE_SELLER_MULTIPLE_IMAGES_SAGA: (state, action) => {},
     UPDATE_SELLER_MULTIPLE_IMAGES_REDUX: (state, action) => {
       state.Images = action.payload;
     },
-    DELETE_SELLER_PRODUCT_SAGA: (state, action) => {},
+
     DELETE_SELLER_PRODUCT_REDUX: (state, action) => {
       state.delete = action.payload;
     },
@@ -47,20 +45,13 @@ const SellerProductSlice = createSlice({
 });
 export const {
   getAllProdctsRedux,
-  GET_ALL_PRODUCTS_SAGA,
+  GET_DASHBOARD_DETAILS_REDUX,
   AddNewProductRedux,
-  AddNewProductSellerSaga,
   GET_SINGLE_PRODUCT_REDUX,
   UPDATE_SELLER_PRODUCTS_REDUX,
-  GET_SINGLE_PRODUCT_SAGA,
-  UPDATE_SELLER_PRODUCTS_SAGA,
   UPDATE_SELLER_BRAND_LOGO_REDUX,
-  UPDATE_SELLER_BRAND_LOGO_SAGA,
   UPDATE_SELLER_MULTIPLE_IMAGES_REDUX,
-  UPDATE_SELLER_MULTIPLE_IMAGES_SAGA,
   UPDATE_SELLER_THUMBNAIL_REDUX,
-  UPDATE_SELLER_THUMBNAIL_SAGA,
-  DELETE_SELLER_PRODUCT_SAGA,
   DELETE_SELLER_PRODUCT_REDUX,
 } = SellerProductSlice.actions;
 export default SellerProductSlice.reducer;

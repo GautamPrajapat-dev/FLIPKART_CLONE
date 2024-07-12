@@ -1,49 +1,68 @@
 import { takeLatest } from "redux-saga/effects";
 import {
-  AddNewProductSellerSaga,
-  DELETE_SELLER_PRODUCT_SAGA,
-  GET_ALL_PRODUCTS_SAGA,
-  GET_SINGLE_PRODUCT_SAGA,
-  UPDATE_SELLER_BRAND_LOGO_SAGA,
-  UPDATE_SELLER_MULTIPLE_IMAGES_SAGA,
-  UPDATE_SELLER_PRODUCTS_SAGA,
-  UPDATE_SELLER_THUMBNAIL_SAGA,
-} from "../../Slice/Seller.Product.Slice";
-import {
   UpdateBrandLogoHandler,
   UpdateImagesHandler,
   UpdateProductHandler,
   UpdateThumbnailHandler,
   addNewProductHandler,
   delelteProductHandler,
+  getDashBoardDetailsHandler,
   getProductHandler,
   getSingleProductHandler,
 } from "../Handler/Seller.Product.Handler";
+import { SellerProductAction } from "../Actions/SellerProductsAction";
 
+export function* getdetaildashboardWatcher() {
+  yield takeLatest(
+    SellerProductAction.GET_DASHBOARD_DETAILS_SAGA,
+    getDashBoardDetailsHandler
+  );
+}
 export function* AddNewProductWatcher() {
-  yield takeLatest(AddNewProductSellerSaga.type, addNewProductHandler);
+  yield takeLatest(
+    SellerProductAction.AddNewProductSellerSaga,
+    addNewProductHandler
+  );
 }
 export function* getAllProductWatcher() {
-  yield takeLatest(GET_ALL_PRODUCTS_SAGA.type, getProductHandler);
+  yield takeLatest(
+    SellerProductAction.GET_ALL_PRODUCTS_SAGA,
+    getProductHandler
+  );
 }
 export function* getSingleProductWatcher() {
-  yield takeLatest(GET_SINGLE_PRODUCT_SAGA.type, getSingleProductHandler);
+  yield takeLatest(
+    SellerProductAction.GET_SINGLE_PRODUCT_SAGA,
+    getSingleProductHandler
+  );
 }
 export function* updateSellerProductWatcher() {
-  yield takeLatest(UPDATE_SELLER_PRODUCTS_SAGA.type, UpdateProductHandler);
+  yield takeLatest(
+    SellerProductAction.UPDATE_SELLER_PRODUCTS_SAGA,
+    UpdateProductHandler
+  );
 }
 export function* updateBrandLogoWatcher() {
-  yield takeLatest(UPDATE_SELLER_BRAND_LOGO_SAGA.type, UpdateBrandLogoHandler);
+  yield takeLatest(
+    SellerProductAction.UPDATE_SELLER_BRAND_LOGO_SAGA,
+    UpdateBrandLogoHandler
+  );
 }
 export function* updateThumbnailWatcher() {
-  yield takeLatest(UPDATE_SELLER_THUMBNAIL_SAGA.type, UpdateThumbnailHandler);
+  yield takeLatest(
+    SellerProductAction.UPDATE_SELLER_THUMBNAIL_SAGA,
+    UpdateThumbnailHandler
+  );
 }
 export function* updateImagesWatcher() {
   yield takeLatest(
-    UPDATE_SELLER_MULTIPLE_IMAGES_SAGA.type,
+    SellerProductAction.UPDATE_SELLER_MULTIPLE_IMAGES_SAGA,
     UpdateImagesHandler
   );
 }
 export function* DeleteSellerProductWatcher() {
-  yield takeLatest(DELETE_SELLER_PRODUCT_SAGA.type, delelteProductHandler);
+  yield takeLatest(
+    SellerProductAction.DELETE_SELLER_PRODUCT_SAGA,
+    delelteProductHandler
+  );
 }

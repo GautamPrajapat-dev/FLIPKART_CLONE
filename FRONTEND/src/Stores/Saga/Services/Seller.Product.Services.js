@@ -29,6 +29,47 @@ export const Signup = async () => {
 //   }
 // };
 
+export const getDashBoardDetails = async () => {
+  // http://localhost:3031/seller/products/v1/getDashbordDetails
+  try {
+    const res = await axios.get(
+      `${URL}/seller/products/v1/getDashbordDetails`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    const data = await res.data;
+
+    if (data.status === true) {
+      toast.success(data.successMessage, {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
+
+      return data;
+    } else {
+      toast.warn(data.errorMessage, {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
+    }
+  } catch (error) {}
+};
+
 export const postNewProduct = async (productData) => {
   try {
     const res = await axios.post(

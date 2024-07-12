@@ -123,318 +123,290 @@ const PublicAuthController = {
     }
   }),
   // update user credentials
-  async updateUserDetails(req, res) {
+  updateUserDetails: asyncHandler(async (req, res) => {
     const user = req.body;
-    try {
-      if (user._id) {
-        // update user details from client side
-        const updateDetails = await PublicAuthSchema.updateOne(
-          {
-            _id: user._id,
+
+    if (user._id) {
+      // update user details from client side
+      const updateDetails = await PublicAuthSchema.updateOne(
+        {
+          _id: user._id,
+        },
+        {
+          $set: {
+            fname: user.firstname,
+            lname: user.surname,
+            fullname: user.fullname,
+            email: user.email,
+            mobile: user.mobile,
+            fullAddress: user.fullAddress,
           },
-          {
-            $set: {
-              fname: user.firstname,
-              lname: user.surname,
-              fullname: user.fullname,
-              email: user.email,
-              mobile: user.mobile,
-              fullAddress: user.fullAddress,
-            },
-          },
-          { new: true }
-        );
-        // check user update or not updated
-        if (updateDetails) {
-          res.status(201).json({
-            status: true,
-            successMessage: "User details updated successfully",
-          });
-        } else {
-          res.status(500).json({
-            status: false,
-            errorMessage: "User details Unsucessfull updated",
-          });
-        }
+        },
+        { new: true }
+      );
+      // check user update or not updated
+      if (updateDetails) {
+        res.status(201).json({
+          status: true,
+          successMessage: "User details updated successfully",
+        });
       } else {
         res.status(500).json({
           status: false,
-          errorMessage: "User details cnnot be updated",
+          errorMessage: "User details Unsucessfull updated",
         });
       }
-    } catch (error) {
+    } else {
       res.status(500).json({
         status: false,
-        errorMessage: "Internal Server Error",
+        errorMessage: "User details cnnot be updated",
       });
     }
-  },
+  }),
   // change user password
-  async changeUserPassword(req, res) {
+  changeUserPassword: asyncHandler(async (req, res) => {
     const usrDetail = req.body;
-    try {
-      //if check user pervious password same or different
-      if (usrDetail.oldpassword !== usrDetail.npassword) {
-        const user = await PublicAuthSchema.findOne({
-          email: { $regex: `^${res.user.email}$`, $options: "i" },
-        });
-        // compare user password
-        const comapre = await user.comparePassword(usrDetail.oldpassword);
-        // check password true or false
-        if (!comapre) {
-          return res.status(401).json({
-            status: false,
-            errorMessage: "Your old password is incorrected.",
-          });
-        }
-        // user find
-        if (user) {
-          // encrypt password for send db
-          const genSalt = await bcrypt.genSalt(10);
-          const hash_password = await bcrypt.hash(usrDetail.npassword, genSalt);
-          // update password
-          const updatPass = await PublicAuthSchema.updateOne(
-            { _id: user._id },
-            {
-              $set: { password: hash_password },
-            },
-            { new: true }
-          );
-          if (updatPass) {
-            // sending sucess response
-            res.status(200).json({
-              status: true,
-              successMessage: "password has been changed",
-            });
-          } else {
-            res.status(304).json({
-              status: false,
-              successMessage: "password has been failed to change",
-            });
-          }
-        }
-      } else {
-        res.status(401).json({
+
+    //if check user pervious password same or different
+    if (usrDetail.oldpassword !== usrDetail.npassword) {
+      const user = await PublicAuthSchema.findOne({
+        email: { $regex: `^${res.user.email}$`, $options: "i" },
+      });
+      // compare user password
+      const comapre = await user.comparePassword(usrDetail.oldpassword);
+      // check password true or false
+      if (!comapre) {
+        return res.status(401).json({
           status: false,
-          errorMessage:
-            "you old password has been matched Please enter another password ",
+          errorMessage: "Your old password is incorrected.",
         });
       }
-    } catch (error) {
-      res.status(500).json({
-        status: false,
-        errorMessage: "Internal Server Error",
-      });
-    }
-  },
-
-  // forget password validation
-  async forgetpassword(req, res) {
-    const data = req.body;
-    try {
-      // generate randome string for rest password request
-      const rendomStr = crypto.randomBytes(16).toString("hex");
-
-      const token = jwt.sign({ rendomStr }, process.env.SECRET_KEY, {
-        expiresIn: 10 * 60,
-      });
-
-      const user = await PublicAuthSchema.findOneAndUpdate(
-        {
-          email: { $regex: `^${data.email}$`, $options: "i" },
-        },
-        { $set: { resetoken: token } },
-        {
-          new: true,
-        }
-      );
-
+      // user find
       if (user) {
-        await sendMail(
-          user.email,
-          "Reset Your Password",
-          `Rest Password to Clikd the link below <a href="http://localhost:3031/public/reset-password/?uid=${user._id}&resetuid=${token}">Reset Your Password</a>`
-        );
-
-        res.status(220).json({
-          status: true,
-          token: token,
-          successMessage: `Email has beed sent on ${user.email}`,
-        });
-      } else {
-        res.status(400).json({
-          status: false,
-          errorMessage: "Email Was InValid, Please Confirm your Email",
-        });
-      }
-    } catch (error) {
-      res
-        .status(500)
-        .json({ status: false, errorMessage: "Internal Server Error" });
-    }
-  },
-  async passwordReset(req, res) {
-    const detail = req.query;
-    const pass = req.body;
-    try {
-      const checkPassword = await PublicAuthSchema.findOne({ _id: detail.uid });
-      const npass = await checkPassword.comparePassword(pass.npassword);
-
-      if (npass) {
-        return res.status(403).json({
-          status: false,
-          errorMessage: "old password are not allowed",
-        });
-      }
-      await jwt.verify(
-        checkPassword.resetoken,
-        process.env.SECRET_KEY,
-        async (err) => {
-          if (err) {
-            const check = await PublicAuthSchema.findOneAndUpdate(
-              { resetoken: { $regex: `^${detail.resetuid}$`, $options: "i" } },
-              {
-                $set: {
-                  resetoken: "",
-                },
-              },
-              { new: true }
-            );
-            if (check) {
-              res.json({
-                status: false,
-                errorMessage: "Rest Token Has Been Expired",
-              });
-            }
-          }
-        }
-      );
-
-      if (checkPassword.resetoken !== "") {
-        const npass = await bcrypt.hash(pass.npassword, 16);
-        const user = await PublicAuthSchema.updateOne(
-          { resetoken: { $regex: `^${detail.resetuid}$`, $options: "i" } },
+        // encrypt password for send db
+        const genSalt = await bcrypt.genSalt(10);
+        const hash_password = await bcrypt.hash(usrDetail.npassword, genSalt);
+        // update password
+        const updatPass = await PublicAuthSchema.updateOne(
+          { _id: user._id },
           {
-            $set: {
-              password: npass,
-              resetoken: "",
-            },
+            $set: { password: hash_password },
           },
           { new: true }
         );
-        if (user) {
+        if (updatPass) {
+          // sending sucess response
           res.status(200).json({
             status: true,
-            successMessage: "Your Password Has been reset",
+            successMessage: "password has been changed",
           });
         } else {
-          res.status(401).json({
-            status: true,
-            errorMessage: "Your Password Not Be Reseted",
+          res.status(304).json({
+            status: false,
+            successMessage: "password has been failed to change",
           });
         }
+      }
+    } else {
+      res.status(401).json({
+        status: false,
+        errorMessage:
+          "you old password has been matched Please enter another password ",
+      });
+    }
+  }),
+
+  // forget password validation
+  forgetpassword: asyncHandler(async (req, res) => {
+    const data = req.body;
+
+    // generate randome string for rest password request
+    const rendomStr = crypto.randomBytes(16).toString("hex");
+
+    const token = jwt.sign({ rendomStr }, process.env.SECRET_KEY, {
+      expiresIn: 10 * 60,
+    });
+
+    const user = await PublicAuthSchema.findOneAndUpdate(
+      {
+        email: { $regex: `^${data.email}$`, $options: "i" },
+      },
+      { $set: { resetoken: token } },
+      {
+        new: true,
+      }
+    );
+
+    if (user) {
+      await sendMail(
+        user.email,
+        "Reset Your Password",
+        `Rest Password to Clikd the link below <a href="http://localhost:3031/public/reset-password/?uid=${user._id}&resetuid=${token}">Reset Your Password</a>`
+      );
+
+      res.status(220).json({
+        status: true,
+        token: token,
+        successMessage: `Email has beed sent on ${user.email}`,
+      });
+    } else {
+      res.status(400).json({
+        status: false,
+        errorMessage: "Email Was InValid, Please Confirm your Email",
+      });
+    }
+  }),
+  passwordReset: asyncHandler(async (req, res) => {
+    const detail = req.query;
+    const pass = req.body;
+
+    const checkPassword = await PublicAuthSchema.findOne({ _id: detail.uid });
+    const npass = await checkPassword.comparePassword(pass.npassword);
+
+    if (npass) {
+      return res.status(403).json({
+        status: false,
+        errorMessage: "old password are not allowed",
+      });
+    }
+    await jwt.verify(
+      checkPassword.resetoken,
+      process.env.SECRET_KEY,
+      async (err) => {
+        if (err) {
+          const check = await PublicAuthSchema.findOneAndUpdate(
+            { resetoken: { $regex: `^${detail.resetuid}$`, $options: "i" } },
+            {
+              $set: {
+                resetoken: "",
+              },
+            },
+            { new: true }
+          );
+          if (check) {
+            res.json({
+              status: false,
+              errorMessage: "Rest Token Has Been Expired",
+            });
+          }
+        }
+      }
+    );
+
+    if (checkPassword.resetoken !== "") {
+      const npass = await bcrypt.hash(pass.npassword, 16);
+      const user = await PublicAuthSchema.updateOne(
+        { resetoken: { $regex: `^${detail.resetuid}$`, $options: "i" } },
+        {
+          $set: {
+            password: npass,
+            resetoken: "",
+          },
+        },
+        { new: true }
+      );
+      if (user) {
+        res.status(200).json({
+          status: true,
+          successMessage: "Your Password Has been reset",
+        });
       } else {
         res.status(401).json({
-          status: false,
-          successMessage: "reset token has been expired",
+          status: true,
+          errorMessage: "Your Password Not Be Reseted",
         });
       }
-    } catch (error) {
-      res
-        .status(500)
-        .json({ status: false, errorMessage: "Internal Server Error" });
+    } else {
+      res.status(401).json({
+        status: false,
+        successMessage: "reset token has been expired",
+      });
     }
-  },
+  }),
 
   // profile picture link generate for ther user
-  async uploadAvatar(req, res) {
+  uploadAvatar: asyncHandler(async (req, res) => {
     // get image file path
     const file = req.file.path;
     // user id get
     const userId = res.user.userId;
-    try {
-      // is file true
-      if (file) {
-        // fined user id from user authontication
-        const userfind = await PublicAuthSchema.findById({ _id: userId });
-        // check avatar true or false
-        if (userfind.avatar) {
-          // if user path not undifined. we delete pervious avatar from db and claudinary
-          if (userfind.avatar.path !== undefined) {
-            // we using destroy methods
-            const deleteAvatar = await cloudinary.uploader.destroy(
-              userfind.avatar.public_id
-            );
-            // if coludinary destroy avatar to cloudinary delete it from mongodb database
-            if (deleteAvatar) {
-              userfind.avatar = "";
-              await userfind.save();
-            }
+
+    // is file true
+    if (file) {
+      // fined user id from user authontication
+      const userfind = await PublicAuthSchema.findById({ _id: userId });
+      // check avatar true or false
+      if (userfind.avatar) {
+        // if user path not undifined. we delete pervious avatar from db and claudinary
+        if (userfind.avatar.path !== undefined) {
+          // we using destroy methods
+          const deleteAvatar = await cloudinary.uploader.destroy(
+            userfind.avatar.public_id
+          );
+          // if coludinary destroy avatar to cloudinary delete it from mongodb database
+          if (deleteAvatar) {
+            userfind.avatar = "";
+            await userfind.save();
           }
         }
-        // user find or not
-        if (userfind) {
-          // upload avatar on cloudinary using uploader method and save in public/avatar folder
-          const fileupload = await cloudinary.uploader.upload(file, {
-            folder: "public/avatar",
-            resource_type: "image",
-          });
-          //conver image to avatar using url and transformation method in caludinary
-          const image = cloudinary.url(fileupload.public_id, {
-            transformation: [
-              {
-                gravity: "auto:body",
-                radius: "max",
-                quality: "auto",
-                width: 240,
-                height: 240,
-                crop: "fill",
-              },
-              { background: "#00000000" },
-            ],
-          });
-          // if avatar upload check succes or not
-          if (fileupload) {
-            // update avatar in mongodb database
-            const avatarUpload = await PublicAuthSchema.updateOne(
-              { _id: userId },
-              {
-                $set: {
-                  avatar: {
-                    public_id: fileupload.public_id,
-                    path: image,
-                  },
+      }
+      // user find or not
+      if (userfind) {
+        // upload avatar on cloudinary using uploader method and save in public/avatar folder
+        const fileupload = await cloudinary.uploader.upload(file, {
+          folder: "public/avatar",
+          resource_type: "image",
+        });
+        //conver image to avatar using url and transformation method in caludinary
+        const image = cloudinary.url(fileupload.public_id, {
+          transformation: [
+            {
+              gravity: "auto:body",
+              radius: "max",
+              quality: "auto",
+              width: 240,
+              height: 240,
+              crop: "fill",
+            },
+            { background: "#00000000" },
+          ],
+        });
+        // if avatar upload check succes or not
+        if (fileupload) {
+          // update avatar in mongodb database
+          const avatarUpload = await PublicAuthSchema.updateOne(
+            { _id: userId },
+            {
+              $set: {
+                avatar: {
+                  public_id: fileupload.public_id,
+                  path: image,
                 },
               },
-              { new: true }
-            );
-            // send status in client for success
-            if (avatarUpload) {
-              res.status(201).json({
-                status: true,
-                successMessage: "uploaded",
-              });
-            }
+            },
+            { new: true }
+          );
+          // send status in client for success
+          if (avatarUpload) {
+            res.status(201).json({
+              status: true,
+              successMessage: "uploaded",
+            });
           }
-        } else {
-          res.status(400).json({
-            status: false,
-            errorMessage: "user not logged in please logged in ",
-          });
         }
       } else {
         res.status(400).json({
           status: false,
-          errorMessage: "please upload avatar form user file",
+          errorMessage: "user not logged in please logged in ",
         });
       }
-    } catch (error) {
-      res.status(500).json({
+    } else {
+      res.status(400).json({
         status: false,
-        errorMessage: "Internal Server Error",
+        errorMessage: "please upload avatar form user file",
       });
     }
-  },
+  }),
 };
 
 module.exports = PublicAuthController;

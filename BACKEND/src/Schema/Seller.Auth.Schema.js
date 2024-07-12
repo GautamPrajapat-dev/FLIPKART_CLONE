@@ -25,7 +25,9 @@ const bussinessDetails = new Schema({
   companyAddress: {
     type: addressSchema,
   },
-  panNum: { type: String, validate: /[A-Z]{5}[0-9]{4}[A-Z]{1}$/ },
+  panNum: {
+    type: String,
+  },
 });
 
 const schema = new Schema(

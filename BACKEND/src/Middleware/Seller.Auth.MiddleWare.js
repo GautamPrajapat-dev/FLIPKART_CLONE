@@ -173,6 +173,90 @@ const SellerauthMiddleware = {
     });
     validData(req.body, schema, res, next);
   },
+  // reset password validation
+  async Seller_Update_Details(req, res, next) {
+    // create a object with Joi
+    const schema = await Joi.object({
+      firstname: Joi.string().required().messages({
+        "string.empty": "First Name Is Required",
+      }),
+      surname: Joi.string().required().messages({
+        "string.empty": "surname Is Required",
+      }),
+      mobile: Joi.string()
+        .min(10)
+        .max(10)
+        .regex(/^[\d]{10}$/)
+        .required({
+          "string.empty": "Mobile Number is Required",
+          "string.min":
+            "'Number Length Must Be At Least {{#limit}} Characters Long'",
+          "any.only": "Mobile Number is Required",
+        }),
+      email: Joi.string()
+        .regex(/^[\w-\.]+@([\w-]{5,12}\.)+[\w-]{2,4}$/)
+        .required()
+        .messages({
+          "string.empty": "Email is Required",
+          "any.only": "Email is Required",
+          "string.pattern.base": "Email Not Validate",
+        }),
+
+      fullAddress: Joi.object({
+        state: Joi.string()
+          .required()
+          .messages({ "string.empty": "Enter Your Current State" }),
+        address: Joi.string().required().messages({
+          "string.empty": "address is Required",
+        }),
+        city: Joi.string()
+          .required()
+          .messages({ "string.empty": "city is Required" }),
+        pincode: Joi.number().min(6).required().messages({
+          "number.min":
+            "'Pincode Length Must Be At Least {{#limit}} Characters Long'",
+          "number.empty": "Pincode is Required",
+        }),
+        country: Joi.string()
+          .required()
+          .messages({ "string.empty": "Country is Required" }),
+      }),
+      bussinessDetail: Joi.object({
+        bussinessName: Joi.string()
+          .required()
+          .messages({ "string.empty": "Bussiness Name is Required" }),
+        company: Joi.string()
+          .required()
+          .messages({ "string.empty": "Company Name is Required" }),
+        panNum: Joi.string()
+          .optional()
+          .regex(/^([a-zA-Z]){5}([0-9]){4}([a-zA-Z]){1}?$/)
+          .messages({
+            "string.pattern.base": "Pan Number Not Validate",
+          }),
+        companyAddress: Joi.object({
+          state: Joi.required().messages({
+            "string.empty": "State Name is Required",
+          }),
+          city: Joi.string()
+            .required()
+            .messages({ "string.empty": "Citi Name is Required" }),
+          address: Joi.string().required().messages({
+            "string.empty": "address is Required",
+          }),
+          pincode: Joi.number().min(6).required().messages({
+            "number.min":
+              "'Pincode Length Must Be At Least {{#limit}} Characters Long'",
+            "number.empty": "Pincode is Required",
+          }),
+          country: Joi.string()
+            .required()
+            .messages({ "string.empty": "Country is Required" }),
+        }),
+      }),
+    }).unknown(true);
+    validData(req.body, schema, res, next);
+  },
 };
 
 module.exports = SellerauthMiddleware;

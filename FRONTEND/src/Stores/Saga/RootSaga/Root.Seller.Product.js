@@ -3,6 +3,7 @@ import {
   AddNewProductWatcher,
   DeleteSellerProductWatcher,
   getAllProductWatcher,
+  getdetaildashboardWatcher,
   getSingleProductWatcher,
   updateBrandLogoWatcher,
   updateImagesWatcher,
@@ -25,6 +26,7 @@ export function* sellerProductsRootSaga() {
     updateThumbnailWatcher(),
     updateImagesWatcher(),
     DeleteSellerProductWatcher(),
+    getdetaildashboardWatcher(),
   ];
 
   yield all(arr);

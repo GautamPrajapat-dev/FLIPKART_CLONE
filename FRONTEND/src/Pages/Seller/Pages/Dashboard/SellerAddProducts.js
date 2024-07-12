@@ -4,8 +4,8 @@ import FormInputIcon from "../../../../Components/FormInputIcon";
 import Button from "../../../../Components/Button";
 import { ToastContainer, toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
-import { AddNewProductSellerSaga } from "../../../../Stores/Slice/Seller.Product.Slice";
 import { Category, SubCategory } from "../../../../Utils/SellerFilters";
+import { SellerProductAction } from "../../../../Stores/Saga/Actions/SellerProductsAction";
 const SellerAddProducts = () => {
   const distpatch = useDispatch();
   const { isLoading } = useSelector((state) => state.loading);
@@ -26,7 +26,10 @@ const SellerAddProducts = () => {
       return;
     }
     let formdata = new FormData(FormRef.current);
-    distpatch(AddNewProductSellerSaga(formdata));
+    distpatch({
+      type: SellerProductAction.AddNewProductSellerSaga,
+      payload: formdata,
+    });
   };
 
   return (

@@ -3,7 +3,9 @@ const SellerAuhSchema = require("../Schema/Seller.Auth.Schema");
 const ApiFeature = require("../Utils/ApiFeatures");
 const asyncHandler = require("../Utils/asyncHandler");
 const calculatePagination = require("../Utils/calculatePagination");
+const { default: mongoose } = require("mongoose");
 const cloudinary = require("cloudinary").v2;
+const moment = require("moment");
 const SellerProduct = {
   addNewProduct: asyncHandler(async (req, res) => {
     const {
@@ -172,19 +174,26 @@ const SellerProduct = {
       }
     }
   }),
-  getAllproductsDetails: asyncHandler(async (req, res) => {
+  getDashBoardDetails: asyncHandler(async (req, res) => {
+    const sellerId = new mongoose.Types.ObjectId(res.Seller.sellerId); // Example seller ID
+    const twoMinutesAgo = moment().subtract(2, "minutes").toDate();
+    const oneDayAgo = moment().subtract(1, "day").toDate();
     const aggregatePipeline = [
       {
-        $match: {
-          createdAt: {
-            $gte: new Date(Date.now() - 365 * 24 * 60 * 60 * 1000),
+        $match:
+          /**
+           * query: The query in MQL.
+           */
+          {
+            sellerId: sellerId,
+            createdAt: {
+              $gte: new Date(Date.now() - 365 * 24 * 60 * 60 * 1000),
+            },
           },
-          // Filter documents from last 30 days
-        },
       },
       {
         $group: {
-          _id: null,
+          _id: "$sellerId",
           totalProducts: {
             $sum: 1,
           },
@@ -192,7 +201,24 @@ const SellerProduct = {
           totalViews: {
             $sum: "$views",
           },
+          lastModifiedDate: {
+            $max: "$updatedAt",
+          },
           // Calculate total views
+          viewsLast365Days: {
+            $sum: {
+              $cond: [
+                {
+                  $gt: [
+                    "$updatedAt",
+                    new Date(Date.now() - 365 * 24 * 60 * 60 * 1000),
+                  ],
+                },
+                "$views",
+                0,
+              ],
+            },
+          },
           viewsLast30Days: {
             $sum: {
               $cond: [
@@ -207,84 +233,163 @@ const SellerProduct = {
               ],
             },
           },
+          viewsLast1Day: {
+            $sum: {
+              $cond: [
+                {
+                  $gt: ["$updatedAt", oneDayAgo],
+                },
+                "$views",
+                0,
+              ],
+            },
+          },
+          // viewsLast1hour: {
+          //   $sum: {
+          //     $cond: [
+          //       {
+          //         $gt: [
+          //           "$updatedAt",
+          //           new Date(Date.now() - 1 * 60 * 60 * 1000),
+          //         ],
+          //       },
+          //       "$views",
+          //       0,
+          //     ],
+          //   },
+          // },
+          //  Calculate total views in the last 1 hour
+          // viewsPrevious1Hour: {
+          //   $sum: {
+          //     $cond: [
+          //       {
+          //         $and: [
+          //           {
+          //             $lte: [
+          //               "$updatedAt",
+          //               new Date(Date.now() - 60 * 60 * 1000),
+          //             ],
+          //           },
+          //           {
+          //             $gt: [
+          //               "$updatedAt",
+          //               new Date(Date.now() - 2 * 60 * 60 * 1000),
+          //             ],
+          //           },
+          //         ],
+          //       },
+          //       "$views",
+          //       0,
+          //     ],
+          //   },
+          // },
+          // viewsLast2Minutes: {
+          //   $sum: {
+          //     $cond: [
+          //       {
+          //         $gte: ["$updatedAt", twoMinutesAgo],
+          //       },
+          //       "$views",
+          //       0,
+          //     ],
+          //   },
+          // },
+          // // viewsLast2min: {
+          // //   $sum: {
+          // //     $cond: [
+          // //       {
+          // //         $and: [
+          // //           {
+          // //             $lte: [
+          // //               "$updatedAt",
+          // //               new Date(Date.now() - 2 * 60 * 1000),
+          // //             ],
+          // //           },
+          // //           {
+          // //             $gt: ["$updatedAt", new Date(Date.now() - 4 * 60 * 1000)],
+          // //           },
+          // //         ],
+          // //       },
+          // //       "$views",
+          // //       0,
+          // //     ],
+          // //   },
+          // // },
         },
       },
       {
-        $lookup: {
-          from: "products",
-          let: {},
-          pipeline: [
-            {
-              $match: {
-                $expr: {
-                  $lte: ["$qty", 10],
-                }, // Filter products with less than 10 quantity
+        $lookup:
+          /**
+           * from: The target collection.
+           * localField: The local join field.
+           * foreignField: The target join field.
+           * as: The name for the results.
+           * pipeline: Optional pipeline to run on the foreign collection.
+           * let: Optional variables to use in the pipeline field stages.
+           */
+          {
+            from: "products",
+            let: {
+              sellerId: "$_id",
+            },
+            pipeline: [
+              {
+                $match: {
+                  $expr: {
+                    $lte: ["$qty", 10],
+                  }, // Filter products with less than 10 quantity
+                },
+              },
+            ],
+            as: "lessqty",
+          },
+      },
+      {
+        $project:
+          /**
+           * specifications: The fields to
+           *   include or exclude.
+           */
+          {
+            _id: 1,
+            totalViews: 1,
+            totalQtyLessThan10: 1,
+            totalProducts: 1,
+            totalViews: {
+              viewsLast365Days: "$viewsLast365Days",
+              viewsLast30Days: "$viewsLast30Days",
+              // viewsLast1Day: "$viewsLast1Day",
+              // viewsLast1hour: "$viewsLast1hour",
+              // viewsPrevious1Hour: "$viewsPrevious1Hour",
+              // viewsLast2Minutes: "$viewsLast2Minutes",
+              // viewsLast2min: "$viewsLast2min",
+            },
+            lessqty: 1,
+            lastModifiedDate: {
+              $dateToString: {
+                format: "%d-%m-%Y",
+                date: "$lastModifiedDate",
+                timezone: "UTC",
               },
             },
-          ],
-          as: "lessqty",
-        },
-      },
-      {
-        $project: {
-          _id: 0,
-          totalViews: 1,
-          totalProducts: 1,
-          viewsLast30Days: 1,
-          lessqty: 1,
-        },
+            lastModifiedTime: {
+              $dateToString: {
+                format: "%H:%M:%S",
+                date: "$lastModifiedDate",
+                timezone: "UTC",
+              },
+            },
+          },
       },
     ];
-
-    // const aggregatePipeline = [
-    //   // Match documents with views within the last 30 days
-    //   {
-    //       createdAt: {
-    //       $match: {
-    //       $gte: new Date(new Date() - 365 * 24 * 60 * 60 * 1000), // 30 days ago
-    //       },
-    //     },
-    //   },
-    //   // Group by productId and calculate total views
-    //   {
-    //     $group: {
-    //       _id: "$_id",
-    //       totalViews: { $sum: "$views" },
-    //     },
-    //   },
-    //   // Project to rename _id to productId
-    //   {
-    //     $project: {
-    //       productId: "$_id",
-    //       totalViews: 1,
-    //       _id: 0,
-    //     },
-    //   },
-    //   // Group again to calculate total views for all time
-    //   {
-    //     $group: {
-    //       _id: null,
-    //       totalViewsAllTime: { $sum: "$totalViews" },
-    //       viewsLast30Days: { $push: "$$ROOT" }, // Push the documents for views in the last 30 days
-    //     },
-    //   },
-    //   // Project to reshape the result
-    //   {
-    //     $project: {
-    //       _id: 0,
-
-    //       totalViewsAllTime: 1,
-    //       viewsLast30Days: 1,
-    //     },
-    //   },
-    // ];
-
-    // Execute the aggregation pipeline
     await ProductSchema.aggregate(aggregatePipeline)
       .then((results) => {
-        res.json(results);
+        res.status(200).json({ status: true, results: results[0] });
       })
       .catch((error) => {
+        res
+          .status(400)
+          .json({ status: false, errorMessage: "internal server error" });
         console.error("Error:", error);
       });
 

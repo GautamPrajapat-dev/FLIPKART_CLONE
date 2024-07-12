@@ -5,7 +5,7 @@ const SellerAuthSlice = createSlice({
   initialState: {
     profile: [],
     avatar: {},
-    details: [],
+    details: {},
   },
   reducers: {
     SELLER_PROFILE_SAGA: (state, action) => {},

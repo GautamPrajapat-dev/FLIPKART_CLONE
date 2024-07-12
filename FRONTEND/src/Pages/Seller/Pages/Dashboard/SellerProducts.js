@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react";
 import DashBoardNavbar from "../../SellerComponents/DashboardNavbar";
 import { useDispatch, useSelector } from "react-redux";
-import { GET_ALL_PRODUCTS_SAGA } from "../../../../Stores/Slice/Seller.Product.Slice";
+
 import { ToastContainer } from "react-toastify";
 
 import {
@@ -12,6 +12,7 @@ import { Link } from "react-router-dom";
 import { SortFilter } from "../../../../Utils/SellerFilters";
 import { HiMiniChevronUpDown } from "react-icons/hi2";
 import useDebounce from "../../../../Hooks/useDebounce.Hook";
+import { SellerProductAction } from "../../../../Stores/Saga/Actions/SellerProductsAction";
 const SellerProducts = () => {
   const dispatch = useDispatch();
   const [currentPage, setCurrentPage] = useState(1);
@@ -47,7 +48,10 @@ const SellerProducts = () => {
       search,
     };
 
-    dispatch(GET_ALL_PRODUCTS_SAGA(config));
+    dispatch({
+      type: SellerProductAction.GET_ALL_PRODUCTS_SAGA,
+      payload: config,
+    });
   }, [dispatch, search, currentPage, sort]);
   // MARK:return
   return (

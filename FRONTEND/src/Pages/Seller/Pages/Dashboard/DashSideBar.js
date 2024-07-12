@@ -46,7 +46,7 @@ const DashSideBar = () => {
             <img
               className="lg:w-1/3 image-full"
               src="https://static-assets-web.flixcart.com/fk-p-linchpin-web/fk-cp-zion/img/flipkart-plus_8d85f4.png"
-              alt=""
+              alt="img"
             />
           </div>
           <ul className="flex flex-col gap-3 mt-3">
