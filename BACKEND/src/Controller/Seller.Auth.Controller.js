@@ -4,6 +4,7 @@ const sendMail = require("../Utils/sendMail");
 const crypto = require("crypto");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
+const errorHandler = require("../Middleware/error.MiddkerWare");
 const cloudinary = require("cloudinary").v2;
 
 const SellerAuthController = {
@@ -130,46 +131,46 @@ const SellerAuthController = {
   }),
 
   // update user credentials
-  updateUserDetails: asyncHandler(async (req, res) => {
+  updateUserDetails: asyncHandler(async (req, res, next) => {
     const seller = req.body;
 
     const id = res.Seller.sellerId;
-    if (id) {
-      // update seller details from client side
-      const updateDetails = await SellerAuhSchema.updateOne(
-        {
-          _id: id,
+    if (!id) {
+      return next(errorHandler(403, "seller details cnnot be updated", res));
+      // return res.status(403).json({
+      //   status: false,
+      //   errorMessage: "seller details cnnot be updated",
+      // });
+    }
+    // update seller details from client side
+    const updateDetails = await SellerAuhSchema.updateOne(
+      {
+        _id: id,
+      },
+      {
+        $set: {
+          fname: seller.firstname,
+          lname: seller.surname,
+          fullname: seller.firstname + " " + seller.surname,
+          email: seller.email,
+          mobile: seller.mobile,
+          fullAddress: seller.fullAddress,
+          bussinessDetail: seller.bussinessDetail,
         },
-        {
-          $set: {
-            fname: seller.firstname,
-            lname: seller.surname,
-            fullname: seller.firstname + " " + seller.surname,
-            email: seller.email,
-            mobile: seller.mobile,
-            fullAddress: seller.fullAddress,
-            bussinessDetail: seller.bussinessDetail,
-          },
-        },
-        { new: true }
-      );
-      // check seller update or not updated
-      if (updateDetails) {
-        res.status(201).json({
-          status: true,
-          path: req.path,
-          successMessage: "seller details updated successfully",
-        });
-      } else {
-        res.status(400).json({
-          status: false,
-          errorMessage: "seller details Unsucessfull updated",
-        });
-      }
+      },
+      { new: true }
+    );
+    // check seller update or not updated
+    if (updateDetails) {
+      res.status(201).json({
+        status: true,
+        path: req.path,
+        successMessage: "seller details updated successfully",
+      });
     } else {
-      res.status(403).json({
+      res.status(400).json({
         status: false,
-        errorMessage: "seller details cnnot be updated",
+        errorMessage: "seller details Unsucessfull updated",
       });
     }
   }),
@@ -178,54 +179,54 @@ const SellerAuthController = {
     const usrDetail = req.body;
 
     //if check user pervious password same or different
-    if (usrDetail.oldpassword !== usrDetail.newpassword) {
-      const user = await SellerAuhSchema.findOne({
-        email: { $regex: `^${res.Seller.email}$`, $options: "i" },
-      });
-      // compare user password
-      const comapre = await user.comparePassword(usrDetail.oldpassword);
-      // check password true or false
-
-      if (!comapre) {
-        return res.status(403).json({
-          status: false,
-          errorMessage: "Your old password is incorrected.",
-        });
-      }
-
-      // user find
-      if (user) {
-        // encrypt password for send db
-        const hash_password = await user.generatePassword(
-          usrDetail.newpassword
-        );
-
-        // update password
-        const updatPass = await SellerAuhSchema.updateOne(
-          { _id: user._id },
-          {
-            $set: { password: hash_password },
-          },
-          { new: true }
-        );
-        if (updatPass) {
-          // sending sucess response
-          res.status(200).json({
-            status: true,
-            successMessage: "password has been changed",
-          });
-        } else {
-          res.status(304).json({
-            status: false,
-            successMessage: "password has been failed to change",
-          });
-        }
-      }
-    } else {
-      res.json({
+    if (usrDetail.oldpassword === usrDetail.newpassword) {
+      return res.json({
         status: false,
-        errorMessage:
-          "you old password has been matched Please enter another password ",
+        errorMessage: "old password has been matched",
+      });
+    }
+    const user = await SellerAuhSchema.findOne({
+      email: { $regex: `^${res.Seller.email}$`, $options: "i" },
+    });
+    // compare user password
+    const comapre = await user.comparePassword(usrDetail.oldpassword);
+    // check password true or false
+
+    if (!comapre) {
+      return res.status(403).json({
+        status: false,
+        errorMessage: "Your old password is incorrected.",
+      });
+    }
+
+    // user find
+    if (user) {
+      return res.status(304).json({
+        status: false,
+        errorMessage: "User Not Found",
+      });
+    }
+    // encrypt password for send db
+    const hash_password = await user.generatePassword(usrDetail.newpassword);
+
+    // update password
+    const updatPass = await SellerAuhSchema.updateOne(
+      { _id: user._id },
+      {
+        $set: { password: hash_password },
+      },
+      { new: true }
+    );
+    if (updatPass) {
+      // sending sucess response
+      res.status(200).json({
+        status: true,
+        successMessage: "Password has been changed",
+      });
+    } else {
+      res.status(304).json({
+        status: false,
+        errorMessage: "Failed To Change Password",
       });
     }
   }),
@@ -250,24 +251,26 @@ const SellerAuthController = {
       }
     );
 
-    if (seller) {
-      await sendMail(
-        seller.email,
-        "Reset Your Password",
-        `Rest Password to Clikd the link below <a href="http://localhost:3031/public/reset-password/?uid=${seller._id}&resetuid=${token}">Reset Your Password</a>`
-      );
-
-      res.status(220).json({
-        status: true,
-        token: token,
-        successMessage: `Email has beed sent on ${seller.email}`,
-      });
-    } else {
-      res.status(400).json({
+    if (!seller) {
+      return res.status(400).json({
         status: false,
-        successMessage: `Email Was InValid, Please Confirm your Email`,
+        errorMessage: `Email Was InValid, Please Confirm your Email`,
       });
     }
+    await sendMail(
+      seller.email,
+      "Reset Your Password",
+      `<div style='background-color: powderblue'>
+      <h1>Rest Password to Clikd the link below</h1>
+      <a style="color:blue;" href="http://localhost:5173/seller/reset-password/?uid=${seller._id}&resetuid=${token}">Reset Your Password</a>
+      </div>`
+    );
+
+    res.status(200).json({
+      status: true,
+      token: token,
+      successMessage: `Email has beed sent on ${seller.email}`,
+    });
   }),
   passwordReset: asyncHandler(async (req, res) => {
     const detail = req.query;
@@ -290,7 +293,7 @@ const SellerAuthController = {
     const npass = await checkPassword.comparePassword(pass.npassword);
 
     if (npass) {
-      return res.json({
+      return res.status(409).json({
         status: false,
         errorMessage: "old password are not allowed",
       });
@@ -344,7 +347,7 @@ const SellerAuthController = {
       }
     } else {
       res.status(401).json({
-        successMessage: "reset token has been expired",
+        errorMessage: "reset token has been expired",
       });
     }
   }),

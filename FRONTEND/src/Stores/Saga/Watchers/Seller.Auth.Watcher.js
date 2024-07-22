@@ -4,20 +4,23 @@ import {
   SellerProfileUpdate,
   Seller_Update_details_Handler,
 } from "../Handler/Seller.Auth.Handler";
-import {
-  SELLER_PROFILE_SAGA,
-  UPDATE_PROFILE_SAGA,
-  UPDATE_SELLER_DETAILS_SAGA,
-} from "../../Slice/Seller.Auth.Slice";
+
+import { SellerAuthActionRequest } from "../Actions/SellerAuthAction";
 export function* SellerProfileWatcher() {
-  yield takeLatest(SELLER_PROFILE_SAGA.type, SellerProfileHandler);
+  yield takeLatest(
+    SellerAuthActionRequest.SELLER_PROFILE_SAGA_REQUEST,
+    SellerProfileHandler
+  );
 }
 export function* SellerUpdateProfileWatcher() {
-  yield takeLatest(UPDATE_PROFILE_SAGA.type, SellerProfileUpdate);
+  yield takeLatest(
+    SellerAuthActionRequest.UPDATE_PROFILE_SAGA_REQUEST,
+    SellerProfileUpdate
+  );
 }
 export function* SellerUpdateDetailsWatcher() {
   yield takeLatest(
-    UPDATE_SELLER_DETAILS_SAGA.type,
+    SellerAuthActionRequest.UPDATE_SELLER_DETAILS_SAGA_REQUEST,
     Seller_Update_details_Handler
   );
 }

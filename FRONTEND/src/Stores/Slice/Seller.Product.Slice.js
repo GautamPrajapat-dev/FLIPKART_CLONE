@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const SellerProductSlice = createSlice({
-  name: "SELLER_PRODUCT",
+  name: "sellerProduct",
   initialState: {
     products: [],
     product: {},
@@ -14,7 +14,6 @@ const SellerProductSlice = createSlice({
   },
 
   reducers: {
-    AddNewProductSellerSaga: (state, action) => {},
     AddNewProductRedux: (state, action) => {},
     GET_DASHBOARD_DETAILS_REDUX: (state, action) => {
       state.dashboard = action.payload;

@@ -2,7 +2,8 @@ import axios from "axios";
 
 import { toast } from "react-toastify";
 import { getTokenLocalStorageSeller } from "../../../Utils/LocalStorage";
-const URL = process.env.REACT_APP_URL;
+import { toastifyOptions } from "../../../Utils/tostifyDefault";
+const URL = import.meta.env.VITE_URL;
 const token = getTokenLocalStorageSeller();
 
 const config = {
@@ -43,29 +44,11 @@ export const getDashBoardDetails = async () => {
     const data = await res.data;
 
     if (data.status === true) {
-      toast.success(data.successMessage, {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: true,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-      });
+      toast.success(data.successMessage, toastifyOptions);
 
       return data;
     } else {
-      toast.warn(data.errorMessage, {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: true,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-      });
+      toast.warn(data.errorMessage, toastifyOptions);
     }
   } catch (error) {}
 };
@@ -85,29 +68,11 @@ export const postNewProduct = async (productData) => {
     const data = await res.data;
 
     if (data.status === true) {
-      toast.success(data.successMessage, {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: true,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-      });
+      toast.success(data.successMessage, toastifyOptions);
 
       return data;
     } else {
-      toast.warn(data.errorMessage, {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: true,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-      });
+      toast.warn(data.errorMessage, toastifyOptions);
     }
   } catch (error) {
     console.log(error);
@@ -123,16 +88,7 @@ export const getAllProduct = async ({ currentPage, search, sort }) => {
     if (data.status === true) {
       return data;
     } else {
-      toast.warn(data.errorMessage, {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: true,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-      });
+      toast.warn(data.errorMessage, toastifyOptions);
     }
   } catch (error) {
     console.log(error);
@@ -172,30 +128,12 @@ export const updateProductService = async ({ id, formData }) => {
   const data = await res.data;
 
   if (data.status === true) {
-    toast.success(data.successMessage, {
-      position: "top-right",
-      autoClose: 5000,
-      hideProgressBar: true,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: "light",
-    });
+    toast.success(data.successMessage, toastifyOptions);
     window.location.href = "/dashboard/products";
 
     return data;
   } else {
-    toast.warn(data.errorMessage, {
-      position: "top-right",
-      autoClose: 5000,
-      hideProgressBar: true,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: "light",
-    });
+    toast.warn(data.errorMessage, toastifyOptions);
   }
 };
 export const updateBrandLogoService = async ({ id, brandLogo }) => {
@@ -211,28 +149,10 @@ export const updateBrandLogoService = async ({ id, brandLogo }) => {
   const data = await res.data;
 
   if (data.status === true) {
-    toast.success(data.successMessage, {
-      position: "top-right",
-      autoClose: 5000,
-      hideProgressBar: true,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: "light",
-    });
+    toast.success(data.successMessage, toastifyOptions);
     return data;
   } else {
-    toast.warn(data.errorMessage, {
-      position: "top-right",
-      autoClose: 5000,
-      hideProgressBar: true,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: "light",
-    });
+    toast.warn(data.errorMessage, toastifyOptions);
   }
 };
 export const updateImageService = async ({ id, images }) => {
@@ -248,28 +168,10 @@ export const updateImageService = async ({ id, images }) => {
   const data = await res.data;
 
   if (data.status === true) {
-    toast.success(data.successMessage, {
-      position: "top-right",
-      autoClose: 5000,
-      hideProgressBar: true,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: "light",
-    });
+    toast.success(data.successMessage, toastifyOptions);
     return data;
   } else {
-    toast.warn(data.errorMessage, {
-      position: "top-right",
-      autoClose: 5000,
-      hideProgressBar: true,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: "light",
-    });
+    toast.warn(data.errorMessage, toastifyOptions);
   }
 };
 export const updateThumbnailService = async ({ id, thumb }) => {
@@ -285,28 +187,10 @@ export const updateThumbnailService = async ({ id, thumb }) => {
   const data = await res.data;
 
   if (data.status === true) {
-    toast.success(data.successMessage, {
-      position: "top-right",
-      autoClose: 5000,
-      hideProgressBar: true,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: "light",
-    });
+    toast.success(data.successMessage, toastifyOptions);
     return data;
   } else {
-    toast.warn(data.errorMessage, {
-      position: "top-right",
-      autoClose: 5000,
-      hideProgressBar: true,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: "light",
-    });
+    toast.warn(data.errorMessage, toastifyOptions);
   }
 };
 export const deleteProductService = async (id) => {
@@ -321,27 +205,9 @@ export const deleteProductService = async (id) => {
   const data = await res.data;
 
   if (data.status === true) {
-    toast.success(data.successMessage, {
-      position: "top-right",
-      autoClose: 5000,
-      hideProgressBar: true,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: "light",
-    });
+    toast.success(data.successMessage, toastifyOptions);
     return data;
   } else {
-    toast.warn(data.errorMessage, {
-      position: "top-right",
-      autoClose: 5000,
-      hideProgressBar: true,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: "light",
-    });
+    toast.warn(data.errorMessage, toastifyOptions);
   }
 };

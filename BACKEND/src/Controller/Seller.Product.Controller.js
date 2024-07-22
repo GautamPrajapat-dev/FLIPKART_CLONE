@@ -6,8 +6,9 @@ const calculatePagination = require("../Utils/calculatePagination");
 const { default: mongoose } = require("mongoose");
 const cloudinary = require("cloudinary").v2;
 const moment = require("moment");
+const errorHandler = require("../Middleware/error.MiddkerWare");
 const SellerProduct = {
-  addNewProduct: asyncHandler(async (req, res) => {
+  addNewProduct: asyncHandler(async (req, res, next) => {
     const {
       title,
       brand,
@@ -34,11 +35,14 @@ const SellerProduct = {
       title: { $regex: `^${title}$`, $options: "i" },
     });
     if (matchTitle) {
-      res.status(406).json({
-        status: false,
-        errorMessage: "Title Hash Been Matched Another Product",
-      });
-      return false;
+      return next(
+        errorHandler(406, "Title Hash Been Matched Another Product", res)
+      );
+      // res.status(406).json({
+      //   status: false,
+      //   errorMessage: "Title Hash Been Matched Another Product",
+      // });
+      // return false;
     }
 
     if (

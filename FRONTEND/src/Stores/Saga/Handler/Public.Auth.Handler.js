@@ -1,6 +1,6 @@
 import { call, put } from "redux-saga/effects";
 import { getDetials } from "../Services/Public.Products.Service";
-import { PUBLIC_PROFILE_REDUX } from "../../Slice/Public.Auth.Slce";
+import { PUBLIC_PROFILE_REDUX } from "../../Slice/Public.Auth.Slice";
 
 export function* Public_Profile_Handler() {
   try {

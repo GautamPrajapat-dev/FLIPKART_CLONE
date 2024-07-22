@@ -10,59 +10,59 @@ import {
   getProductHandler,
   getSingleProductHandler,
 } from "../Handler/Seller.Product.Handler";
-import { SellerProductAction } from "../Actions/SellerProductsAction";
+import { SellerProductActionRequest } from "../Actions/SellerProductsAction";
 
 export function* getdetaildashboardWatcher() {
   yield takeLatest(
-    SellerProductAction.GET_DASHBOARD_DETAILS_SAGA,
+    SellerProductActionRequest.GET_DASHBOARD_DETAILS_SAGA_REQUEST,
     getDashBoardDetailsHandler
   );
 }
 export function* AddNewProductWatcher() {
   yield takeLatest(
-    SellerProductAction.AddNewProductSellerSaga,
+    SellerProductActionRequest.AddNewProductSellerSaga,
     addNewProductHandler
   );
 }
 export function* getAllProductWatcher() {
   yield takeLatest(
-    SellerProductAction.GET_ALL_PRODUCTS_SAGA,
+    SellerProductActionRequest.GET_ALL_PRODUCTS_SAGA_REQUEST,
     getProductHandler
   );
 }
 export function* getSingleProductWatcher() {
   yield takeLatest(
-    SellerProductAction.GET_SINGLE_PRODUCT_SAGA,
+    SellerProductActionRequest.GET_SINGLE_PRODUCT_SAGA_REQUEST,
     getSingleProductHandler
   );
 }
 export function* updateSellerProductWatcher() {
   yield takeLatest(
-    SellerProductAction.UPDATE_SELLER_PRODUCTS_SAGA,
+    SellerProductActionRequest.UPDATE_SELLER_PRODUCTS_SAGA_REQUEST,
     UpdateProductHandler
   );
 }
 export function* updateBrandLogoWatcher() {
   yield takeLatest(
-    SellerProductAction.UPDATE_SELLER_BRAND_LOGO_SAGA,
+    SellerProductActionRequest.UPDATE_SELLER_BRAND_LOGO_SAGA_REQUEST,
     UpdateBrandLogoHandler
   );
 }
 export function* updateThumbnailWatcher() {
   yield takeLatest(
-    SellerProductAction.UPDATE_SELLER_THUMBNAIL_SAGA,
+    SellerProductActionRequest.UPDATE_SELLER_THUMBNAIL_SAGA_REQUEST,
     UpdateThumbnailHandler
   );
 }
 export function* updateImagesWatcher() {
   yield takeLatest(
-    SellerProductAction.UPDATE_SELLER_MULTIPLE_IMAGES_SAGA,
+    SellerProductActionRequest.UPDATE_SELLER_MULTIPLE_IMAGES_SAGA_REQUEST,
     UpdateImagesHandler
   );
 }
 export function* DeleteSellerProductWatcher() {
   yield takeLatest(
-    SellerProductAction.DELETE_SELLER_PRODUCT_SAGA,
+    SellerProductActionRequest.DELETE_SELLER_PRODUCT_SAGA_REQUEST,
     delelteProductHandler
   );
 }

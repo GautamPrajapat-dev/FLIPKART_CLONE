@@ -1,8 +1,9 @@
 import axios from "axios";
 
-import { toast } from "react-toastify";
+// import { toast } from "react-toastify";
 import { getTokenLocalStoragePublic } from "../../../Utils/LocalStorage";
-const URL = process.env.REACT_APP_URL + "/public";
+// eslint-disable-next-line no-undef
+const URL = import.meta.env.VITE_URL + "/public";
 const token = getTokenLocalStoragePublic();
 
 // const config = {

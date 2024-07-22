@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 import axios, { formToJSON } from "axios";
 import { jwtDecode } from "jwt-decode";
 import {
@@ -5,22 +6,23 @@ import {
   getTokenLocalStorageSeller,
 } from "../../../Utils/LocalStorage";
 import { toast } from "react-toastify";
+import { toastifyOptions } from "../../../Utils/tostifyDefault";
 
 // import { toast } from "react-toastify";
-const URL = process.env.REACT_APP_URL + "/seller";
+const URL = import.meta.env.VITE_URL + "/seller";
 
 const token = getTokenLocalStorageSeller();
-if (!!token) {
+if (!token) {
   try {
     let decodedToken = jwtDecode(token);
-    // JWT exp is in seconds
+    // JWT exp is in secondss
     if (Date.now() >= decodedToken.exp * 1000) {
       window.location.href = "/login";
       console.log("Token expired.");
       clearTokenLocalStorageSeller();
     }
   } catch (error) {
-    console.log("");
+    console.log("token error");
   }
 }
 
@@ -84,28 +86,10 @@ export const updateSellerDetails = async (fromdata) => {
     const data = await res.data;
 
     if (data.status === true) {
-      toast.success(data.successMessage, {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: true,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-      });
+      toast.success(data.successMessage, toastifyOptions);
       return data;
     } else {
-      toast.warn(data.errorMessage, {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: true,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-      });
+      toast.warn(data.errorMessage, toastifyOptions);
     }
   } catch (error) {
     console.log(error);
