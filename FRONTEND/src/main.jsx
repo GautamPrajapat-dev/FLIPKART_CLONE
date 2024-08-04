@@ -1,8 +1,8 @@
 import React from "react";
+import "./index.css";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import "react-toastify/dist/ReactToastify.css";
 import ReactDOM from "react-dom/client";
-import "./index.css";
 import App from "./App";
 
 import { BrowserRouter } from "react-router-dom";
@@ -15,10 +15,10 @@ import Store from "./Stores/Store";
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.Fragment>
-    <Provider store={Store}>
-      <BrowserRouter basename="/">
+    <BrowserRouter basename="/">
+      <Provider store={Store}>
         <App />
-      </BrowserRouter>
-    </Provider>
+      </Provider>
+    </BrowserRouter>
   </React.Fragment>
 );

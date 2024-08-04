@@ -1,4 +1,4 @@
-import { takeLatest } from "redux-saga/effects";
+import { all, takeLatest } from "redux-saga/effects";
 import {
   UpdateBrandLogoHandler,
   UpdateImagesHandler,
@@ -65,4 +65,21 @@ export function* DeleteSellerProductWatcher() {
     SellerProductActionRequest.DELETE_SELLER_PRODUCT_SAGA_REQUEST,
     delelteProductHandler
   );
+}
+
+// MARK:ROOT PRODUCTS
+export function* sellerProductsRootSaga() {
+  const arr = [
+    AddNewProductWatcher(),
+    getAllProductWatcher(),
+    getSingleProductWatcher(),
+    updateSellerProductWatcher(),
+    updateBrandLogoWatcher(),
+    updateThumbnailWatcher(),
+    updateImagesWatcher(),
+    DeleteSellerProductWatcher(),
+    getdetaildashboardWatcher(),
+  ];
+
+  yield all(arr);
 }

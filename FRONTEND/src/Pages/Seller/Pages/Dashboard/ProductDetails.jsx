@@ -1,30 +1,24 @@
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import FormInput from "../../../../Components/FormInput";
-import { ReactSearchAutocomplete } from "react-search-autocomplete";
 import DashboardNavbar from "../../SellerComponents/DashboardNavbar";
 import { useParams, useNavigate } from "react-router-dom";
 import ModalOutsideClick from "../../../../Components/ModalOutsideClick";
 import { ToastContainer } from "react-toastify";
-import { Category, SubCategory } from "../../../../Utils/SellerFilters";
+import {
+  ageFilter,
+  Category,
+  ganderFilter,
+  SubCategory,
+  targetPeople,
+} from "../../../../Utils/SellerFilters";
 import { SellerProductActionRequest } from "../../../../Stores/Saga/Actions/SellerProductsAction";
 const ProductDetails = () => {
-  const FormatResult = (item) => {
-    return (
-      <>
-        {/* <span style={{ display: "block", textAlign: "left" }}>id: {item.id}</span> */}
-        <span style={{ display: "block", textAlign: "left" }}>{item.name}</span>
-      </>
-    );
-  };
-
   const { id } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [model, setOpenModel] = useState(false);
-
   const product = useSelector((state) => state?.SellerProduct?.product);
-
   const brand = useSelector((state) => state?.SellerProduct);
   const { isLoading } = useSelector((state) => state?.loading);
   const [multipleImage, setMultipleImage] = useState([]);
@@ -40,12 +34,9 @@ const ProductDetails = () => {
   const priceCost = useRef(null);
   const priceDiscount = useRef(null);
   const brandName = useRef(null);
-  const handleOnSelectSubCategory = (item) => {
-    setSubCategoryVal(item.value);
-  };
-  const handleOnSelectCategory = (item) => {
-    setCategoryVal(item.value);
-  };
+  const [thubnailSeller, setThumbnail] = useState();
+  const [thubnailSellerImgLink, setThumbnailLink] = useState("");
+  const [thubnailmodel, setThumbnailModel] = useState(false);
   useLayoutEffect(() => {
     if (id) {
       title.current.value = product?.product?.title;
@@ -148,9 +139,6 @@ const ProductDetails = () => {
     });
   };
 
-  const [thubnailSeller, setThumbnail] = useState();
-  const [thubnailSellerImgLink, setThumbnailLink] = useState("");
-  const [thubnailmodel, setThumbnailModel] = useState(false);
   const updateThumbnailSeller = (e) => {
     setThumbnail(e.target.files[0]);
     setThumbnailLink(URL.createObjectURL(e.target.files[0]));
@@ -214,10 +202,8 @@ const ProductDetails = () => {
   return (
     <>
       <ToastContainer />
-
-      <div className="overflow-y-scroll bg-white  dark:bg-gray-900 no-scroll">
+      <div className="px-2 bg-white not-scroll dark:bg-gray-900">
         <DashboardNavbar name="Product Details/Update" />
-
         <section className="dark:text-white ">
           <div className="flex flex-col gap-6 mt-5">
             <div className="flex flex-col gap-6">
@@ -342,97 +328,104 @@ const ProductDetails = () => {
                   </button>
                 </div>
               </div>
-              <div className="grid items-center grid-cols-12 gap-3 place-content-center">
-                <div className="relative col-span-6 bg-white border rounded-lg peer border-personal-300 focus-within:ring-1">
-                  <ReactSearchAutocomplete
-                    className="z-50 dark:bg-gray-900"
+              <div className="grid items-center grid-cols-12 gap-3 place-content-center ">
+                <div className="flex flex-col col-span-4">
+                  <label htmlFor="category" className="pl-2 font-semibold">
+                    Select Category
+                  </label>
+                  <select
+                    className="bg-transparent border-2 outline-none dark:bg-gray-900 dark:border-white/30 dark:text-white border-personal-300 select select-primary focus:outline-none focus:ring-0"
+                    name="category[category]"
                     id="category"
-                    showIcon={false}
-                    styling={{
-                      boxShadow: 0,
-                      borderRadius: "0.5rem",
-                      border: 0,
-                      backgroundColor: "rgba(255, 255, 255, 0)",
-                    }}
-                    maxResults={3}
-                    items={Category}
-                    placeholder={product?.product?.category?.category}
-                    inputDebounce={300}
-                    // onSearch={handleOnSelect}
-                    // onHover={handleOnHover}
-                    onSelect={handleOnSelectCategory}
-                    // onFocus={handleOnFocus}
-                    autoFocus
-                    formatResult={FormatResult}
-                  />
-                  <label
-                    htmlFor="category"
-                    className="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-3 scale-75 top-1 z-40 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:mx-3 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-1 peer-focus:scale-75 peer-focus:-translate-y-3 start-1 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto"
+                    onChange={(e) => setCategoryVal(e.target.value)}
                   >
-                    Category
-                  </label>
-                  <FormatResult />
+                    {Category.map((_c, i) => {
+                      return (
+                        <option key={i} value={_c.value}>
+                          {_c.name}
+                        </option>
+                      );
+                    })}
+                  </select>
                 </div>
-
-                {CategoryVal === "other" && (
-                  <div className="col-span-6">
-                    <FormInput
-                      variant="lg-outlined"
-                      className=" text-personal-800 placeholder:text-personal-900/50 border-personal-300"
-                      type="text"
-                      name="category"
-                      // onChange={handleOnChange}
-                      passwordClassName="text-personal-900"
-                      iconClassName="text-personal-900"
-                      label="Other Category"
-                    />
-                  </div>
-                )}
-              </div>
-              <div className="relative grid grid-cols-12 gap-3 ">
-                <div className="col-span-6 border rounded-lg peer border-personal-300 focus-within:ring-1">
-                  <ReactSearchAutocomplete
-                    className="z-20 "
+                <div className="flex flex-col col-span-4">
+                  <label htmlFor="subcategory" className="pl-2 font-semibold">
+                    Select Sub Category
+                  </label>
+                  <select
+                    onChange={(e) => setSubCategoryVal(e.target.value)}
+                    className="bg-transparent border-2 outline-none dark:border-white/30 dark:text-white dark:bg-gray-800 border-personal-300 select select-primary focus:outline-none focus:ring-0"
+                    name="category[subCategory]"
                     id="subcategory"
-                    showIcon={false}
-                    styling={{
-                      boxShadow: 0,
-                      borderRadius: "0.5rem",
-                      border: 0,
-                      backgroundColor: "rgba(255, 255, 255, 0)",
-                    }}
-                    maxResults={3}
-                    items={SubCategory}
-                    placeholder={product?.product?.category?.subCategory}
-                    // onSearch={handleOnSelectSubCategory}
-                    // onHover={handleOnHover}
-                    onSelect={handleOnSelectSubCategory}
-                    // onFocus={handleOnFocus}
-                    autoFocus
-                    formatResult={FormatResult}
-                  />
-                  <label
-                    htmlFor="subcategory"
-                    className="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-3 scale-75 top-1 z-20 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:mx-3 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-1 peer-focus:scale-75 peer-focus:-translate-y-3 start-1 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto"
                   >
-                    SubCategory
-                  </label>
-                  <FormatResult />
+                    {SubCategory.map((_sub, i) => (
+                      <option key={i} value={_sub.value}>
+                        {_sub.name}
+                      </option>
+                    ))}
+                  </select>
                 </div>
-                {subCategoryVal === "other" && (
-                  <div className="col-span-6">
-                    <FormInput
-                      variant="lg-outlined"
-                      className=" text-personal-800 placeholder:text-personal-900/50 border-personal-300"
-                      type="text"
-                      name="category"
-                      // onChange={handleOnChange}
-                      passwordClassName="text-personal-900"
-                      iconClassName="text-personal-900"
-                      label="Other SubCategory"
-                    />
-                  </div>
-                )}
+                <div className="flex flex-col col-span-4">
+                  <label
+                    htmlFor="targetAudiences"
+                    className="pl-2 font-semibold"
+                  >
+                    Select Target Audiance
+                  </label>
+                  <select
+                    className="bg-transparent border-2 outline-none dark:border-white/30 dark:text-white dark:bg-gray-800 border-personal-300 select select-primary focus:outline-none focus:ring-0"
+                    name="category[targetAudiences]"
+                    id="targetAudiences"
+                  >
+                    {targetPeople.map((_sub, i) => (
+                      <option key={i} value={_sub.value}>
+                        {_sub.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+              <div className="grid items-center grid-cols-12 gap-3 place-content-center ">
+                <div className="flex flex-col col-span-4">
+                  <label htmlFor="gender" className="pl-2 font-semibold">
+                    Select Gender
+                  </label>
+                  <select
+                    className="bg-transparent border-2 outline-none dark:bg-gray-900 dark:border-white/30 dark:text-white border-personal-300 select select-primary focus:outline-none focus:ring-0"
+                    name="category[gender]"
+                    id="gender"
+                  >
+                    {ganderFilter.map((_c, i) => {
+                      return (
+                        <option key={i} value={_c} className="capitalize">
+                          {_c}
+                        </option>
+                      );
+                    })}
+                  </select>
+                </div>
+                <div className="flex flex-col col-span-4">
+                  <label htmlFor="Age" className="pl-2 font-semibold">
+                    Select Age
+                  </label>
+                  <select
+                    className="bg-transparent border-2 outline-none dark:bg-gray-900 dark:border-white/30 dark:text-white border-personal-300 select select-primary focus:outline-none focus:ring-0"
+                    name="category[age]"
+                    id="Age"
+                  >
+                    {ageFilter.map((_c, i) => {
+                      return (
+                        <option
+                          key={i}
+                          value={_c.ageRange}
+                          className="capitalize"
+                        >
+                          {_c.name} / {_c.ageRange}
+                        </option>
+                      );
+                    })}
+                  </select>
+                </div>
               </div>
               <div className="">
                 <div className="flex items-center space-x-6">
@@ -584,7 +577,6 @@ const ProductDetails = () => {
 
                 <button
                   onClick={() => setShowDeletModal(true)}
-                  children="Add Product "
                   className="py-2 text-white bg-red-700 btn hover:bg-personal-900"
                 >
                   Delete Product

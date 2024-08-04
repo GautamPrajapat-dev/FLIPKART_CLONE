@@ -78,23 +78,46 @@ const Product = {
       data: product,
     });
   }),
-  ProductByCategory: asyncHandler(async (req, res) => {
+  Category: asyncHandler(async (req, res) => {
     const category = [];
     const product = await ProductSchema.aggregate([
-      { $unwind: "$category.category" },
-
       {
         $group: {
-          _id: "",
-          category: { $addToSet: "$category.category" },
-          subcategory: { $addToSet: "$category.subCategory" },
+          _id: "$category.category",
+          subcategories: { $addToSet: "$category.subCategory" },
         },
       },
       {
         $project: {
           _id: 0,
-          category: 1,
+          category: "$_id",
+          subcategories: 1,
         },
+      },
+      {
+        $sort: { category: 1 }, // Sort categories in ascending order
+      },
+      {
+        $unwind: "$subcategories",
+      },
+      {
+        $sort: { subcategories: 1 }, // Sort subcategories in ascending order
+      },
+      {
+        $group: {
+          _id: "$category",
+          subcategories: { $push: "$subcategories" },
+        },
+      },
+      {
+        $project: {
+          _id: 0,
+          category: "$_id",
+          subcategories: 1,
+        },
+      },
+      {
+        $sort: { category: 1 }, // Ensure categories are sorted again if necessary
       },
     ]);
     if (!product) {
@@ -104,37 +127,73 @@ const Product = {
       });
     }
 
-    product[0].category.forEach((elm) => {
-      category.push(elm);
-    });
+    // product[0].category.forEach((elm) => {
+    //   category.push(elm);
+    // });
 
     res.status(200).json({
       status: true,
-      category,
+      path: req.path,
+      product,
     });
   }),
   getSubcategory: asyncHandler(async (req, res) => {
     const subcategory = [];
+    const params = req.params.category;
     const product = await ProductSchema.aggregate([
-      { $unwind: "$category" },
-      { $match: { $or: [{ "category.category": req.params.category }] } },
+      {
+        $unwind: "$category",
+      },
+      {
+        $match: {
+          "category.category": params, // Replace with the desired category
+        },
+      },
       {
         $group: {
-          _id: "$category.category",
-          subcategory: { $addToSet: "$category.subCategory" },
+          _id: {
+            category: "$category.category",
+            subCategory: "$category.subCategory",
+          },
+          productCount: {
+            $sum: 1,
+          },
+          products: {
+            $push: {
+              _id: "$_id",
+              title: "$title",
+              thumbnail: "$thumbnail",
+              price: "$price",
+              rating: "$rating",
+            },
+          },
+        },
+      },
+      {
+        $addFields: {
+          category: "$_id.category",
+          subCategory: "$_id.subCategory",
         },
       },
       {
         $project: {
           _id: 0,
-          subcategory: 1,
+          category: 1,
+          subCategory: 1,
+          productCount: 1,
+          products: 1,
         },
       },
+      {
+        $sort: {
+          productCount: -1,
+        },
+      },
+      // {
+      //   $limit: 6
+      // } // Uncomment this line if you want to limit the results
     ]);
 
-    product[0].subcategory.forEach((elm) => {
-      subcategory.push(elm);
-    });
     if (!product) {
       return res.status(404).json({
         status: false,
@@ -144,34 +203,62 @@ const Product = {
     res.status(200).json({
       status: true,
       length: product.length,
-      subcategory,
+      product,
     });
-    //     const movies = await Movie.aggregate([
-    //         {$unwind: '$genres'},
-    //         {$group: {
-    //             _id: '$genres',
-    //             movieCount: { $sum: 1},
-    //             movies: {$push: '$name'},
-    //         }},
-    //         {$addFields: {genre: "$_id"}},
-    //         {$project: {_id: 0}},
-    //         {$sort: {movieCount: -1}},
-    //         //{$limit: 6}
-    //         //{$match: {genre: genre}}
-    //     ]);
-
-    //     res.status(200).json({
-    //         status: 'success',
-    //         count: movies.length,
-    //         data: {
-    //             movies
-    //         }
-    //     });
   }),
   getdatabySubcategory: asyncHandler(async (req, res) => {
-    const product = await ProductSchema.find({
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 3;
+    const prod = new ApiFeature(ProductSchema, req.query)
+      .filter()
+      .sort()
+      .limitFields()
+      .paginate();
+    const p = await prod.query;
+    // console.log(p);
+
+    const totalProductsCount = await ProductSchema.find({
       "category.subCategory": {
         $regex: req.params.subcategory,
+      },
+      "category.category": {
+        $regex: req.params.category,
+      },
+    }).countDocuments();
+    const totalPage = Math.ceil(totalProductsCount / limit);
+    const { prevPages, nextPages, hasOwnPage } = calculatePagination(
+      page,
+      totalPage,
+      p
+    );
+
+    // if (!product) {
+    //   return res.status(404).json({
+    //     status: false,
+    //     errorMessage: "not found",
+    //   });
+    // }
+    res.status(200).json({
+      status: true,
+      path: req.url,
+      totalProducts: totalProductsCount,
+      productperPage: p.length,
+      pagePerLimit: limit,
+      totalPages: totalPage,
+      prevPages: prevPages,
+      nextPages: nextPages,
+      prevPage: page === 1 ? 1 : page - 1,
+      nextPage: page + 1,
+      page: page,
+      hasOwnPage,
+      totalPage: totalPage,
+      data: p,
+    });
+  }),
+  getSubcategoryProduct: asyncHandler(async (req, res) => {
+    const product = await ProductSchema.find({
+      _id: {
+        $regex: req.params.id,
       },
     });
 
@@ -186,28 +273,6 @@ const Product = {
       length: product.length,
       data: product,
     });
-
-    //     const movies = await Movie.aggregate([
-    //         {$unwind: '$genres'},
-    //         {$group: {
-    //             _id: '$genres',
-    //             movieCount: { $sum: 1},
-    //             movies: {$push: '$name'},
-    //         }},
-    //         {$addFields: {genre: "$_id"}},
-    //         {$project: {_id: 0}},
-    //         {$sort: {movieCount: -1}},
-    //         //{$limit: 6}
-    //         //{$match: {genre: genre}}
-    //     ]);
-
-    //     res.status(200).json({
-    //         status: 'success',
-    //         count: movies.length,
-    //         data: {
-    //             movies
-    //         }
-    //     });
   }),
 };
 

@@ -1,16 +1,16 @@
 import { combineReducers } from "@reduxjs/toolkit";
 
-import ProductsSlice from "./Slice/Products.Slice";
 import SellerAuthSlice from "./Slice/Seller.Auth.Slice";
 import SellerProductSlice from "./Slice/Seller.Product.Slice";
 import loadingSlice from "./Slice/loading.Slice";
 import PublicAuthSlce from "./Slice/Public.Auth.Slice";
+import product from "./Slice/Products.Slice";
 
 const reducer = combineReducers({
   SellerProduct: SellerProductSlice,
   Seller: SellerAuthSlice,
-  User: PublicAuthSlce,
+  user: PublicAuthSlce,
   loading: loadingSlice,
-  products: ProductsSlice,
+  products: product,
 });
 export default reducer;

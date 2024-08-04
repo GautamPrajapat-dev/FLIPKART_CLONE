@@ -1,11 +1,12 @@
+import axios from "axios";
 import { useRef, useState } from "react";
 import Button from "../../../../Components/Button";
 import { toast, ToastContainer } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import FormInputIcon from "../../../../Components/FormInputIcon";
 import { IoMailOutline } from "react-icons/io5";
-import axios from "axios";
 import { toastifyOptions } from "../../../../Utils/tostifyDefault";
+
 const ForgetPass = () => {
   const email = useRef();
   const [isloading, setisLoading] = useState(false);

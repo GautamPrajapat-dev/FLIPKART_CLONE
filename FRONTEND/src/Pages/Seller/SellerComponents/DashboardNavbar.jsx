@@ -19,7 +19,7 @@ const DashboardNavbar = ({ name, subname }) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (!!getTokenLocalStorageSeller()) {
+    if (getTokenLocalStorageSeller()) {
       dispatch({ type: SellerAuthActionRequest.SELLER_PROFILE_SAGA_REQUEST });
     }
   }, [dispatch]);
@@ -59,7 +59,7 @@ const DashboardNavbar = ({ name, subname }) => {
                 className="btn btn-ghost btn-circle avatar"
               >
                 <div className="w-10 rounded-full">
-                  <img alt="Avatar" src={profile?.data?.user?.avatar?.path} />
+                  <img alt="avatar" src={profile?.data?.user?.avatar?.path} />
                 </div>
               </div>
               <ul
@@ -75,7 +75,7 @@ const DashboardNavbar = ({ name, subname }) => {
                 <li>
                   <Link
                     to="/dashboard/update_your_details"
-                    className="justify-between"
+                    className="justify-between line-clamp-1"
                   >
                     Update Your Details
                     {/* <span className="badge">New</span> */}

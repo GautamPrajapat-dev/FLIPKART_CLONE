@@ -27,7 +27,6 @@ export function* getDashBoardDetailsHandler() {
   yield put(startLoading());
   try {
     const getdata = yield call(getDashBoardDetails);
-    console.log(getdata);
     yield put(stopLoading());
     yield put(GET_DASHBOARD_DETAILS_REDUX(getdata));
   } catch (error) {

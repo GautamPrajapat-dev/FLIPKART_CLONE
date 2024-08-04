@@ -1,22 +1,14 @@
 import { useEffect } from "react";
 import {
-  IoBagAddOutline,
-  IoBagOutline,
   IoCartOutline,
   IoClose,
-  IoHelp,
   IoLogOutOutline,
   IoMenu,
-  IoNewspaperOutline,
 } from "react-icons/io5";
 import { HiOutlineDotsVertical } from "react-icons/hi";
-import { CiBoxes } from "react-icons/ci";
 import { LuSearch, LuUser2 } from "react-icons/lu";
-import { MdOutlineDiscount, MdOutlineLocalOffer } from "react-icons/md";
 import { AiOutlineShop } from "react-icons/ai";
-
 import { Link, NavLink, useNavigate } from "react-router-dom";
-import { IoMdHeart, IoMdNotificationsOutline } from "react-icons/io";
 import {
   clearTokenLocalStoragePublic,
   getTokenLocalStoragePublic,
@@ -25,74 +17,11 @@ import { PUBLIC_PROFILE_SAGA } from "../../../Stores/Slice/Public.Auth.Slice.js"
 import { useDispatch, useSelector } from "react-redux";
 import useToggle from "../../../Hooks/useToggle.jsx";
 import Button from "../../../Components/Button.jsx";
+import { publicNavList } from "../../../Utils/NavbarList";
 const Navbar = () => {
   const navigate = useNavigate();
-  const { profile } = useSelector((state) => state.User);
-
+  const { profile } = useSelector((state) => state.user);
   const [istoggle, toggler] = useToggle(false);
-
-  const navList = [
-    {
-      link: "All Catagories",
-      icon: <CiBoxes />,
-      to: "/catagories",
-    },
-    {
-      link: "Trending Stores",
-      icon: <AiOutlineShop />,
-      to: "/topstores",
-    },
-    {
-      link: "Offer Zone",
-      icon: <MdOutlineLocalOffer />,
-      to: "/offers",
-    },
-    {
-      link: "Sell On Flipkart",
-      icon: <IoBagOutline />,
-      to: "/seller",
-    },
-    {
-      link: "My Orders",
-      icon: <IoBagAddOutline />,
-      to: "/my-orders",
-    },
-    {
-      link: "Coupons",
-      icon: <MdOutlineDiscount />,
-      to: "/coupons",
-    },
-    {
-      link: "My Cart",
-      icon: <IoCartOutline />,
-      to: "/cart",
-    },
-    {
-      link: "My Whitelist",
-      icon: <IoMdHeart />,
-      to: "/whitelist",
-    },
-    {
-      link: "My Account",
-      icon: <LuUser2 />,
-      to: "/my-account",
-    },
-    {
-      link: "My Notifications",
-      icon: <IoMdNotificationsOutline />,
-      to: "/notification",
-    },
-    {
-      link: "Help Center",
-      icon: <IoHelp />,
-      to: "/help-center",
-    },
-    {
-      link: "Legal",
-      icon: <IoNewspaperOutline />,
-      to: "/legal",
-    },
-  ];
   const dispatch = useDispatch();
   const handleOnClickLogout = () => {
     clearTokenLocalStoragePublic();
@@ -241,7 +170,7 @@ const Navbar = () => {
                     </div>
                   </div>
                   <ul tabIndex={0} className="">
-                    {navList.map((item, index) => {
+                    {publicNavList.map((item, index) => {
                       return (
                         <li
                           key={index}
@@ -313,7 +242,7 @@ const Navbar = () => {
                     </div>
                     {/* list */}
                     <nav className="flex flex-col gap-4 ml-3 text-lg capitalize">
-                      {navList.map((item, index) => {
+                      {publicNavList.map((item, index) => {
                         return (
                           <ul
                             key={index}

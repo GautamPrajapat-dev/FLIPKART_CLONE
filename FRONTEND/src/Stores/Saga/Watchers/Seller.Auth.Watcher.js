@@ -1,4 +1,4 @@
-import { takeLatest } from "redux-saga/effects";
+import { all, takeLatest } from "redux-saga/effects";
 import {
   SellerProfileHandler,
   SellerProfileUpdate,
@@ -23,4 +23,15 @@ export function* SellerUpdateDetailsWatcher() {
     SellerAuthActionRequest.UPDATE_SELLER_DETAILS_SAGA_REQUEST,
     Seller_Update_details_Handler
   );
+}
+
+// MARK:ROOT SELLER AUTH
+export function* rootSellerAuthSaga() {
+  const arr = [
+    SellerProfileWatcher(),
+    SellerUpdateProfileWatcher(),
+    SellerUpdateDetailsWatcher(),
+  ];
+
+  yield all(arr);
 }

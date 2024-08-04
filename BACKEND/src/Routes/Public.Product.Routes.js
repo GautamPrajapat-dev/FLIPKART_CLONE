@@ -5,7 +5,7 @@ const WhiteListController = require("../Controller/Products_API/whitelist.Contro
 const ProductRouter = APP.Router();
 
 ProductRouter.route("/product").get(Product.AllProduct);
-ProductRouter.route("/category").get(Product.ProductByCategory);
+ProductRouter.route("/category").get(Product.Category);
 ProductRouter.route("/category/:category").get(Product.getSubcategory);
 ProductRouter.route("/category/:category/:subcategory").get(
   Product.getdatabySubcategory

@@ -218,7 +218,10 @@ const SellerProducts = () => {
                             </td>
                             <td>{product?.views} Views</td>
                             <td>{product?.qty}</td>
-                            <td>{product?.price?.mrp} /-</td>
+                            <td>
+                              &#8377;{" "}
+                              {product?.price?.mrp.toLocaleString("en-In")} /-
+                            </td>
                             <td>
                               <div>
                                 {new Date(

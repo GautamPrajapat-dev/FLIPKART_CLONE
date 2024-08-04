@@ -43,11 +43,11 @@ const schema = new Schema(
     category: {
       category: { type: String, trim: true, lowercase: true },
       subCategory: { type: String, trim: true, lowercase: true },
-      for: { type: String, trim: true, lowercase: true },
-      age: { type: Number, trim: true, lowercase: true },
+      // for: { type: String, trim: true, lowercase: true },
+      age: { type: String, trim: true, lowercase: true },
       gender: {
         type: String,
-        enum: ["men", "women", "unisex"], // assuming three options
+        enum: ["Men", "Women", "Kids"], // assuming three options
       },
       targetAudiences: {
         type: String,
@@ -58,7 +58,7 @@ const schema = new Schema(
     price: {
       mrp: { type: Number },
       cost: { type: Number },
-      discount: { type: String },
+      discount: { type: Number },
     },
     thumbnail: {
       public_id: { type: String },

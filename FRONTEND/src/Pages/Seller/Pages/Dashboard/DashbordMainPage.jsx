@@ -18,7 +18,7 @@ const DashbordMainPage = () => {
   }, [dispatch]);
 
   return (
-    <main className="px-3">
+    <main className="">
       <DashBoardNavbar name="Dashboard" />
       {/* ! Product Details  */}
       <section className="flex flex-col mt-4">

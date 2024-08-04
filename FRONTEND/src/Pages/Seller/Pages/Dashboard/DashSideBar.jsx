@@ -25,7 +25,7 @@ const links = [
   },
   {
     to: "addnewproducts",
-    name: "Add New Products",
+    name: "Add Products",
     icon: <BiSolidInbox />,
   },
 ];
@@ -63,7 +63,9 @@ const DashSideBar = () => {
                     data-tip={links.name}
                   >
                     <div className="text-lg">{links.icon}</div>
-                    <span className="hidden lg:block">{links.name}</span>
+                    <span className="hidden text-start lg:block text-nowrap line-clamp-1">
+                      {links.name}
+                    </span>
                   </NavLink>
                 </div>
               );

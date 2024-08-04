@@ -7,7 +7,7 @@ import {
   getTokenLocalStorageSeller,
   setTokenLocalStorageSeller,
 } from "../../../../Utils/LocalStorage";
-import { PageRouts } from "../../../../Constant/PageRoutes.jsx";
+import { PageRouts } from "../../../../Utils/PageRoutes.jsx";
 import FormInputIcon from "../../../../Components/FormInputIcon.jsx";
 import Button from "../../../../Components/Button.jsx";
 import { toastifyOptions } from "../../../../Utils/tostifyDefault";

@@ -14,11 +14,11 @@ const DashBordLayout = () => {
 
   return (
     <>
-      <div className="grid grid-cols-12 text-black dark:text-white dark:bg-gray-900 bg-gray-50 md:px-2 ">
-        <div className="relative z-50 col-span-2 rounded-none bg-daintree-700 md:m-2 md:rounded-md xl:rounded-xl">
+      <div className="grid grid-flow-col grid-cols-7 text-black dark:text-white dark:bg-gray-900 bg-gray-50 ">
+        <div className="z-50 h-[98] col-span-1 rounded-none bg-daintree-700 md:m-2 md:rounded-md xl:rounded-xl">
           <DashSideBar />
         </div>
-        <div className="w-full h-[100vh] lg:col-span-10 px-2 overflow-y-scroll  col-span-10 pb-2 rounded-lg  no-scroll">
+        <div className="w-full h-screen col-span-6 px-2 pb-2 overflow-hidden overflow-y-scroll rounded-lg lg:col-span-10 no-scroll ">
           <Outlet />
         </div>
       </div>

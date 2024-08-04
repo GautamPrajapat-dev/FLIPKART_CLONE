@@ -68,6 +68,9 @@ const ProductValidation = {
       category: Joi.object({
         category: Joi.string(),
         subCategory: Joi.string(),
+        targetAudiences: Joi.string(),
+        gender: Joi.string(),
+        age: Joi.string(),
       }).required(),
       features: Joi.boolean(),
       price: Joi.object({

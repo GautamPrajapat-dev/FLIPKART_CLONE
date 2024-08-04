@@ -5,10 +5,11 @@
 body {
   margin: 0;
   padding: 0;
-  scroll-behavior: smooth;
+
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+
 * {
   scroll-behavior: smooth;
 }
@@ -16,12 +17,11 @@ body {
   display: flex;
 } */
 
-.no-scroll::-webkit-scrollbar {
-  display: none;
+div::-webkit-scrollbar {
+  display: none !important;
 }
-
 .no-scroll::-webkit-scrollbar {
-  display: none;
+  display: none !important;
 }
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",

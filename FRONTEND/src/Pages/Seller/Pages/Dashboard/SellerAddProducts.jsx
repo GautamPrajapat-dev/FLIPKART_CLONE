@@ -4,7 +4,13 @@ import FormInputIcon from "../../../../Components/FormInputIcon";
 import Button from "../../../../Components/Button";
 import { ToastContainer, toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
-import { Category, SubCategory } from "../../../../Utils/SellerFilters";
+import {
+  ageFilter,
+  Category,
+  ganderFilter,
+  SubCategory,
+  targetPeople,
+} from "../../../../Utils/SellerFilters";
 import { SellerProductActionRequest } from "../../../../Stores/Saga/Actions/SellerProductsAction";
 import { toastifyOptions } from "../../../../Utils/tostifyDefault";
 const SellerAddProducts = () => {
@@ -30,7 +36,7 @@ const SellerAddProducts = () => {
       <div className="">
         <DashBoardNavbar name="Add Products" />
 
-        <section className="dark:text-white">
+        <section className=" dark:text-white">
           <div className="flex flex-col gap-6 mt-5">
             <form
               method="POST"
@@ -105,7 +111,7 @@ const SellerAddProducts = () => {
                   />
                 </div>
                 <div className="grid items-center grid-cols-12 gap-3 place-content-center ">
-                  <div className="flex flex-col col-span-5">
+                  <div className="flex flex-col col-span-4">
                     <label htmlFor="category" className="pl-2 font-semibold">
                       Select Category
                     </label>
@@ -123,9 +129,7 @@ const SellerAddProducts = () => {
                       })}
                     </select>
                   </div>
-                </div>
-                <div className="grid items-center grid-cols-12 gap-3 place-content-center ">
-                  <div className="flex flex-col col-span-5">
+                  <div className="flex flex-col col-span-4">
                     <label htmlFor="subcategory" className="pl-2 font-semibold">
                       Select Sub Category
                     </label>
@@ -139,6 +143,67 @@ const SellerAddProducts = () => {
                           {_sub.name}
                         </option>
                       ))}
+                    </select>
+                  </div>
+                  <div className="flex flex-col col-span-4">
+                    <label
+                      htmlFor="targetAudiences"
+                      className="pl-2 font-semibold"
+                    >
+                      Select Target Audiance
+                    </label>
+                    <select
+                      className="bg-transparent border-2 outline-none dark:border-white/30 dark:text-white dark:bg-gray-800 border-personal-300 select select-primary focus:outline-none focus:ring-0"
+                      name="category[targetAudiences]"
+                      id="targetAudiences"
+                    >
+                      {targetPeople.map((_sub, i) => (
+                        <option key={i} value={_sub.value}>
+                          {_sub.name}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
+                <div className="grid items-center grid-cols-12 gap-3 place-content-center ">
+                  <div className="flex flex-col col-span-4">
+                    <label htmlFor="gender" className="pl-2 font-semibold">
+                      Select Gender
+                    </label>
+                    <select
+                      className="bg-transparent border-2 outline-none dark:bg-gray-900 dark:border-white/30 dark:text-white border-personal-300 select select-primary focus:outline-none focus:ring-0"
+                      name="category[gender]"
+                      id="gender"
+                    >
+                      {ganderFilter.map((_c, i) => {
+                        return (
+                          <option key={i} value={_c} className="capitalize">
+                            {_c}
+                          </option>
+                        );
+                      })}
+                    </select>
+                  </div>
+                  <div className="flex flex-col col-span-4">
+                    <label htmlFor="Age" className="pl-2 font-semibold">
+                      Select Age
+                    </label>
+                    <select
+                      className="bg-transparent border-2 outline-none dark:bg-gray-900 dark:border-white/30 dark:text-white border-personal-300 select select-primary focus:outline-none focus:ring-0"
+                      name="category[age]"
+                      id="Age"
+                    >
+                      {ageFilter.map((_c, i) => {
+                        return (
+                          <option
+                            key={i}
+                            value={_c.ageRange}
+                            className="capitalize"
+                          >
+                            {_c.name} / {_c.ageRange}
+                          </option>
+                        );
+                      })}
                     </select>
                   </div>
                 </div>

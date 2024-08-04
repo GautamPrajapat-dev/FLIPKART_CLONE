@@ -1,6 +1,7 @@
 import { Suspense, lazy } from "react";
-import PublicLayout from "./Pages/Public/page/PublicLayout.jsx";
+import { PageRouts } from "./Utils/PageRoutes.jsx";
 import { Route, Routes } from "react-router-dom";
+import PublicLayout from "./Pages/Public/page/PublicLayout.jsx";
 import SignUp from "./Pages/Public/page/Authentication/SignUp.jsx";
 import Login from "./Pages/Public/page/Authentication/Login.jsx";
 import AdminLayout from "./Pages/Seller/Layout.jsx";
@@ -14,11 +15,12 @@ import LoginSeller from "./Pages/Seller/Pages/Authantication/LoginSeller.jsx";
 import DashBordLayout from "./Pages/Seller/Pages/Dashboard/Layout.jsx";
 import DashbordMainPage from "./Pages/Seller/Pages/Dashboard/DashbordMainPage.jsx";
 import NotFound from "./Components/NotFound.jsx";
-import { PageRouts } from "./Constant/PageRoutes.jsx";
 import OfflineStatus from "./Components/Offline-Status.jsx";
 import UpdateUserDetails from "./Pages/Seller/Pages/Dashboard/UpdateUserDetails.jsx";
 import ForgetPass from "./Pages/Seller/Pages/Authantication/ForgetPass.jsx";
 import ResetPassword from "./Pages/Seller/Pages/Authantication/ResetPassword.jsx";
+import GetDataCategory from "./Pages/Public/page/GetDataCategory.jsx";
+import GetDataSubCategory from "./Pages/Public/page/GetDataSubCategory.jsx";
 // import whitelist from "./Pages/Public/page/whitelist.jsx";
 // const SellOnlineMainPage = lazy(() =>
 //   import("./Pages/Seller/Pages/SellOnline")
@@ -61,12 +63,25 @@ const App = () => {
             <Route path={PageRouts.MAIN_ROUTE} element={<PublicLayout />}>
               <Route index element={<PublicHomePage />} />
               <Route path={PageRouts.LOGIN_ROUTE} element={<Login />} />
-              <Route path={PageRouts.CART_ROUTE} element={<Cart />} />
+              <Route path={PageRouts.SIGNUP_ROUTE} element={<SignUp />} />
+              <Route
+                path={PageRouts.GETDATA_CATEGORY_ROUTE}
+                element={<GetDataCategory />}
+              />
+              <Route
+                path={PageRouts.GETDATA_SUB_CATEGORY_ROUTE}
+                element={<GetDataSubCategory />}
+              />
+              <Route
+                path={PageRouts.GET_DATA_SINGLE_PORDUCT_ROUTE}
+                element={<SingleProduct />}
+              />
+
               <Route
                 path={PageRouts.ALL_PRODUCTS_ROUTE}
                 element={<AllProducts />}
               ></Route>
-              <Route path={PageRouts.SIGNUP_ROUTE} element={<SignUp />} />
+              <Route path={PageRouts.CART_ROUTE} element={<Cart />} />
               <Route
                 path={PageRouts.SINGLE_PRODUCT_ROUTE}
                 element={<SingleProduct />}

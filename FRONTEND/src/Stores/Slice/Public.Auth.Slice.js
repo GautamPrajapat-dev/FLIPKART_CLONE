@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const PublicAuthSlice = createSlice({
-  name: "PublicAuthSlice",
+  name: "public",
   initialState: {
     profile: [],
     avatar: {},

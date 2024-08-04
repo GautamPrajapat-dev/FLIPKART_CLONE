@@ -28,10 +28,9 @@ const navbarSellerDropdown = [
 
 const NavbarSeller = () => {
   const navigate = useNavigate();
-
   const [toggle, setToggle] = useToggle(false);
   useEffect(() => {
-    if (!!getTokenLocalStorageSeller()) {
+    if (getTokenLocalStorageSeller()) {
       navigate("/dashboard/main");
     }
   }, [navigate]);
