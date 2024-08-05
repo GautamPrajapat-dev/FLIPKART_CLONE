@@ -1,8 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const SellerProductSlice = createSlice({
-  name: "sellerProduct",
+  name: "sProduct",
   initialState: {
+    addProduct: {
+      isloading: false,
+    },
     products: [],
     product: {},
     updateProducts: {},
@@ -14,7 +17,15 @@ const SellerProductSlice = createSlice({
   },
 
   reducers: {
-    AddNewProductRedux: (state, action) => {},
+    AddNewProductSellerSaga: (state) => {
+      state.addProduct.isloading = true;
+    },
+    AddNewProductRedux: (state) => {
+      state.addProduct.isloading = false;
+    },
+    AddNewProductSellerSaga_ERROR: (state) => {
+      state.addProduct.isloading = false;
+    },
     GET_DASHBOARD_DETAILS_REDUX: (state, action) => {
       state.dashboard = action.payload;
     },

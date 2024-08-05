@@ -21,6 +21,8 @@ const ProductDetails = () => {
   const product = useSelector((state) => state?.SellerProduct?.product);
   const brand = useSelector((state) => state?.SellerProduct);
   const { isLoading } = useSelector((state) => state?.loading);
+  const [brandlogo, setBrandLogo] = useState();
+  const [brandLogoImgLink, setBrandLogoImg] = useState("");
   const [multipleImage, setMultipleImage] = useState([]);
   const [multipleImageUrl, setMultipleImageURL] = useState([]);
   const [multipleImageModel, setMultipleImageModel] = useState(false);
@@ -120,11 +122,6 @@ const ProductDetails = () => {
     });
   };
 
-  const handleOnClickBrandLogo = () => {
-    setOpenModel(true);
-  };
-  const [brandlogo, setBrandLogo] = useState();
-  const [brandLogoImgLink, setBrandLogoImg] = useState("");
   const updateBrandLogo = (e) => {
     setBrandLogo(e.target.files[0]);
     const image = e.target.files[0];
@@ -321,7 +318,7 @@ const ProductDetails = () => {
                     </ModalOutsideClick>
                   </div>
                   <button
-                    onClick={handleOnClickBrandLogo}
+                    onClick={() => setOpenModel(true)}
                     className="btn btn-link"
                   >
                     Update Brand Logo

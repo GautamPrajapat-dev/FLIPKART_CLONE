@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import DashBoardNavbar from "../../SellerComponents/DashboardNavbar";
 import FormInputIcon from "../../../../Components/FormInputIcon";
 import Button from "../../../../Components/Button";
@@ -15,8 +15,9 @@ import { SellerProductActionRequest } from "../../../../Stores/Saga/Actions/Sell
 import { toastifyOptions } from "../../../../Utils/tostifyDefault";
 const SellerAddProducts = () => {
   const distpatch = useDispatch();
-  const { isLoading } = useSelector((state) => state.loading);
+  const { isloading } = useSelector((state) => state.SellerProduct.addProduct);
   const FormRef = useRef();
+
   const handleOnClickSubmit = (e) => {
     e.preventDefault();
     if (FormRef.current.images.length > 4) {
@@ -29,7 +30,11 @@ const SellerAddProducts = () => {
       payload: formdata,
     });
   };
-
+  const [cat, setcat] = useState("Electronics");
+  const hanonChange = (e) => {
+    setcat(e.target.value);
+  };
+  console.log(cat);
   return (
     <>
       <ToastContainer />
@@ -119,6 +124,7 @@ const SellerAddProducts = () => {
                       className="bg-transparent border-2 outline-none dark:bg-gray-900 dark:border-white/30 dark:text-white border-personal-300 select select-primary focus:outline-none focus:ring-0"
                       name="category[category]"
                       id="category"
+                      onChange={(e) => hanonChange(e)}
                     >
                       {Category.map((_c, i) => {
                         return (
@@ -193,14 +199,14 @@ const SellerAddProducts = () => {
                       name="category[age]"
                       id="Age"
                     >
-                      {ageFilter.map((_c, i) => {
+                      {ageFilter.map((_age, i) => {
                         return (
                           <option
                             key={i}
-                            value={_c.ageRange}
+                            value={_age.ageRange}
                             className="capitalize"
                           >
-                            {_c.name} / {_c.ageRange}
+                            {_age.name} / {_age.ageRange}
                           </option>
                         );
                       })}
@@ -264,7 +270,7 @@ const SellerAddProducts = () => {
                 type="submit"
                 // eslint-disable-next-line react/no-children-prop
                 children={
-                  isLoading ? (
+                  isloading ? (
                     <span className="animate-ping">Uploading..</span>
                   ) : (
                     "Add Product"

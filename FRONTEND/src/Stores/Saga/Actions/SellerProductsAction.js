@@ -12,7 +12,7 @@ export const SellerProductActionSuccess = {
   DELETE_SELLER_PRODUCT_SAGA_SUCCESS: "DELETE_SELLER_PRODUCT_SAGA_SUCCESS",
 };
 export const SellerProductActionRequest = {
-  AddNewProductSellerSaga: "AddNewProductSellerSaga",
+  AddNewProductSellerSaga: "sProduct/AddNewProductSellerSaga",
   GET_DASHBOARD_DETAILS_SAGA_REQUEST: "GET_DASHBOARD_DETAILS_SAGA_REQUEST",
   GET_ALL_PRODUCTS_SAGA_REQUEST: "GET_ALL_PRODUCTS_SAGA_REQUEST",
   GET_SINGLE_PRODUCT_SAGA_REQUEST: "GET_SINGLE_PRODUCT_SAGA_REQUEST",
@@ -25,7 +25,7 @@ export const SellerProductActionRequest = {
   DELETE_SELLER_PRODUCT_SAGA_REQUEST: "DELETE_SELLER_PRODUCT_SAGA_REQUEST",
 };
 export const SellerProductActionError = {
-  AddNewProductSellerSaga: "AddNewProductSellerSaga",
+  AddNewProductSellerSaga_ERROR: "sProduct/AddNewProductSellerSaga_ERROR",
   GET_DASHBOARD_DETAILS_SAGA_ERROR: "GET_DASHBOARD_DETAILS_SAGA_ERROR",
   GET_ALL_PRODUCTS_SAGA_ERROR: "GET_ALL_PRODUCTS_SAGA_ERROR",
   GET_SINGLE_PRODUCT_SAGA_ERROR: "GET_SINGLE_PRODUCT_SAGA_ERROR",

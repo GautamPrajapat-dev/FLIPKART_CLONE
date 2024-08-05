@@ -22,6 +22,7 @@ import {
   getAllProdctsRedux,
 } from "../../Slice/Seller.Product.Slice";
 import { startLoading, stopLoading } from "../../Slice/loading.Slice";
+import { SellerProductActionError } from "../Actions/SellerProductsAction";
 
 export function* getDashBoardDetailsHandler() {
   yield put(startLoading());
@@ -44,6 +45,7 @@ export function* addNewProductHandler(action) {
     yield put(AddNewProductRedux(postData));
   } catch (error) {
     yield put(stopLoading());
+    yield put({ type: SellerProductActionError.AddNewProductSellerSaga_ERROR });
     console.log(error);
   }
 }
