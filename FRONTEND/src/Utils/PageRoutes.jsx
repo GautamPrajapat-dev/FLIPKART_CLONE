@@ -11,7 +11,7 @@ export const PageRouts = {
   CART_ROUTE: "/cart",
   GETDATA_CATEGORY_ROUTE: "/:category",
   GETDATA_SUB_CATEGORY_ROUTE: "/:category/:subcategory",
-  GET_DATA_SINGLE_PORDUCT_ROUTE: "/:category/:subcategory/:p",
+  GET_DATA_SINGLE_PORDUCT_ROUTE: "/:category/:subcategory/:id",
   ALL_PRODUCTS_ROUTE: "/products",
   SINGLE_PRODUCT_ROUTE: "/products/:SingleProduct",
   PublicWhiteList: "/whitelist",

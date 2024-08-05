@@ -134,13 +134,8 @@ export default {
     daisyui,
     function ({ addUtilities }) {
       const newUtilities = {
-        ".D::-webkit-scrollbar": {
+        "*:-webkit-scrollbar": {
           display: "none",
-        },
-        "*::-webkit-scrollbar-thumb": {
-          // "--ms-overflow-style": "none",
-          "scrollbar-width": "1px",
-          "background-color": "green",
         },
       };
       addUtilities(newUtilities);

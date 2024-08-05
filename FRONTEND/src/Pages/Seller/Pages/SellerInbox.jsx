@@ -1,4 +1,4 @@
-import DashBoardNavbar from "../../SellerComponents/DashboardNavbar";
+import DashBoardNavbar from "../SellerComponents/DashboardNavbar";
 import { CiTrash } from "react-icons/ci";
 
 const SellerInbox = () => {

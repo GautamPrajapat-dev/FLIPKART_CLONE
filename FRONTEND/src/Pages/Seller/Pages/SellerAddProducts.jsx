@@ -1,7 +1,7 @@
 import { useRef, useState } from "react";
-import DashBoardNavbar from "../../SellerComponents/DashboardNavbar";
-import FormInputIcon from "../../../../Components/FormInputIcon";
-import Button from "../../../../Components/Button";
+import DashBoardNavbar from "../SellerComponents/DashboardNavbar";
+import FormInputIcon from "../../../Components/FormInputIcon";
+import Button from "../../../Components/Button";
 import { ToastContainer, toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -10,9 +10,9 @@ import {
   ganderFilter,
   SubCategory,
   targetPeople,
-} from "../../../../Utils/SellerFilters";
-import { SellerProductActionRequest } from "../../../../Stores/Saga/Actions/SellerProductsAction";
-import { toastifyOptions } from "../../../../Utils/tostifyDefault";
+} from "../../../Utils/SellerFilters";
+import { SellerProductActionRequest } from "../../../Stores/Saga/Actions/SellerProductsAction";
+import { toastifyOptions } from "../../../Utils/tostifyDefault";
 const SellerAddProducts = () => {
   const distpatch = useDispatch();
   const { isloading } = useSelector((state) => state.SellerProduct.addProduct);

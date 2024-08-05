@@ -1,11 +1,11 @@
 import { useEffect, useRef, useState } from "react";
-import DashboardNavbar from "../../SellerComponents/DashboardNavbar";
+import DashboardNavbar from "../SellerComponents/DashboardNavbar";
 
-import FormInputIcon from "../../../../Components/FormInputIcon";
+import FormInputIcon from "../../../Components/FormInputIcon";
 import { useDispatch, useSelector } from "react-redux";
 import { ToastContainer } from "react-toastify";
 
-import { SellerAuthActionRequest } from "../../../../Stores/Saga/Actions/SellerAuthAction";
+import { SellerAuthActionRequest } from "../../../Stores/Saga/Actions/SellerAuthAction";
 const UpdateUserDetails = () => {
   const formref = useRef();
   const { details } = useSelector((state) => state.Seller);

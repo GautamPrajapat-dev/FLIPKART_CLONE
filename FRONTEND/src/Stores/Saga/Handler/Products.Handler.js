@@ -41,7 +41,7 @@ export function* subCategoryWithproductHandler(action) {
 
     yield put({
       type: productActionSuccess.SUB_CATEGORY_ALL_DATA_REQUEST_SUCCESS,
-      payload: data?.data,
+      payload: data,
     });
   } catch (error) {
     console.log(error);

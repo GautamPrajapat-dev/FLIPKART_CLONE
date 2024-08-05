@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
-import DashboardNavbar from "../../SellerComponents/DashboardNavbar";
+import DashboardNavbar from "../SellerComponents/DashboardNavbar";
 
 import { useDispatch, useSelector } from "react-redux";
-import ModalOutsideClick from "../../../../Components/ModalOutsideClick";
+import ModalOutsideClick from "../../../Components/ModalOutsideClick";
 
-import { SellerAuthActionRequest } from "../../../../Stores/Saga/Actions/SellerAuthAction";
+import { SellerAuthActionRequest } from "../../../Stores/Saga/Actions/SellerAuthAction";
 
 const SellerProfile = () => {
   const dispatch = useDispatch();

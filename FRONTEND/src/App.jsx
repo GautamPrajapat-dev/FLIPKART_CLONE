@@ -9,39 +9,38 @@ import PublicHomePage from "./Pages/Public/page/PublicHomePage.jsx";
 import AllProducts from "./Pages/Public/page/AllProducts.jsx";
 import SingleProduct from "./Pages/Public/page/SingleProduct.jsx";
 import Cart from "./Pages/Public/page/Cart.jsx";
-import SellOnlineMainPage from "./Pages/Seller/Pages/Dashboard/SellOnline.jsx";
+import SellOnlineMainPage from "./Pages/Seller/Pages/SellOnline.jsx";
 import Signup from "./Pages/Seller/Pages/Authantication/Signup.jsx";
 import LoginSeller from "./Pages/Seller/Pages/Authantication/LoginSeller.jsx";
-import DashBordLayout from "./Pages/Seller/Pages/Dashboard/Layout.jsx";
-import DashbordMainPage from "./Pages/Seller/Pages/Dashboard/DashbordMainPage.jsx";
+import DashBordLayout from "./Pages/Seller/Pages/Layout.jsx";
+import DashbordMainPage from "./Pages/Seller/Pages/DashbordMainPage.jsx";
 import NotFound from "./Components/NotFound.jsx";
 import OfflineStatus from "./Components/Offline-Status.jsx";
-import UpdateUserDetails from "./Pages/Seller/Pages/Dashboard/UpdateUserDetails.jsx";
+import UpdateUserDetails from "./Pages/Seller/Pages/UpdateUserDetails.jsx";
 import ForgetPass from "./Pages/Seller/Pages/Authantication/ForgetPass.jsx";
 import ResetPassword from "./Pages/Seller/Pages/Authantication/ResetPassword.jsx";
 import GetDataCategory from "./Pages/Public/page/GetDataCategory.jsx";
-import GetDataSubCategory from "./Pages/Public/page/GetDataSubCategory.jsx";
+import ProductSubCategory from "./Pages/Public/page/ProductSubCategory.jsx";
+
 // import whitelist from "./Pages/Public/page/whitelist.jsx";
 // const SellOnlineMainPage = lazy(() =>
 //   import("./Pages/Seller/Pages/SellOnline")
 // );
 
 const Whitelist = lazy(() => import("./Pages/Public/page/Whitelist.jsx"));
-const SellerInbox = lazy(() =>
-  import("./Pages/Seller/Pages/Dashboard/SellerInbox.jsx")
-);
+const SellerInbox = lazy(() => import("./Pages/Seller/Pages/SellerInbox.jsx"));
 const SellerAddProducts = lazy(() =>
-  import("./Pages/Seller/Pages/Dashboard/SellerAddProducts.jsx")
+  import("./Pages/Seller/Pages/SellerAddProducts.jsx")
 );
 const SellerProducts = lazy(() =>
-  import("./Pages/Seller/Pages/Dashboard/SellerProducts.jsx")
+  import("./Pages/Seller/Pages/SellerProducts.jsx")
 );
 const SellerProfile = lazy(() =>
-  import("./Pages/Seller/Pages/Dashboard/SellerProfile.jsx")
+  import("./Pages/Seller/Pages/SellerProfile.jsx")
 );
 
 const ProductDetails = lazy(() =>
-  import("./Pages/Seller/Pages/Dashboard/ProductDetails.jsx")
+  import("./Pages/Seller/Pages/ProductDetails.jsx")
 );
 
 const App = () => {
@@ -70,7 +69,7 @@ const App = () => {
               />
               <Route
                 path={PageRouts.GETDATA_SUB_CATEGORY_ROUTE}
-                element={<GetDataSubCategory />}
+                element={<ProductSubCategory />}
               />
               <Route
                 path={PageRouts.GET_DATA_SINGLE_PORDUCT_ROUTE}

@@ -1,9 +1,9 @@
 import { useDispatch, useSelector } from "react-redux";
-import DashBoardNavbar from "../../SellerComponents/DashboardNavbar";
+import DashBoardNavbar from "../SellerComponents/DashboardNavbar";
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
-import { SortFilter } from "../../../../Utils/SellerFilters";
-import { SellerProductActionRequest } from "../../../../Stores/Saga/Actions/SellerProductsAction";
+import { SortFilter } from "../../../Utils/SellerFilters";
+import { SellerProductActionRequest } from "../../../Stores/Saga/Actions/SellerProductsAction";
 
 const DashbordMainPage = () => {
   const dispatch = useDispatch();

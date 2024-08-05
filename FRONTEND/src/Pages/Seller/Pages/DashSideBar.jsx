@@ -6,7 +6,7 @@ import {
   BiSolidInbox,
 } from "react-icons/bi";
 import { NavLink, useNavigate } from "react-router-dom";
-import { getTokenLocalStorageSeller } from "../../../../Utils/LocalStorage";
+import { getTokenLocalStorageSeller } from "../../../Utils/LocalStorage";
 const links = [
   {
     to: "main",

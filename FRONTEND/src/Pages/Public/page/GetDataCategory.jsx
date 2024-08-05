@@ -2,7 +2,7 @@ import { IoIosArrowForward } from "react-icons/io";
 // import Card from "../PublicComponents/Card";
 import HorizontalCarousel from "../Components/HorizontalCarousel";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { useEffect } from "react";
 import { productActionRequest } from "../../../Stores/Saga/Actions/ProductsAction";
 const GetDataCategory = () => {
@@ -19,10 +19,23 @@ const GetDataCategory = () => {
   }, [dispatch, params]);
   return (
     <div>
+      <div className="breadcrumbs text-xs">
+        <ul>
+          <li>
+            <Link to={`/`}>Home</Link>
+          </li>
+          <li>
+            <Link to={`/${params.category}`}>
+              {params?.category.toUpperCase()}
+            </Link>
+          </li>
+        </ul>
+      </div>
       <div>
         <div className="py-3">
           <HorizontalCarousel />
         </div>
+
         {data?.subcategory?.data &&
           data?.subcategory?.data.map((val, i) => {
             return (
@@ -33,9 +46,9 @@ const GetDataCategory = () => {
                     onClick={() =>
                       navigate(`/${params.category}/${val.subCategory}`)
                     }
-                    className="flex items-center px-1 rounded-full cursor-pointer bg-personal-900 text-personal-10"
+                    className="flex items-center px-3 rounded-md py-2  cursor-pointer bg-personal-900 text-personal-10"
                   >
-                    <IoIosArrowForward />
+                    View All
                   </div>
                 </div>
                 <div className="gap-4 carousel carousel-center ">
@@ -60,14 +73,14 @@ const GetDataCategory = () => {
                                 ) || 4.3}
                               </div>
                               <div className="font-semibold">
-                                Price : &#8377;{" "}
+                                Price : &#8377;
                                 {item?.price?.mrp.toLocaleString("en-In")}
                               </div>
                               <div className="card-actions">
                                 <button
                                   onClick={() =>
                                     navigate(
-                                      `/${params.category}/?pid=${item?._id}`
+                                      `/${params.category}/${val.subCategory}/${item._id}/?pid=${item._id}&brand=${item?.brand?.name}`
                                     )
                                   }
                                   className="btn btn-primary"

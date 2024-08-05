@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
-import { SellerAuthActionRequest } from "../../../../Stores/Saga/Actions/SellerAuthAction";
+import { SellerAuthActionRequest } from "../../../Stores/Saga/Actions/SellerAuthAction";
 const SellOnlineMainPage = () => {
   const dispatch = useDispatch();
   const profile = useSelector((state) => state.Seller.profile);

@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import DashBoardNavbar from "../../SellerComponents/DashboardNavbar";
+import DashBoardNavbar from "../SellerComponents/DashboardNavbar";
 import { useDispatch, useSelector } from "react-redux";
 
 import { ToastContainer } from "react-toastify";
@@ -9,10 +9,10 @@ import {
   MdOutlineKeyboardArrowRight,
 } from "react-icons/md";
 import { Link } from "react-router-dom";
-import { SortFilter } from "../../../../Utils/SellerFilters";
+import { SortFilter } from "../../../Utils/SellerFilters";
 import { HiMiniChevronUpDown } from "react-icons/hi2";
-import useDebounce from "../../../../Hooks/useDebounce.Hook";
-import { SellerProductActionRequest } from "../../../../Stores/Saga/Actions/SellerProductsAction";
+import useDebounce from "../../../Hooks/useDebounce.Hook";
+import { SellerProductActionRequest } from "../../../Stores/Saga/Actions/SellerProductsAction";
 const SellerProducts = () => {
   const dispatch = useDispatch();
   const [currentPage, setCurrentPage] = useState(1);

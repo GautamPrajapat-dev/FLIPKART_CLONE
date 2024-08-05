@@ -1,9 +1,9 @@
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import FormInput from "../../../../Components/FormInput";
-import DashboardNavbar from "../../SellerComponents/DashboardNavbar";
+import FormInput from "../../../Components/FormInput";
+import DashboardNavbar from "../SellerComponents/DashboardNavbar";
 import { useParams, useNavigate } from "react-router-dom";
-import ModalOutsideClick from "../../../../Components/ModalOutsideClick";
+import ModalOutsideClick from "../../../Components/ModalOutsideClick";
 import { ToastContainer } from "react-toastify";
 import {
   ageFilter,
@@ -11,8 +11,8 @@ import {
   ganderFilter,
   SubCategory,
   targetPeople,
-} from "../../../../Utils/SellerFilters";
-import { SellerProductActionRequest } from "../../../../Stores/Saga/Actions/SellerProductsAction";
+} from "../../../Utils/SellerFilters";
+import { SellerProductActionRequest } from "../../../Stores/Saga/Actions/SellerProductsAction";
 const ProductDetails = () => {
   const { id } = useParams();
   const dispatch = useDispatch();

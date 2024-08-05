@@ -162,6 +162,7 @@ const Product = {
             $push: {
               _id: "$_id",
               title: "$title",
+              brand: "$brand",
               thumbnail: "$thumbnail",
               price: "$price",
               rating: "$rating",
