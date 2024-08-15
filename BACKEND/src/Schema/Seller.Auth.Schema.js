@@ -39,6 +39,7 @@ const schema = new Schema(
     fullname: { type: String },
     mobile: {
       type: String,
+      trim: true,
     },
     avatar: {
       public_id: { type: String },

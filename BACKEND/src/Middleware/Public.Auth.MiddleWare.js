@@ -43,7 +43,6 @@ const PublicAuthMiddleware = {
       const verify = await jwt.verify(token, process.env.SECRET_KEY);
       // send response user details
       res.user = verify;
-
       next();
     } catch (error) {
       await res.status(401).json({ message: error.message });

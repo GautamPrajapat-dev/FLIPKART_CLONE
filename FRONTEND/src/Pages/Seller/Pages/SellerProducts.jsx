@@ -35,11 +35,11 @@ const SellerProducts = () => {
     }
   }, [currentPage]);
 
-  const handleOnNext = () => {
+  const handleOnNext = useCallback(() => {
     if (products?.products?.totalPages > currentPage) {
       setCurrentPage(currentPage + 1);
     }
-  };
+  }, [currentPage, products?.products?.totalPages]);
 
   useEffect(() => {
     const config = {

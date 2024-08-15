@@ -55,6 +55,7 @@ const schema = new Schema(
     },
 
     features: { type: Boolean, default: false },
+    whitelisted: { type: Boolean, default: false },
     price: {
       mrp: { type: Number },
       cost: { type: Number },

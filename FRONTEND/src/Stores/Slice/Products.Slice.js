@@ -16,6 +16,11 @@ const product = createSlice({
       isloading: false,
       data: [],
     },
+    whitelist: {
+      isloading: false,
+      data: [],
+      msg: {},
+    },
   },
   reducers: {
     All_PRODUCT_SAGA: () => {},
@@ -29,7 +34,19 @@ const product = createSlice({
       state.category.isloading = false;
       state.category.data = action.payload;
     },
-
+    GET_WHITELIST_SAGA: (state) => {
+      state.whitelist.isloading = true;
+    },
+    GET_WHITELIST: (state, action) => {
+      state.whitelist.isloading = false;
+      state.whitelist.data = action.payload;
+    },
+    ADD_WHITELIST: (state, action) => {
+      state.whitelist.msg = action.payload;
+    },
+    REMOVE_WHITELIST: (state, action) => {
+      state.whitelist.msg = action.payload;
+    },
     SUBCATEGORY_WITH_PRODUCTS_SAGA: (state) => {
       state.subcategory.isloading = true;
     },
@@ -49,6 +66,7 @@ const product = createSlice({
 export const {
   AllProductRedux,
   CATEGORY_REDUX,
+  GET_WHITELIS,
   SUBCATEGORY_WITH_PRODUCTS,
   SUBCATEGORY_WITH_ALL_PRODUCTS,
 } = product.actions;

@@ -12,18 +12,21 @@ import { toastifyOptions } from "../../../Utils/tostifyDefault";
 const URL = import.meta.env.VITE_URL + "/seller";
 
 const token = getTokenLocalStorageSeller();
-if (!token) {
+if (token) {
   try {
     let decodedToken = jwtDecode(token);
+    // console.log(decodedToken);
     // JWT exp is in secondss
     if (Date.now() >= decodedToken.exp * 1000) {
-      window.location.href = "/login";
+      window.location.href = "/seller/login";
       console.log("Token expired.");
       clearTokenLocalStorageSeller();
     }
   } catch (error) {
     console.log("token error");
   }
+} else {
+  console.log("Invalid Token");
 }
 
 // const config = {

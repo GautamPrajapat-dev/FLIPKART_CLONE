@@ -50,7 +50,9 @@ export const getDashBoardDetails = async () => {
     } else {
       toast.warn(data.errorMessage, toastifyOptions);
     }
-  } catch (error) {}
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 export const postNewProduct = async (productData) => {

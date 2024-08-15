@@ -1,8 +1,11 @@
 import { all, takeLatest } from "redux-saga/effects";
 import {
+  addwhiteListHandler,
   CategoryHandler,
+  removewhiteListHandler,
   subCategoryHandler,
   subCategoryWithproductHandler,
+  whiteListHandler,
 } from "../Handler/Products.Handler";
 import { productActionRequest } from "../Actions/ProductsAction";
 
@@ -24,13 +27,34 @@ export function* subcategoryAllproductWatcher() {
     subCategoryWithproductHandler
   );
 }
+export function* getWhhiteListWatcher() {
+  yield takeLatest(
+    productActionRequest.GET_WHITELIST_REQUEST_SAGA,
+    whiteListHandler
+  );
+}
+export function* addWhhiteListWatcher() {
+  yield takeLatest(
+    productActionRequest.ADD_WHITELIST_REQUEST_SAGA,
+    addwhiteListHandler
+  );
+}
+export function* removeWhhiteListWatcher() {
+  yield takeLatest(
+    productActionRequest.REMOVE_WHITELIST_REQUEST_SAGA,
+    removewhiteListHandler
+  );
+}
 
 // MARK: ROOT PRODUCT SAGA
 export function* productsRoot() {
   const arr = [
     categoryWatcher(),
     subcategoryWatcher(),
+    addWhhiteListWatcher(),
+    removeWhhiteListWatcher(),
     subcategoryAllproductWatcher(),
+    getWhhiteListWatcher(),
   ];
   yield all(arr);
 }

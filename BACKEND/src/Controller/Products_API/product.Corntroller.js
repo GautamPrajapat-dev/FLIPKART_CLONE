@@ -1,5 +1,5 @@
-const PublicAuthSchema = require("../../Schema/Public.Auth.Schema");
-const SellerAuhSchema = require("../../Schema/Seller.Auth.Schema");
+// const PublicAuthSchema = require("../../Schema/Public.Auth.Schema");
+// const SellerAuhSchema = require("../../Schema/Seller.Auth.Schema");
 const ProductSchema = require("../../Schema/Seller.Product.Schema");
 const ApiFeature = require("../../Utils/ApiFeatures");
 const asyncHandler = require("../../Utils/asyncHandler");
@@ -252,7 +252,6 @@ const Product = {
       nextPage: page + 1,
       page: page,
       hasOwnPage,
-      totalPage: totalPage,
       data: p,
     });
   }),

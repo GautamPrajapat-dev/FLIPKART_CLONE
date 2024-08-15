@@ -1,4 +1,4 @@
-import { IoIosArrowForward } from "react-icons/io";
+// import { IoIosArrowForward } from "react-icons/io";
 // import Card from "../PublicComponents/Card";
 import HorizontalCarousel from "../Components/HorizontalCarousel";
 import { useDispatch, useSelector } from "react-redux";
@@ -18,11 +18,11 @@ const GetDataCategory = () => {
     });
   }, [dispatch, params]);
   return (
-    <div>
-      <div className="breadcrumbs text-xs">
+    <div className="">
+      <div className="container px-4 text-xs breadcrumbs">
         <ul>
           <li>
-            <Link to={`/`}>Home</Link>
+            <Link to={`/`}>HOME</Link>
           </li>
           <li>
             <Link to={`/${params.category}`}>
@@ -38,6 +38,7 @@ const GetDataCategory = () => {
 
         {data?.subcategory?.data &&
           data?.subcategory?.data.map((val, i) => {
+            console.log(val.subCategory);
             return (
               <div key={i} className="p-3 m-4 border-2 rounded-lg ">
                 <div className="flex justify-between py-2 mb-4 text-xl font-bold">
@@ -46,7 +47,7 @@ const GetDataCategory = () => {
                     onClick={() =>
                       navigate(`/${params.category}/${val.subCategory}`)
                     }
-                    className="flex items-center px-3 rounded-md py-2  cursor-pointer bg-personal-900 text-personal-10"
+                    className="flex items-center px-3 py-2 rounded-md cursor-pointer bg-personal-900 text-personal-10"
                   >
                     View All
                   </div>

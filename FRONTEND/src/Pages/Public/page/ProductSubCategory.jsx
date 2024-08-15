@@ -1,39 +1,74 @@
 import { LuHeart } from "react-icons/lu";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { useCallback, useEffect, useMemo, useState } from "react";
-import { productActionRequest } from "../../../Stores/Saga/Actions/ProductsAction";
+import { useCallback, useEffect, useState } from "react";
+import {
+  productActionRequest,
+  productActionSuccess,
+} from "../../../Stores/Saga/Actions/ProductsAction";
+import { FcLike } from "react-icons/fc";
+import { ToastContainer } from "react-toastify";
+
 const ProductSubCategory = () => {
   const navigate = useNavigate();
   const urlPath = useParams();
   const dispatch = useDispatch();
   const path = useParams();
   const { data } = useSelector((state) => state.products.subCategoryProducts);
-  console.log(data);
+  const { msg } = useSelector((state) => state.products.whitelist);
   const [page, setpage] = useState(1);
-  const handleOnNextPage = useMemo(() => {
-    if (page === 0) {
+
+  const handleOnPrevPage = useCallback(() => {
+    if (page === 1) {
       setpage(page);
     } else {
       setpage(page - 1);
     }
   }, [page]);
-  const handleOnPrevPage = useMemo(() => {}, []);
+  const handleOnNextPage = useCallback(() => {
+    if (data?.totalPages > page) {
+      setpage(page + 1);
+    }
+  }, [data.totalPages, page]);
 
+  const handleOnWhiteList = (id) => {
+    dispatch({
+      type: productActionRequest.ADD_WHITELIST_REQUEST_SAGA,
+      payload: { id },
+    });
+  };
+  const removewhiteListHandler = (id) => {
+    dispatch({
+      type: productActionRequest.REMOVE_WHITELIST_REQUEST_SAGA,
+      payload: { id },
+    });
+  };
   useEffect(() => {
     if (path) {
       dispatch({
         type: productActionRequest.SUB_CATEGORY_ALl_DATA_REQUEST_SAGA,
-        payload: path,
+        payload: { path, page },
       });
     }
-  }, [dispatch, path]);
+    if (msg?.status === true) {
+      dispatch({
+        type: productActionRequest.SUB_CATEGORY_ALl_DATA_REQUEST_SAGA,
+        payload: { path, page },
+      });
+    }
+    return () =>
+      dispatch({
+        type: productActionSuccess.ADD_WHITELIST_SUCCESS,
+        payload: {},
+      });
+  }, [dispatch, path, page, msg?.status]);
   return (
     <>
-      <div className="breadcrumbs text-xs">
+      <ToastContainer />
+      <div className="container px-4 text-xs breadcrumbs">
         <ul>
           <li>
-            <Link to={`/`}>Home</Link>
+            <Link to={`/`}>HOME</Link>
           </li>
           <li>
             <Link to={`/${urlPath.category}`}>
@@ -61,10 +96,17 @@ const ProductSubCategory = () => {
                     src="https://rukminim2.flixcart.com/image/312/312/xif0q/dslr-camera/i/o/c/eos-r100-24-1-eos-r100-kit-canon-original-imagqeydhsxgacxp.jpeg?q=70"
                     alt="image"
                   />
-                  <div className="absolute cursor-pointer top-2 lg:top-4 right-2 lg:right-7">
-                    <LuHeart />
+                  <div className="absolute text-xl cursor-pointer top-2 lg:top-4 right-2 lg:right-7">
+                    {item.whitelisted ? (
+                      <FcLike
+                        onClick={() => removewhiteListHandler(item._id)}
+                      />
+                    ) : (
+                      <LuHeart onClick={() => handleOnWhiteList(item._id)} />
+                    )}
                   </div>
                 </div>
+
                 <div
                   onClick={() =>
                     navigate(
@@ -103,23 +145,52 @@ const ProductSubCategory = () => {
               </div>
             );
           })}
-        <div className="py-4  mb-32 ">
-          <div className="flex px-3 justify-between">
-            <div>page 1 of 2 </div>
+        <div className="py-4 mb-32 ">
+          <div className="flex justify-between px-3">
             <div>
-              <div className="join">
+              page {data?.page} of {data?.totalPages}
+            </div>
+            <div>
+              <div className="join ">
                 <button
-                  onClick={() => handleOnPrevPage}
-                  className="join-item btn"
+                  onClick={handleOnPrevPage}
+                  className="join-item btn btn-sm"
                 >
                   Previous
                 </button>
-                <button className="join-item btn">1</button>
-                <button className="join-item btn">2</button>
-                <button className="join-item btn btn-disabled">...</button>
-                <button className="join-item btn">99</button>
-                <button className="join-item btn">100</button>
-                <button onClick={handleOnNextPage} className="join-item btn">
+                {data.prevPages &&
+                  data.prevPages.map((page, index) => {
+                    return (
+                      <button
+                        key={index}
+                        onClick={() => setpage(page)}
+                        className="join-item btn btn-sm"
+                      >
+                        {page}
+                      </button>
+                    );
+                  })}
+                <div className="relative inline-flex items-center text-sm font-semibold text-gray-700 bg-personal-50 ring-1 ring-inset ring-gray-300 focus:outline-offset-0 join-item btn btn-sm">
+                  {data?.page}
+                </div>
+
+                {data.nextPages &&
+                  data.nextPages.map((page, index) => {
+                    return (
+                      <button
+                        key={index}
+                        onClick={() => setpage(page)}
+                        className="join-item btn btn-sm"
+                      >
+                        {page}
+                      </button>
+                    );
+                  })}
+
+                <button
+                  onClick={handleOnNextPage}
+                  className="join-item btn btn-sm"
+                >
                   Next
                 </button>
               </div>

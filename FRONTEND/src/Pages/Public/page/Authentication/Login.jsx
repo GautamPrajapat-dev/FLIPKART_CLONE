@@ -141,12 +141,12 @@ const Login = () => {
                       )}
                     </Button>
                   </form>
-                  <divx
+                  <div
                     onClick={() => navigate("/signup")}
                     className="mt-3 text-blue-400 cursor-pointer px-9 text-end lg:text-center"
                   >
                     New to Flipkart? Create an account
-                  </divx>
+                  </div>
                 </div>
               </div>
             </div>
