@@ -12,20 +12,6 @@ const addressSchema = new Schema({
   },
 });
 
-// const whiteList = new Schema(
-//   [
-//     {
-//       productId: {
-//         type: Schema.Types.ObjectId,
-//         ref: "products",
-//         required: true,
-//       },
-
-//       date: { type: Date, default: Date.now() },
-//     },
-//   ],
-//   { timestamps: true }
-// );
 const schema = new Schema(
   {
     fname: {
@@ -49,9 +35,16 @@ const schema = new Schema(
       public_id: { type: String },
       path: { type: String },
     },
-    whiteList: {
-      type: whiteList,
-    },
+    whiteList: [
+      {
+        productId: {
+          type: Schema.Types.ObjectId,
+          ref: "products",
+        },
+
+        date: { type: Date, default: Date.now() },
+      },
+    ],
     resetoken: { type: String, default: "" },
   },
   { timestamps: true }

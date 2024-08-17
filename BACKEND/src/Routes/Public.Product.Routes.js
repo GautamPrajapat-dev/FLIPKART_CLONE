@@ -16,6 +16,7 @@ ProductRouter.route("/whitelist")
   .get(PublicAuthMiddleware.validUser, WhiteListController.getWhitelist)
   .post(PublicAuthMiddleware.validUser, WhiteListController.addWhitelist);
 ProductRouter.route("/whitelist/:id").delete(
+  PublicAuthMiddleware.validUser,
   WhiteListController.removeWhitelist
 );
 module.exports = ProductRouter;

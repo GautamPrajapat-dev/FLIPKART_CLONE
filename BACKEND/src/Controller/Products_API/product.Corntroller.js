@@ -183,6 +183,7 @@ const Product = {
           subCategory: 1,
           productCount: 1,
           products: 1,
+          inWhiteList: 1,
         },
       },
       {
@@ -210,14 +211,60 @@ const Product = {
   getdatabySubcategory: asyncHandler(async (req, res) => {
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 3;
-    const prod = new ApiFeature(ProductSchema, req.query)
-      .filter()
-      .sort()
-      .limitFields()
-      .paginate();
-    const p = await prod.query;
-    // console.log(p);
 
+    const a = ProductSchema.aggregate([
+      {
+        $match: {
+          // _id: ObjectId('65f02cba6687f93ae1667355'),
+          "category.category": "electronics",
+          "category.subCategory": "mobile",
+        },
+      },
+      {
+        $sort: {
+          title: -1,
+        },
+      },
+      {
+        $skip: (page - 1) * limit,
+      },
+      {
+        $limit: limit,
+      },
+      {
+        $lookup: {
+          from: "publicusers",
+          localField: "_id",
+          foreignField: "whiteList.productId",
+          as: "productDetails",
+        },
+      },
+      {
+        $addFields: {
+          inWhiteList: {
+            $cond: {
+              if: {
+                $gt: [
+                  {
+                    $size: "$productDetails",
+                  },
+                  0,
+                ],
+              },
+              then: true,
+              else: false,
+            },
+          },
+        },
+      },
+    ]);
+    // const prod = new ApiFeature(ProductSchema, req.query)
+    //   .filter()
+    //   .sort()
+    //   .limitFields()
+    //   .paginate()
+    //   .inWhiteList();
+    // const p = await prod.query;
     const totalProductsCount = await ProductSchema.find({
       "category.subCategory": {
         $regex: req.params.subcategory,
