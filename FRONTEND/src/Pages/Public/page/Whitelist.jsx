@@ -43,9 +43,9 @@ const Whitelist = () => {
     <>
       <ToastContainer />
       <div className="container w-4/5 mx-auto divide-y-2">
-        {data.products && data.products.length !== 0 ? (
-          data.products &&
-          data.products.map((p, i) => {
+        {data.product && data.product.length !== 0 ? (
+          data.product &&
+          data.product.map((p, i) => {
             return (
               <div key={i}>
                 {p.product.map((item, i) => {
@@ -61,7 +61,7 @@ const Whitelist = () => {
                           alt="image"
                         />
                         <div className="absolute text-xl cursor-pointer top-2 lg:top-4 right-2 lg:right-7">
-                          {item.whitelisted ? (
+                          {item.inWhiteList ? (
                             <FcLike
                               onClick={() => hanleRemoveWhiteList(item._id)}
                             />

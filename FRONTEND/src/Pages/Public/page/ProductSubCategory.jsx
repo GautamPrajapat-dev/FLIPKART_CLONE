@@ -159,7 +159,7 @@ const ProductSubCategory = () => {
                       alt="image"
                     />
                     <div className="absolute text-xl cursor-pointer top-2 lg:top-4 right-2 lg:right-7">
-                      {item.whitelisted ? (
+                      {item.inWhiteList ? (
                         <FcLike
                           onClick={() => removewhiteListHandler(item._id)}
                         />

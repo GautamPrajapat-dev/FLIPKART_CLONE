@@ -4,6 +4,7 @@ import HorizontalCarousel from "../Components/HorizontalCarousel";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useEffect } from "react";
+import { HiArrowLongRight } from "react-icons/hi2";
 import { productActionRequest } from "../../../Stores/Saga/Actions/ProductsAction";
 const GetDataCategory = () => {
   const params = useParams();
@@ -38,7 +39,6 @@ const GetDataCategory = () => {
 
         {data?.subcategory?.data &&
           data?.subcategory?.data.map((val, i) => {
-            console.log(val.subCategory);
             return (
               <div key={i} className="p-3 m-4 border-2 rounded-lg ">
                 <div className="flex justify-between py-2 mb-4 text-xl font-bold">
@@ -47,9 +47,9 @@ const GetDataCategory = () => {
                     onClick={() =>
                       navigate(`/${params.category}/${val.subCategory}`)
                     }
-                    className="flex items-center px-3 py-2 rounded-md cursor-pointer bg-personal-900 text-personal-10"
+                    className="flex items-center px-2 py-1 text-sm transition-colors delay-200 rounded-md cursor-pointer hover:underline text-personal-900"
                   >
-                    View All
+                    View All <HiArrowLongRight className="pl-1 text-xl" />
                   </div>
                 </div>
                 <div className="gap-4 carousel carousel-center ">
