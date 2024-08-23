@@ -93,7 +93,6 @@ const WhiteListController = {
                 }
             }
         ])
-        console.log(productAggregate)
 
         if (productAggregate) {
             res.status(200).json({

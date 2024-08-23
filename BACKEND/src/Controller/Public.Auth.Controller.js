@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 const bcrypt = require('bcryptjs')
 const crypto = require('crypto')
 const jwt = require('jsonwebtoken')
@@ -18,6 +19,8 @@ const PublicAuthController = {
                 password: 0,
                 resetoken: 0,
                 updatedAt: 0,
+                whiteList: 0,
+                __v: 0,
                 avatar: {
                     public_id: 0
                 }
@@ -70,7 +73,7 @@ const PublicAuthController = {
     }),
 
     // login user
-    SignIn: asyncHandler(async (req, res, next) => {
+    SignIn: asyncHandler(async (req, res) => {
         const data = req.body
 
         // check user exits first

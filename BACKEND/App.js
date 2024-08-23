@@ -1,4 +1,5 @@
-require('dotenv').config()
+require('dotenv').config({ path: `.env.${process.env.NODE_ENV}`, override: true })
+require('dotenv').config({ override: true })
 require('./src/servers')
 const db = require('./src/Utils/db')
 const express = require('express')
@@ -14,12 +15,10 @@ const { createServer } = require('http')
 const NotificationRoutes = require('./src/Routes/Notification.Routes')
 const socketServer = require('./src/Utils/Socket.io.Server')
 const errorHandler = require('./src/Middleware/error.MiddkerWare')
-
 const app = express()
 app.use(helmet())
 app.set('trust proxy', 1)
 app.use(express.urlencoded({ extended: true }))
-
 const httpServer = createServer(app)
 
 app.use(function (req, res, next) {
@@ -49,7 +48,7 @@ app.use('/notificatios', NotificationRoutes)
 app.use(errorHandler)
 // listion server on port 3031
 db().then(() => {
-    httpServer.listen(config.get('_PORT'), () => console.log(` app listening on port http://localhost:${config.get('_PORT')}`))
+    httpServer.listen(config.get('_PORT'), () => console.warn(` app listening on port http://localhost:${config.get('_PORT')}`))
     const io = new Server(httpServer)
     socketServer(io)
 })

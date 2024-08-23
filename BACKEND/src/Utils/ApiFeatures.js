@@ -7,18 +7,10 @@ class ApiFeature {
     search() {
         const keyword = this.queryStr.search
             ? {
-                  $or: [
-                      {
-                          title: {
-                              $regex: this.queryStr.search,
-                              $options: 'i'
-                          },
-                          description: {
-                              $regex: this.queryStr.search,
-                              $options: 'i'
-                          }
-                      }
-                  ]
+                  title: {
+                      $regex: this.queryStr.search,
+                      $options: 'i'
+                  }
               }
             : {}
         this.query = this.query.find({ ...keyword })

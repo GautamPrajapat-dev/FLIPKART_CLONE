@@ -2,10 +2,11 @@
     "name": "server",
     "version": "1.0.0",
     "description": "",
+    "type": "commonjs",
     "main": "App.js",
-    "author": "",
+    "author": "Gautam Prajapat",
     "scripts": {
-        "start": "node App.js",
+        "start": "cross-env NODE_ENV=production node App.js",
         "dev": "cross-env NODE_ENV=development nodemon --legacy-watch App.js",
         "lint": "eslint",
         "lint:fix": "eslint --fix",
@@ -47,7 +48,7 @@
         "eslint-plugin-prettier": "^5.2.1",
         "globals": "^15.9.0",
         "husky": "^9.1.5",
-        "lint-staged": "^6.1.1",
+        "lint-staged": "^15.2.9",
         "prettier": "3.3.3"
     }
 }

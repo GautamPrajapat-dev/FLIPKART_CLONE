@@ -10,23 +10,9 @@ const Product = {
         const limit = parseInt(req.query.limit) || 3
         const products = new ApiFeature(ProductSchema, req.query).search().filter().sort().limitFields().paginate()
         const product = await products.query
-
         const totalProductsCount = await ProductSchema.find({}).countDocuments()
         const totalPage = Math.ceil(totalProductsCount / limit)
         const { prevPages, nextPages, hasOwnPage } = calculatePagination(page, totalPage, product)
-
-        // path: req.url,
-        // totalProducts: count,
-        // productperPage: products.length,
-        // pagePerLimit: limit,
-        // totalPages: total,
-        // prevPages: prevPages,
-        // nextPages: nextPages,
-        // prevPage: page === 1 ? 1 : page - 1,
-        // nextPage: page + 1,
-        // page: page,
-        // hasOwnPage,
-        // products,
         res.status(200).json({
             path: req.url,
             totalProducts: totalProductsCount,
@@ -58,7 +44,8 @@ const Product = {
             { _id: req.params.id },
             {
                 $inc: { views: 1 }
-            }
+            },
+            { new: true }
         )
         // product.views += 1;
         await products.save()
@@ -69,7 +56,6 @@ const Product = {
         })
     }),
     Category: asyncHandler(async (req, res) => {
-        const category = []
         const product = await ProductSchema.aggregate([
             {
                 $group: {
@@ -117,10 +103,6 @@ const Product = {
             })
         }
 
-        // product[0].category.forEach((elm) => {
-        //   category.push(elm);
-        // });
-
         res.status(200).json({
             status: true,
             path: req.path,
@@ -128,7 +110,6 @@ const Product = {
         })
     }),
     getSubcategory: asyncHandler(async (req, res) => {
-        const subcategory = []
         const params = req.params.category
         const product = await ProductSchema.aggregate([
             {
@@ -201,16 +182,10 @@ const Product = {
     getdatabySubcategory: asyncHandler(async (req, res) => {
         const page = parseInt(req.query.page) || 1
         const limit = parseInt(req.query.limit) || 3
-        const user = new mongoose.Types.ObjectId(res.user.userId)
+        console.log(req.params)
 
-        const p = await ProductSchema.aggregate([
-            {
-                $match: {
-                    'category.category': req.params.category,
-                    'category.subCategory': req.params.subcategory
-                }
-            },
-
+        const user = new mongoose.Types.ObjectId('66bf6214e6f10615decbc8dc')
+        const pipeline = [
             {
                 $sort: {
                     views: -1
@@ -269,14 +244,34 @@ const Product = {
             {
                 $unset: 'productDetails'
             }
-        ])
-        // const prod = new ApiFeature(ProductSchema, req.query)
-        //   .filter()
-        //   .sort()
-        //   .limitFields()
-        //   .paginate()
-        //   .inWhiteList();
-        // const p = await prod.query;
+        ]
+
+        if (req.query.pid && req.query.pid !== '') {
+            const id = new mongoose.Types.ObjectId(req.query.pid)
+            pipeline.unshift({
+                $match: {
+                    _id: id
+                }
+            })
+        }
+        if (req.params.category && req.params.subcategory) {
+            pipeline.unshift({
+                $match: {
+                    'category.category': req.params.category,
+                    'category.subCategory': req.params.subcategory
+                }
+            })
+        }
+        if (req.query.search && req.query.search !== '') {
+            pipeline.unshift({
+                $match: {
+                    $or: [{ title: { $regex: req.query.search, $options: 'i' } }, { description: { $regex: req.query.search, $options: 'i' } }]
+                }
+            })
+        }
+        // console.log(pipeline)
+        const p = await ProductSchema.aggregate(pipeline)
+
         const totalProductsCount = await ProductSchema.find({
             'category.subCategory': {
                 $regex: req.params.subcategory
@@ -285,6 +280,7 @@ const Product = {
                 $regex: req.params.category
             }
         }).countDocuments()
+
         const totalPage = Math.ceil(totalProductsCount / limit)
         const { prevPages, nextPages, hasOwnPage } = calculatePagination(page, totalPage, p)
 
@@ -311,11 +307,64 @@ const Product = {
         })
     }),
     getSubcategoryProduct: asyncHandler(async (req, res) => {
-        const product = await ProductSchema.find({
-            _id: {
-                $regex: req.params.id
+        const user = new mongoose.Types.ObjectId('66bf6214e6f10615decbc8dc')
+        const product = await ProductSchema.aggregate([
+            {
+                $match: {
+                    _id: {
+                        $regex: req.params.id
+                    }
+                }
+            },
+            {
+                $lookup: {
+                    from: 'publicusers',
+                    let: {
+                        productId: '$_id'
+                    },
+                    pipeline: [
+                        {
+                            $match: {
+                                $expr: {
+                                    $and: [
+                                        {
+                                            $eq: ['$_id', user]
+                                        },
+                                        {
+                                            $in: ['$$productId', '$whiteList.productId']
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    ],
+                    as: 'productDetails'
+                }
+            },
+
+            {
+                $addFields: {
+                    inWhiteList: {
+                        $cond: {
+                            if: {
+                                $gt: [
+                                    {
+                                        $size: '$productDetails'
+                                    },
+                                    0
+                                ]
+                            },
+                            then: true,
+                            else: false
+                        }
+                    }
+                }
+            },
+            {
+                $unset: 'productDetails'
             }
-        })
+        ])
+        console.log(product)
 
         if (!product) {
             return res.status(404).json({

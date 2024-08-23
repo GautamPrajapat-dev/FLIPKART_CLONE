@@ -5,9 +5,11 @@ import "react-toastify/dist/ReactToastify.css";
 import ReactDOM from "react-dom/client";
 import App from "./App";
 
-import { BrowserRouter } from "react-router-dom";
+import { RouterProvider } from "react-router-dom";
 import { Provider } from "react-redux";
 import Store from "./Stores/Store";
+import Routes from "../Routes/Routes";
+
 // if (window.__REDUX_DEVTOOLS_EXTENSION__)
 //   window.__REDUX_DEVTOOLS_EXTENSION__ &&
 //     window.__REDUX_DEVTOOLS_EXTENSION__.disconnect();
@@ -15,10 +17,10 @@ import Store from "./Stores/Store";
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.Fragment>
-    <BrowserRouter basename="/">
-      <Provider store={Store}>
+    <Provider store={Store}>
+      <RouterProvider router={Routes}>
         <App />
-      </Provider>
-    </BrowserRouter>
+      </RouterProvider>
+    </Provider>
   </React.Fragment>
 );
