@@ -182,7 +182,6 @@ const Product = {
     getdatabySubcategory: asyncHandler(async (req, res) => {
         const page = parseInt(req.query.page) || 1
         const limit = parseInt(req.query.limit) || 3
-        console.log(req.params)
 
         const user = new mongoose.Types.ObjectId('66bf6214e6f10615decbc8dc')
         const pipeline = [

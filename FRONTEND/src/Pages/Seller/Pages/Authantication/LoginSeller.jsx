@@ -7,7 +7,7 @@ import {
   getTokenLocalStorageSeller,
   setTokenLocalStorageSeller,
 } from "../../../../Utils/LocalStorage";
-import { PageRouts } from "../../../../Utils/PageRoutes.jsx";
+
 import FormInputIcon from "../../../../Components/FormInputIcon.jsx";
 import Button from "../../../../Components/Button.jsx";
 import { toastifyOptions } from "../../../../Utils/tostifyDefault";
@@ -37,7 +37,7 @@ const LoginSeller = () => {
         setTokenLocalStorageSeller(user._token__);
 
         toast.warn(user.successMessage, toastifyOptions);
-        window.location.href = PageRouts.SELLER_MAIN_DASHBOARD_ROUTE;
+        window.location.href = "/dashboard/main";
       }
     } catch (error) {
       toast.error(error.response.data.errorMessage, toastifyOptions);
@@ -53,7 +53,7 @@ const LoginSeller = () => {
   };
   useEffect(() => {
     if (getTokenLocalStorageSeller("_token")) {
-      navigate(PageRouts.SELLER_MAIN_DASHBOARD_ROUTE);
+      navigate("/dashboard/main");
     }
   }, [navigate]);
   return (

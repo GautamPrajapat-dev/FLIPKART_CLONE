@@ -2,7 +2,6 @@
     "name": "server",
     "version": "1.0.0",
     "description": "",
-    "type": "commonjs",
     "main": "App.js",
     "author": "Gautam Prajapat",
     "scripts": {
@@ -52,4 +51,3 @@
         "prettier": "3.3.3"
     }
 }
-

@@ -1,7 +1,5 @@
-import OfflineStatus from "./Components/Offline-Status.jsx";
-
 const App = () => {
-  return <>{!window.navigator.onLine && <OfflineStatus />}</>;
+  return <div></div>;
 };
 
 export default App;
