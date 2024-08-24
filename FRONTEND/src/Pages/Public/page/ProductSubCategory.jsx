@@ -11,6 +11,7 @@ import { ToastContainer } from "react-toastify";
 
 const ProductSubCategory = () => {
   const navigate = useNavigate();
+
   const urlPath = useParams();
   const dispatch = useDispatch();
   const path = useParams();
@@ -46,6 +47,7 @@ const ProductSubCategory = () => {
       payload: { id },
     });
   };
+
   useEffect(() => {
     if (path) {
       dispatch({
