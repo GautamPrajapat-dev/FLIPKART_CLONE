@@ -1,7 +1,7 @@
-const SellerNotification = require('../Controller/Notification.js/Seller.Notification')
-const Product = require('../Controller/Products_API/product.Corntroller')
+import SellerNotification from '../Controller/Notification.js/Seller.Notification.js'
+import Product from '../Controller/Products_API/product.Corntroller.js'
 
-const APP = require('express')
+import APP from 'express'
 const NotificationRoutes = APP.Router()
 NotificationRoutes.route('/notification').post(SellerNotification.postNotification)
-module.exports = NotificationRoutes
+export default NotificationRoutes

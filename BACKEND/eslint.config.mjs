@@ -6,7 +6,7 @@ export default [
     {
         files: ['**/*.js'],
         rules: { 'no-console': 'error', 'no-useless-catch': 0, quotes: ['error', 'single', { allowTemplateLiterals: true }] },
-        languageOptions: { sourceType: 'commonjs' }
+        languageOptions: { sourceType: 'module' }
     },
     { languageOptions: { globals: globals.browser } },
     eslintConfigPrettier,

@@ -1,5 +1,5 @@
-const { default: mongoose } = require('mongoose')
-const config = require('./config')
+import mongoose from 'mongoose'
+import { config } from './config.js'
 
 const db = async () => {
     try {
@@ -14,4 +14,4 @@ const db = async () => {
         console.log(err)
     }
 }
-module.exports = db
+export default db

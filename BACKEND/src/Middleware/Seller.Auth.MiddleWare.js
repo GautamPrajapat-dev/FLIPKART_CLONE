@@ -1,5 +1,5 @@
-const Joi = require('joi')
-const jwt = require('jsonwebtoken')
+import Joi from 'joi'
+import jwt from 'jsonwebtoken'
 
 // token verificaton
 
@@ -225,4 +225,4 @@ const SellerauthMiddleware = {
     }
 }
 
-module.exports = SellerauthMiddleware
+export default SellerauthMiddleware

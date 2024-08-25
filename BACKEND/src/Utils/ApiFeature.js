@@ -1,20 +1,21 @@
-const { default: mongoose } = require('mongoose')
-const calculatePagination = require('./calculatePagination')
+import mongoose from 'mongoose'
+import calculatePagination from './calculatePagination.js'
 
-const ApiFeatures = async (query, ProductSchema, res) => {
+const ApiFeatures = async (query, ProductSchema) => {
     const {
         search = '',
         category = '',
         subcategory = '',
         minPrice = 0,
         maxPrice = Infinity,
-        sortBy = 'createdAt',
+        sortBy = 'views',
         sortOrder = 'asc',
         page = 1,
         limit,
-        pid
+        pid,
+        uid
     } = query
-    const user = new mongoose.Types.ObjectId('66bf6214e6f10615decbc8dc')
+
     const productId = new mongoose.Types.ObjectId(pid)
     const pages = parseInt(page) || 1
     const limits = parseInt(limit) || 3
@@ -55,60 +56,76 @@ const ApiFeatures = async (query, ProductSchema, res) => {
     pipeline.push({ $sort: { [sortBy]: sortOrder === 'asc' ? 1 : -1 } })
     pipeline.push({ $skip: (pages - 1) * limits })
     pipeline.push({ $limit: limits })
-    pipeline.push(
-        {
-            $lookup: {
-                from: 'publicusers',
-                let: {
-                    productId: '$_id'
-                },
-                pipeline: [
-                    {
-                        $match: {
-                            $expr: {
-                                $and: [
-                                    {
-                                        $eq: ['$_id', user]
-                                    },
-                                    {
-                                        $in: ['$$productId', '$whiteList.productId']
-                                    }
-                                ]
+    if (uid) {
+        const user = new mongoose.Types.ObjectId(uid)
+
+        pipeline.push(
+            {
+                $lookup: {
+                    from: 'publicusers',
+                    let: {
+                        productId: '$_id'
+                    },
+                    pipeline: [
+                        {
+                            $match: {
+                                $expr: {
+                                    $and: [
+                                        {
+                                            $eq: ['$_id', user]
+                                        },
+                                        {
+                                            $in: ['$$productId', '$whiteList.productId']
+                                        }
+                                    ]
+                                }
                             }
                         }
-                    }
-                ],
-                as: 'productDetails'
-            }
-        },
+                    ],
+                    as: 'productDetails'
+                }
+            },
 
-        {
-            $addFields: {
-                inWhiteList: {
-                    $cond: {
-                        if: {
-                            $gt: [
-                                {
-                                    $size: '$productDetails'
-                                },
-                                0
-                            ]
-                        },
-                        then: true,
-                        else: false
+            {
+                $addFields: {
+                    inWhiteList: {
+                        $cond: {
+                            if: {
+                                $gt: [
+                                    {
+                                        $size: '$productDetails'
+                                    },
+                                    0
+                                ]
+                            },
+                            then: true,
+                            else: false
+                        }
                     }
                 }
+            },
+            {
+                $unset: 'productDetails'
             }
-        },
-        {
-            $unset: 'productDetails'
-        }
-    )
-    console.log(pipeline)
+        )
+    }
+
     const results = await ProductSchema.aggregate(pipeline).exec()
     const { prevPages, nextPages, hasOwnPage } = calculatePagination(pages, totalPages, results)
-    const data = { curruntPage: page, productPerpage: results.length, totalProducts, prevPages, nextPages, hasOwnPage, results }
+    console.log(pipeline)
+    const data = {
+        page: Number(page),
+        productperPage: results.length,
+        totalProducts,
+        totalPages,
+        pagePerLimit: limits,
+        prevPages,
+        nextPages,
+        hasOwnPage,
+        prevPage: pages === 1 ? 1 : pages - 1,
+        nextPage: pages + 1,
+        products: results
+    }
     return data
 }
-
-module.exports = ApiFeatures
+export default ApiFeatures

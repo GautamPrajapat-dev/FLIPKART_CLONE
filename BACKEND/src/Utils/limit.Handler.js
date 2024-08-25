@@ -1,4 +1,4 @@
-const { rateLimit } = require('express-rate-limit')
+import { rateLimit } from 'express-rate-limit'
 
 const limit = {
     loginlimit: rateLimit({
@@ -24,4 +24,4 @@ const limit = {
     })
 }
 
-module.exports = limit
+export default limit

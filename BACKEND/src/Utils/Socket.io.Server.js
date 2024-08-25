@@ -16,4 +16,4 @@ const socketServer = (io) => {
         })
     })
 }
-module.exports = socketServer
+export default socketServer

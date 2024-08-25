@@ -1,5 +1,5 @@
-const { Schema, model } = require('mongoose')
-const jwt = require('jsonwebtoken')
+import { Schema, model } from 'mongoose'
+import jwt from 'jsonwebtoken'
 
 const schema = new Schema(
     {
@@ -36,4 +36,4 @@ schema.methods.compareToken = async function (token) {
     return await jwt.verify(token, process.env.SECRET_KEY)
 }
 const NotificationSchema = model('notification', schema)
-module.exports = NotificationSchema
+export default NotificationSchema

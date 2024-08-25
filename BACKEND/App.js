@@ -1,20 +1,22 @@
-require('dotenv').config({ path: `.env.${process.env.NODE_ENV}`, override: true })
-require('dotenv').config({ override: true })
-require('./src/servers')
-const db = require('./src/Utils/db')
-const express = require('express')
-const cors = require('cors')
-const PublicRouter = require('./src/Routes/Public.Auth.Routes')
-const SellerRoutes = require('./src/Routes/Seller.Auth.Routes')
-const helmet = require('helmet')
-const SellerProductRoutes = require('./src/Routes/Seller.Product.Routes')
-const ProductRouter = require('./src/Routes/Public.Product.Routes')
-const config = require('./src/Utils/config')
-const { Server } = require('socket.io')
-const { createServer } = require('http')
-const NotificationRoutes = require('./src/Routes/Notification.Routes')
-const socketServer = require('./src/Utils/Socket.io.Server')
-const errorHandler = require('./src/Middleware/error.MiddkerWare')
+import 'dotenv/config'
+import dotenv from 'dotenv'
+
+dotenv.config({ path: `.env.${process.env.NODE_ENV}`, override: true })
+import('./src/servers.js')
+import db from './src/Utils/db.js'
+import express from 'express'
+import cors from 'cors'
+import PublicRouter from './src/Routes/Public.Auth.Routes.js'
+import SellerRoutes from './src/Routes/Seller.Auth.Routes.js'
+import helmet from 'helmet'
+import SellerProductRoutes from './src/Routes/Seller.Product.Routes.js'
+import ProductRouter from './src/Routes/Public.Product.Routes.js'
+import { config } from './src/Utils/config.js'
+import { Server } from 'socket.io'
+import { createServer } from 'http'
+import NotificationRoutes from './src/Routes/Notification.Routes.js'
+import socketServer from './src/Utils/Socket.io.Server.js'
+import errorHandler from './src/Middleware/error.MiddkerWare.js'
 const app = express()
 app.use(helmet())
 app.set('trust proxy', 1)

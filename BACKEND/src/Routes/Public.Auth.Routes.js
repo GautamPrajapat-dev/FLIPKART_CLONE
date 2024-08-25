@@ -1,9 +1,9 @@
-const PublicAuthController = require('../Controller/Public.Auth.Controller')
-const PublicAuthMiddleware = require('../Middleware/Public.Auth.MiddleWare')
-const PublicRouter = require('express').Router()
-const limit = require('../Utils/limit.Handler')
-const { upload } = require('../Middleware/image.upload')
-
+import PublicAuthController from '../Controller/Public.Auth.Controller.js'
+import PublicAuthMiddleware from '../Middleware/Public.Auth.MiddleWare.js'
+import { Router } from 'express'
+import limit from '../Utils/limit.Handler.js'
+import { upload } from '../Middleware/image.upload.js'
+let PublicRouter = Router()
 PublicRouter.route('/getDetails').get(PublicAuthMiddleware.validUser, PublicAuthController.userDetails)
 
 PublicRouter.route('/getUserId').get(PublicAuthMiddleware.validUser, PublicAuthController.userId)
@@ -22,5 +22,4 @@ PublicRouter.route('/forget-password').post(PublicAuthController.forgetpassword)
 PublicRouter.route('/reset-password').post(PublicAuthMiddleware.PublicResetPassword, PublicAuthController.passwordReset)
 PublicRouter.route('/update-details').post(PublicAuthMiddleware.validUser, PublicAuthController.updateUserDetails)
 PublicRouter.route('/uploadAvatar').post(PublicAuthMiddleware.validUser, upload.single('avatar'), PublicAuthController.uploadAvatar)
-
-module.exports = PublicRouter
+export default PublicRouter

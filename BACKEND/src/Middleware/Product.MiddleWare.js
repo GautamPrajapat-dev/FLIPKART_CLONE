@@ -1,5 +1,5 @@
-const Joi = require('joi')
-const jwt = require('jsonwebtoken')
+import Joi from 'joi'
+import jwt from 'jsonwebtoken'
 
 // token verificaton
 
@@ -86,4 +86,4 @@ const ProductValidation = {
         validData(req.body, schema, res, next)
     }
 }
-module.exports = ProductValidation
+export default ProductValidation

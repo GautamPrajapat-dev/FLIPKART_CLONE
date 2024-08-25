@@ -1,5 +1,5 @@
-const Joi = require('joi')
-const jwt = require('jsonwebtoken')
+import Joi from 'joi'
+import jwt from 'jsonwebtoken'
 
 async function validData(data, schema, res, next) {
     try {
@@ -43,6 +43,7 @@ const PublicAuthMiddleware = {
             const verify = await jwt.verify(token, process.env.SECRET_KEY)
             // send response user details
             res.user = verify
+
             next()
         } catch (error) {
             await res.status(401).json({ message: error.message })
@@ -130,4 +131,4 @@ const PublicAuthMiddleware = {
     }
 }
 
-module.exports = PublicAuthMiddleware
+export default PublicAuthMiddleware

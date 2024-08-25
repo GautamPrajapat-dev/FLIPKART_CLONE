@@ -15,4 +15,4 @@ const asyncHandler = (fun) => {
             next(error)
         })
 }
-module.exports = asyncHandler
+export default asyncHandler

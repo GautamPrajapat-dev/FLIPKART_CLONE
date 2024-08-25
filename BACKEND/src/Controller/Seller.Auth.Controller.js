@@ -1,11 +1,11 @@
-const SellerAuhSchema = require('../Schema/Seller.Auth.Schema')
-const asyncHandler = require('../Utils/asyncHandler')
-const sendMail = require('../Utils/sendMail')
-const crypto = require('crypto')
-const jwt = require('jsonwebtoken')
-const bcrypt = require('bcryptjs')
-const errorHandler = require('../Middleware/error.MiddkerWare')
-const cloudinary = require('cloudinary').v2
+import SellerAuhSchema from '../Schema/Seller.Auth.Schema.js'
+import asyncHandler from '../Utils/asyncHandler.js'
+import sendMail from '../Utils/sendMail.js'
+import crypto from 'crypto'
+import jwt from 'jsonwebtoken'
+import bcrypt from 'bcryptjs'
+import { v2 as cloudinary } from 'cloudinary'
+import errorHandler from '../Middleware/error.MiddkerWare.js'
 
 const SellerAuthController = {
     getSellerDetails: asyncHandler(async (req, res) => {
@@ -453,4 +453,4 @@ const SellerAuthController = {
         // },
     })
 }
-module.exports = SellerAuthController
+export default SellerAuthController

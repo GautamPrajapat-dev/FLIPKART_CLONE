@@ -1,12 +1,12 @@
 /* eslint-disable no-undef */
-const bcrypt = require('bcryptjs')
-const crypto = require('crypto')
-const jwt = require('jsonwebtoken')
-const PublicAuthSchema = require('../Schema/Public.Auth.Schema')
-const sendMail = require('../Utils/sendMail')
-const asyncHandler = require('../Utils/asyncHandler')
+import bcrypt from 'bcryptjs'
+import crypto from 'crypto'
+import jwt from 'jsonwebtoken'
+import PublicAuthSchema from '../Schema/Public.Auth.Schema.js'
+import sendMail from '../Utils/sendMail.js'
+import asyncHandler from '../Utils/asyncHandler.js'
 
-const cloudinary = require('cloudinary').v2
+import { v2 as cloudinary } from 'cloudinary'
 
 const PublicAuthController = {
     userId: asyncHandler(async (req, res) => {
@@ -403,4 +403,4 @@ const PublicAuthController = {
     })
 }
 
-module.exports = PublicAuthController
+export default PublicAuthController

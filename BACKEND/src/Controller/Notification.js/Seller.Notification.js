@@ -1,4 +1,4 @@
-const asyncHandler = require('../../Utils/asyncHandler')
+import asyncHandler from '../../Utils/asyncHandler.js'
 
 const SellerNotification = {
     postNotification: asyncHandler(async (req, res) => {
@@ -6,4 +6,4 @@ const SellerNotification = {
         const sellerId = res.Seller.sellerId
     })
 }
-module.exports = SellerNotification
+export default SellerNotification

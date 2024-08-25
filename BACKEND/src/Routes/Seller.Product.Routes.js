@@ -1,8 +1,9 @@
-const SellerProduct = require('../Controller/Seller.Product.Controller')
-const ProductValidation = require('../Middleware/Product.MiddleWare')
-const { upload } = require('../Middleware/image.upload')
-const SellerProductRoutes = require('express').Router()
+import SellerProduct from '../Controller/Seller.Product.Controller.js'
+import ProductValidation from '../Middleware/Product.MiddleWare.js'
+import { upload } from '../Middleware/image.upload.js'
 
+import { Router } from 'express'
+let SellerProductRoutes = Router()
 SellerProductRoutes.route('/add-product').post(
     ProductValidation.ValidUser,
     upload.fields([
@@ -24,4 +25,4 @@ SellerProductRoutes.route('/products/:id')
 SellerProductRoutes.route('/brandlogo/:id').put(upload.single('brandLogo'), ProductValidation.ValidUser, SellerProduct.updateBrandLogo)
 SellerProductRoutes.route('/thumbnail/:id').put(upload.single('thumbnail'), ProductValidation.ValidUser, SellerProduct.updateThumbnail)
 SellerProductRoutes.route('/updateImage/:id').put(upload.array('images'), ProductValidation.ValidUser, SellerProduct.updateImage)
-module.exports = SellerProductRoutes
+export default SellerProductRoutes

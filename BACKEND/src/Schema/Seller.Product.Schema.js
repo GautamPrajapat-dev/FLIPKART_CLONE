@@ -1,6 +1,6 @@
-const { Schema, model } = require('mongoose')
-const jwt = require('jsonwebtoken')
-const bcrypt = require('bcryptjs')
+import { Schema, model } from 'mongoose'
+import jwt from 'jsonwebtoken'
+// import bcrypt from 'bcryptjs'
 
 const productComment = new Schema({
     userId: { type: Schema.Types.ObjectId, ref: 'pulbicuser' },
@@ -106,4 +106,4 @@ schema.methods.compareToken = async function (token) {
     return await jwt.verify(token, process.env.SECRET_KEY)
 }
 const ProductSchema = model('products', schema)
-module.exports = ProductSchema
+export default ProductSchema

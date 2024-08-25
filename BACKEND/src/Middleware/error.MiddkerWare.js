@@ -12,4 +12,4 @@ const errorHandler = (statusCode, msg, res, next) => {
     }
 }
 
-module.exports = errorHandler
+export default errorHandler

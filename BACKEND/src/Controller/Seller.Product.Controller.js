@@ -1,12 +1,13 @@
-const ProductSchema = require('../Schema/Seller.Product.Schema')
-const SellerAuhSchema = require('../Schema/Seller.Auth.Schema')
-const ApiFeature = require('../Utils/ApiFeatures')
-const asyncHandler = require('../Utils/asyncHandler')
-const calculatePagination = require('../Utils/calculatePagination')
-const { default: mongoose } = require('mongoose')
-const cloudinary = require('cloudinary').v2
-const moment = require('moment')
-const errorHandler = require('../Middleware/error.MiddkerWare')
+import mongoose from 'mongoose'
+import { v2 as cloudinary } from 'cloudinary'
+import moment from 'moment'
+import ProductSchema from '../Schema/Seller.Product.Schema.js'
+import SellerAuhSchema from '../Schema/Seller.Auth.Schema.js'
+import ApiFeature from '../Utils/ApiFeatures.js'
+import asyncHandler from '../Utils/asyncHandler.js'
+import calculatePagination from '../Utils/calculatePagination.js'
+import errorHandler from '../Middleware/error.MiddkerWare.js'
+
 const SellerProduct = {
     addNewProduct: asyncHandler(async (req, res, next) => {
         const { title, brand, qty, description, category, features, price, rating } = req.body
@@ -745,4 +746,4 @@ const SellerProduct = {
         }
     })
 }
-module.exports = SellerProduct
+export default SellerProduct

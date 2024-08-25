@@ -1,5 +1,6 @@
-const { Schema, model } = require('mongoose')
-const jwt = require('jsonwebtoken')
+import { Schema, model } from 'mongoose'
+import jwt from 'jsonwebtoken'
+// import bcrypt from 'bcryptjs'
 const schema = new Schema(
     {
         userId: { type: Schema.Types.ObjectId, ref: 'PublicUser', required: true },
@@ -35,4 +36,4 @@ schema.methods.compareToken = async function (token) {
     return await jwt.verify(token, process.env.SECRET_KEY)
 }
 const whitelistSchema = model('whitelist', schema)
-module.exports = whitelistSchema
+export default whitelistSchema

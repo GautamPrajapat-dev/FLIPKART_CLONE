@@ -1,6 +1,6 @@
-const nodemailer = require('nodemailer')
+import nodemailer from 'nodemailer'
 
-module.exports = sendMail = async (to, subject, text) => {
+const sendMail = async (to, subject, text) => {
     const transport = nodemailer.createTransport({
         host: process.env.MAILLER_HOST,
         port: process.env.MAILLER_PORT,
@@ -16,3 +16,5 @@ module.exports = sendMail = async (to, subject, text) => {
         // html: "<p>HTML version of the message</p>",
     })
 }
+
+export default sendMail

@@ -14,4 +14,4 @@ const calculatePagination = (currentPage, totalPages, product) => {
     const hasOwnPage = product.length > 0
     return { prevPages, nextPages, hasOwnPage }
 }
-module.exports = calculatePagination
+export default calculatePagination

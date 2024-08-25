@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 const _config = {
     _PORT: process.env.PORT,
     _URI: process.env.URI,
@@ -12,7 +13,7 @@ const _config = {
     _CLOUDINARY_API_SECRET: process.env.CLOUDINARY_API_SECRET
 }
 
-module.exports = config = {
+export const config = {
     get(key) {
         const value = _config[key]
         if (!value) {

@@ -1,37 +1,15 @@
-const { default: mongoose } = require('mongoose')
-const ProductSchema = require('../../Schema/Seller.Product.Schema')
-// const ApiFeature = require('../../Utils/ApiFeatures')
-const asyncHandler = require('../../Utils/asyncHandler')
-const calculatePagination = require('../../Utils/calculatePagination')
-const ApiFeatures = require('../../Utils/ApiFeature')
+import mongoose from 'mongoose'
+import ProductSchema from '../../Schema/Seller.Product.Schema.js'
+// import ApiFeature from'../../Utils/ApiFeatures'
+import asyncHandler from '../../Utils/asyncHandler.js'
+import calculatePagination from '../../Utils/calculatePagination.js'
+import ApiFeatures from '../../Utils/ApiFeature.js'
 
 const Product = {
     AllProduct: asyncHandler(async (req, res) => {
-        const page = parseInt(req.query.page) || 1
-        const limit = parseInt(req.query.limit) || 3
         const data = await ApiFeatures(req.query, ProductSchema, res)
-        res.json(data)
+        res.json({ status: true, path: req.url, ...data })
         return false
-        // const products = new ApiFeature(ProductSchema, req.query).filter().search().sort().limitFields().paginate()
-        // const product = await products.query
-        // const totalProductsCount = await ProductSchema.find({}).countDocuments()
-        // const totalPage = Math.ceil(totalProductsCount / limit)
-        // const { prevPages, nextPages, hasOwnPage } = calculatePagination(page, totalPage, product)
-        // res.status(200).json({
-        //     path: req.url,
-        //     totalProducts: totalProductsCount,
-        //     productperPage: product.length,
-        //     pagePerLimit: limit,
-        //     totalPages: totalPage,
-        //     prevPages: prevPages,
-        //     nextPages: nextPages,
-        //     prevPage: page === 1 ? 1 : page - 1,
-        //     nextPage: page + 1,
-        //     page: page,
-        //     hasOwnPage,
-        //     status: true,
-        //     products: product
-        // })
     }),
     // AllProduct: asyncHandler(async (req, res) => {
     //     const page = parseInt(req.query.page) || 1
@@ -312,12 +290,6 @@ const Product = {
         const totalPage = Math.ceil(totalProductsCount / limit)
         const { prevPages, nextPages, hasOwnPage } = calculatePagination(page, totalPage, p)
 
-        // if (!product) {
-        //   return res.status(404).json({
-        //     status: false,
-        //     errorMessage: "not found",
-        //   });
-        // }
         res.status(200).json({
             status: true,
             path: req.url,
@@ -332,78 +304,6 @@ const Product = {
             page: page,
             hasOwnPage,
             data: p
-        })
-    }),
-    getSubcategoryProduct: asyncHandler(async (req, res) => {
-        const user = new mongoose.Types.ObjectId('66bf6214e6f10615decbc8dc')
-        const product = await ProductSchema.aggregate([
-            {
-                $match: {
-                    _id: {
-                        $regex: req.params.id
-                    }
-                }
-            },
-            {
-                $lookup: {
-                    from: 'publicusers',
-                    let: {
-                        productId: '$_id'
-                    },
-                    pipeline: [
-                        {
-                            $match: {
-                                $expr: {
-                                    $and: [
-                                        {
-                                            $eq: ['$_id', user]
-                                        },
-                                        {
-                                            $in: ['$$productId', '$whiteList.productId']
-                                        }
-                                    ]
-                                }
-                            }
-                        }
-                    ],
-                    as: 'productDetails'
-                }
-            },
-
-            {
-                $addFields: {
-                    inWhiteList: {
-                        $cond: {
-                            if: {
-                                $gt: [
-                                    {
-                                        $size: '$productDetails'
-                                    },
-                                    0
-                                ]
-                            },
-                            then: true,
-                            else: false
-                        }
-                    }
-                }
-            },
-            {
-                $unset: 'productDetails'
-            }
-        ])
-        console.log(product)
-
-        if (!product) {
-            return res.status(404).json({
-                status: false,
-                errorMessage: 'not found'
-            })
-        }
-        res.status(200).json({
-            status: true,
-            length: product.length,
-            data: product
         })
     }),
     searchFeature: asyncHandler(async (req, res) => {
@@ -478,4 +378,4 @@ const Product = {
     })
 }
 
-module.exports = Product
+export default Product

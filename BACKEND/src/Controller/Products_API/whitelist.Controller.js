@@ -1,10 +1,10 @@
-const mongoose = require('mongoose')
-// const whitelistSchema = require('../../Schema/product.whiteList')
-const asyncHandler = require('../../Utils/asyncHandler')
-// const ProductSchema = require('../../Schema/Seller.Product.Schema')
-const PublicAuthSchema = require('../../Schema/Public.Auth.Schema')
-const errorHandler = require('../../Middleware/error.MiddkerWare')
-// const ApiError = require('../../Utils/ApiError.js')
+import mongoose from 'mongoose'
+// import whitelistSchema from '../../Schema/product.whiteList'
+import asyncHandler from '../../Utils/asyncHandler.js'
+// import ProductSchema from '../../Schema/Seller.Product.Schema'
+import PublicAuthSchema from '../../Schema/Public.Auth.Schema.js'
+import errorHandler from '../../Middleware/error.MiddkerWare.js'
+// import ApiError from '../../Utils/ApiError.js'
 
 const WhiteListController = {
     addWhitelist: asyncHandler(async (req, res, next) => {
@@ -104,4 +104,4 @@ const WhiteListController = {
         }
     })
 }
-module.exports = WhiteListController
+export default WhiteListController

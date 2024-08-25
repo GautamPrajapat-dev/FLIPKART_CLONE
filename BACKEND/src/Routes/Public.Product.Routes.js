@@ -1,8 +1,7 @@
-const Product = require('../Controller/Products_API/product.Corntroller')
-
-const APP = require('express')
-const WhiteListController = require('../Controller/Products_API/whitelist.Controller')
-const PublicAuthMiddleware = require('../Middleware/Public.Auth.MiddleWare')
+import APP from 'express'
+import Product from '../Controller/Products_API/product.Corntroller.js'
+import WhiteListController from '../Controller/Products_API/whitelist.Controller.js'
+import PublicAuthMiddleware from '../Middleware/Public.Auth.MiddleWare.js'
 const ProductRouter = APP.Router()
 
 ProductRouter.route('/product').get(Product.AllProduct)
@@ -15,4 +14,4 @@ ProductRouter.route('/whitelist')
     .get(PublicAuthMiddleware.validUser, WhiteListController.getWhitelist)
     .post(PublicAuthMiddleware.validUser, WhiteListController.addWhitelist)
 ProductRouter.route('/whitelist/:id').delete(PublicAuthMiddleware.validUser, WhiteListController.removeWhitelist)
-module.exports = ProductRouter
+export default ProductRouter
