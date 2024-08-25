@@ -22,35 +22,42 @@ export const SortFilter = [
   },
 ];
 
-export const ganderFilter = ["Men", "Women", "Kids"];
+export const ganderFilter = ["Men", "Women", "Kids", "Both"];
 export const ageFilter = [
   {
     name: "Infant",
     ageRange: "0-1",
+    age: "0+",
   },
   {
     name: "Toddler",
     ageRange: "1-3",
+    age: "1+",
   },
   {
     name: "Child",
     ageRange: "3-12",
+    age: "3+",
   },
   {
     name: "Teenager",
+    age: "12+",
     ageRange: "12-18",
   },
   {
     name: "Young Adult",
     ageRange: "18-25",
+    age: "18+",
   },
   {
     name: "Adult",
     ageRange: "25-60",
+    age: "25+",
   },
   {
     name: "Older Adult",
     ageRange: "60+",
+    age: "60+",
   },
 ];
 

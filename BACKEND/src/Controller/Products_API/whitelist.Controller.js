@@ -1,10 +1,10 @@
 const mongoose = require('mongoose')
-const whitelistSchema = require('../../Schema/product.whiteList')
+// const whitelistSchema = require('../../Schema/product.whiteList')
 const asyncHandler = require('../../Utils/asyncHandler')
-const ProductSchema = require('../../Schema/Seller.Product.Schema')
+// const ProductSchema = require('../../Schema/Seller.Product.Schema')
 const PublicAuthSchema = require('../../Schema/Public.Auth.Schema')
 const errorHandler = require('../../Middleware/error.MiddkerWare')
-const ApiError = require('../../Utils/ApiError.js')
+// const ApiError = require('../../Utils/ApiError.js')
 
 const WhiteListController = {
     addWhitelist: asyncHandler(async (req, res, next) => {
@@ -49,7 +49,7 @@ const WhiteListController = {
                 }
             }
         )
-        console.log(deleted)
+
         if (deleted.modifiedCount === 1) {
             res.status(200).json({ status: true, successMessage: 'Removed SeccessFully' })
         } else {

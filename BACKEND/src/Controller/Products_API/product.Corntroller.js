@@ -1,34 +1,63 @@
 const { default: mongoose } = require('mongoose')
 const ProductSchema = require('../../Schema/Seller.Product.Schema')
-const ApiFeature = require('../../Utils/ApiFeatures')
+// const ApiFeature = require('../../Utils/ApiFeatures')
 const asyncHandler = require('../../Utils/asyncHandler')
 const calculatePagination = require('../../Utils/calculatePagination')
+const ApiFeatures = require('../../Utils/ApiFeature')
 
 const Product = {
     AllProduct: asyncHandler(async (req, res) => {
         const page = parseInt(req.query.page) || 1
         const limit = parseInt(req.query.limit) || 3
-        const products = new ApiFeature(ProductSchema, req.query).search().filter().sort().limitFields().paginate()
-        const product = await products.query
-        const totalProductsCount = await ProductSchema.find({}).countDocuments()
-        const totalPage = Math.ceil(totalProductsCount / limit)
-        const { prevPages, nextPages, hasOwnPage } = calculatePagination(page, totalPage, product)
-        res.status(200).json({
-            path: req.url,
-            totalProducts: totalProductsCount,
-            productperPage: product.length,
-            pagePerLimit: limit,
-            totalPages: totalPage,
-            prevPages: prevPages,
-            nextPages: nextPages,
-            prevPage: page === 1 ? 1 : page - 1,
-            nextPage: page + 1,
-            page: page,
-            hasOwnPage,
-            status: true,
-            products: product
-        })
+        const data = await ApiFeatures(req.query, ProductSchema, res)
+        res.json(data)
+        return false
+        // const products = new ApiFeature(ProductSchema, req.query).filter().search().sort().limitFields().paginate()
+        // const product = await products.query
+        // const totalProductsCount = await ProductSchema.find({}).countDocuments()
+        // const totalPage = Math.ceil(totalProductsCount / limit)
+        // const { prevPages, nextPages, hasOwnPage } = calculatePagination(page, totalPage, product)
+        // res.status(200).json({
+        //     path: req.url,
+        //     totalProducts: totalProductsCount,
+        //     productperPage: product.length,
+        //     pagePerLimit: limit,
+        //     totalPages: totalPage,
+        //     prevPages: prevPages,
+        //     nextPages: nextPages,
+        //     prevPage: page === 1 ? 1 : page - 1,
+        //     nextPage: page + 1,
+        //     page: page,
+        //     hasOwnPage,
+        //     status: true,
+        //     products: product
+        // })
     }),
+    // AllProduct: asyncHandler(async (req, res) => {
+    //     const page = parseInt(req.query.page) || 1
+    //     const limit = parseInt(req.query.limit) || 3
+
+    //     const products = new ApiFeature(ProductSchema, req.query).filter().search().sort().limitFields().paginate()
+    //     const product = await products.query
+    //     const totalProductsCount = await ProductSchema.find({}).countDocuments()
+    //     const totalPage = Math.ceil(totalProductsCount / limit)
+    //     const { prevPages, nextPages, hasOwnPage } = calculatePagination(page, totalPage, product)
+    //     res.status(200).json({
+    //         path: req.url,
+    //         totalProducts: totalProductsCount,
+    //         productperPage: product.length,
+    //         pagePerLimit: limit,
+    //         totalPages: totalPage,
+    //         prevPages: prevPages,
+    //         nextPages: nextPages,
+    //         prevPage: page === 1 ? 1 : page - 1,
+    //         nextPage: page + 1,
+    //         page: page,
+    //         hasOwnPage,
+    //         status: true,
+    //         products: product
+    //     })
+    // }),
     getProduct: asyncHandler(async (req, res) => {
         const product = await ProductSchema.findById({
             _id: req.params.id
@@ -376,6 +405,76 @@ const Product = {
             length: product.length,
             data: product
         })
+    }),
+    searchFeature: asyncHandler(async (req, res) => {
+        const searchQuery = req.query.search
+        let pipeline = []
+        const extractSearchTermAndPriceLimit = (query) => {
+            // Extract price limit
+            const priceMatch = query.match(/(?:under|max)\s+(\d+)/i)
+            const priceLimit = priceMatch ? parseInt(priceMatch[1], 10) : null
+
+            const searchTerm = query.replace(/(?:under|max)\s+\d+/i, '').trim()
+
+            return { searchTerm, priceLimit }
+        }
+        const { searchTerm, priceLimit } = extractSearchTermAndPriceLimit(searchQuery)
+
+        if (searchTerm && searchTerm.trim().length > 0) {
+            pipeline = [
+                {
+                    $match: priceLimit ? { 'price.mrp': { $lte: priceLimit } } : {}
+                },
+                {
+                    $match: {
+                        $or: [
+                            { title: { $regex: searchTerm, $options: 'i' } },
+                            { description: { $regex: searchTerm, $options: 'i' } },
+                            {
+                                'category.category': { $regex: searchTerm, $options: 'i' }
+                            },
+                            {
+                                'category.subCategory': { $regex: searchTerm, $options: 'i' }
+                            }
+                        ]
+                    }
+                },
+                {
+                    $project: {
+                        _id: 0,
+                        title: 1,
+                        category: 1,
+
+                        description: { $substr: ['$description', 0, 100] }
+                    }
+                },
+                {
+                    $sort: {
+                        views: -1 // Sorting by views or relevance
+                    }
+                },
+                {
+                    $limit: 5 // Limit suggestions to 5
+                }
+            ]
+        } else {
+            pipeline = [
+                {
+                    $sample: { size: 5 } // Randomly select 5 products
+                },
+                {
+                    $project: {
+                        _id: 0,
+                        title: 1,
+                        category: 1,
+                        description: { $substr: ['$description', 0, 100] }
+                    }
+                }
+            ]
+        }
+
+        const product = await ProductSchema.aggregate(pipeline)
+        res.status(200).json(product)
     })
 }
 

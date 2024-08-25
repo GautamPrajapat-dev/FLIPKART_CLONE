@@ -47,7 +47,7 @@ const schema = new Schema(
             age: { type: String, trim: true, lowercase: true },
             gender: {
                 type: String,
-                enum: ['Men', 'Women', 'Kids'] // assuming three options
+                enum: ['Men', 'Women', 'Kids', 'Both'] // assuming three options
             },
             targetAudiences: {
                 type: String

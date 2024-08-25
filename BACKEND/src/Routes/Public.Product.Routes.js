@@ -6,6 +6,7 @@ const PublicAuthMiddleware = require('../Middleware/Public.Auth.MiddleWare')
 const ProductRouter = APP.Router()
 
 ProductRouter.route('/product').get(Product.AllProduct)
+ProductRouter.route('/search').get(Product.searchFeature)
 ProductRouter.route('/category').get(Product.Category)
 ProductRouter.route('/category/:category').get(Product.getSubcategory)
 ProductRouter.route('/category/:category/:subcategory').get(PublicAuthMiddleware.validUser, Product.getdatabySubcategory)

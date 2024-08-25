@@ -19,6 +19,7 @@ const ProductSubCategory = () => {
     (state) => state.products.subCategoryProducts
   );
 
+  console.log(data);
   const { msg } = useSelector((state) => state.products.whitelist);
   const [page, setpage] = useState(1);
 

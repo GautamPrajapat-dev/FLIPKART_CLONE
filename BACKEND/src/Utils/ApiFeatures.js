@@ -4,6 +4,7 @@ class ApiFeature {
         this.queryStr = queryStr
         this.seller = seller
     }
+
     search() {
         const keyword = this.queryStr.search
             ? {
@@ -26,6 +27,7 @@ class ApiFeature {
             queryobj.sellerId = this.seller
         }
         // console.log(queryobj);
+        console.log(queryobj)
         this.query = this.query.find(queryobj)
         return this
     }
