@@ -60,7 +60,7 @@ const UpdateUserDetails = () => {
   }, [details, dispatch]);
   return (
     <>
-      <ToastContainer />
+      <ToastContainer stacked />
       <div className="relative ">
         <DashboardNavbar name="Update Details" />
         <div className="mt-7">

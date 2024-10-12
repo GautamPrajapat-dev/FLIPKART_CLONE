@@ -56,7 +56,7 @@ const SellerProducts = () => {
   // MARK:return
   return (
     <>
-      <ToastContainer />
+      <ToastContainer stacked />
 
       <div className="relative ">
         <DashBoardNavbar name="All Products" />

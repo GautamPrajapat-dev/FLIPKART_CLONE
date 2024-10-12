@@ -198,7 +198,7 @@ const ProductDetails = () => {
 
   return (
     <>
-      <ToastContainer />
+      <ToastContainer stacked />
       <div className="px-2 bg-white not-scroll dark:bg-gray-900">
         <DashboardNavbar name="Product Details/Update" />
         <section className="dark:text-white ">

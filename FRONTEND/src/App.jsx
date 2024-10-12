@@ -1,9 +1,9 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import PublicLayout from "./Pages/Public/page/PublicLayout";
-import PublicHomePage from "./Pages/Public/page/PublicHomePage";
+import HomePage from "./Pages/Public/page/HomePage";
 import Login from "./Pages/Public/page/Authentication/Login";
 import SignUp from "./Pages/Public/page/Authentication/SignUp";
-import GetDataCategory from "./Pages/Public/page/GetDataCategory";
+import CategoryProductList from "./Pages/Public/page/CategoryProductList";
 import ProductSubCategory from "./Pages/Public/page/ProductSubCategory";
 import SingleProduct from "./Pages/Public/page/SingleProduct";
 import AllProducts from "./Pages/Public/page/AllProducts";
@@ -24,8 +24,8 @@ import SellerProducts from "./Pages/Seller/Pages/SellerProducts";
 import ProductDetails from "./Pages/Seller/Pages/ProductDetails";
 import SellerAddProducts from "./Pages/Seller/Pages/SellerAddProducts";
 import SellerProfile from "./Pages/Seller/Pages/SellerProfile";
-import { useDispatch, useSelector } from "react-redux";
-import { productActionSuccess } from "./Stores/Saga/Actions/ProductsAction";
+// import { useDispatch, useSelector } from "react-redux";
+// import { productActionSuccess } from "./Stores/Saga/Actions/ProductsAction";
 
 const App = () => {
   const Routes = createBrowserRouter([
@@ -33,29 +33,29 @@ const App = () => {
       path: "/",
       element: <PublicLayout />,
       children: [
-        { index: true, element: <PublicHomePage /> },
+        { index: true, element: <HomePage /> },
         {
           path: "/login",
           element: <Login />,
         },
         { path: "/signup", element: <SignUp /> },
         {
-          path: "/:category",
-          element: <GetDataCategory />,
-        },
-        {
-          path: "/:category/:subcategory",
-          element: <ProductSubCategory />,
-        },
-        {
-          path: "/:category/:subcategory/:id",
-          element: <SingleProduct />,
+          path: "/category",
+          element: <CategoryProductList />,
         },
         {
           path: "/products",
+          element: <ProductSubCategory />,
+        },
+        {
+          path: "/s",
+          element: <SingleProduct />,
+        },
+        {
+          path: "/search",
           element: <AllProducts />,
         },
-        { path: "/products/:SingleProduct", element: <SingleProduct /> },
+        // { path: "/products/:SingleProduct", element: <SingleProduct /> },
         { path: "/cart", element: <Cart /> },
         { path: "/whitelist", element: <Whitelist /> },
       ],

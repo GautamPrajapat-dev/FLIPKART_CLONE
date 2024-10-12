@@ -1,9 +1,9 @@
 import mongoose from 'mongoose'
-import ProductSchema from '../../Schema/Seller.Product.Schema.js'
+import ProductSchema from '../Schema/Seller.Product.Schema.js'
 // import ApiFeature from'../../Utils/ApiFeatures'
-import asyncHandler from '../../Utils/asyncHandler.js'
-import calculatePagination from '../../Utils/calculatePagination.js'
-import ApiFeatures from '../../Utils/ApiFeature.js'
+import asyncHandler from '../Utils/asyncHandler.js'
+import calculatePagination from '../Utils/calculatePagination.js'
+import ApiFeatures from '../Utils/ApiFeature.js'
 
 const Product = {
     AllProduct: asyncHandler(async (req, res) => {

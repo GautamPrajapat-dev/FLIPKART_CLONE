@@ -58,7 +58,7 @@ const LoginSeller = () => {
   }, [navigate]);
   return (
     <>
-      <ToastContainer />
+      <ToastContainer stacked />
       <section className="relative flex items-center justify-center py-8">
         <div className="shadow lg:rounded-lg  lg:w-[32rem]">
           <div className="w-full col-span-12 px-3 py-8 lg:rounded-lg lg:col-start-4 lg:col-span-6 bg-mariner-50 ">

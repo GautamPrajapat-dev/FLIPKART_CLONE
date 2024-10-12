@@ -41,7 +41,7 @@ const Whitelist = () => {
   }, [msg?.status, dispatch]);
   return (
     <>
-      <ToastContainer />
+      <ToastContainer stacked />
       <div className="container w-4/5 mx-auto divide-y-2">
         {data.product && data.product.length !== 0 ? (
           data.product &&

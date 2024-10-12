@@ -39,6 +39,7 @@ export function* subCategoryHandler(action) {
 export function* subCategoryWithproductHandler(action) {
   try {
     const path = action.payload;
+
     const data = yield call(subcategoryAllproducts, path);
 
     yield put({

@@ -68,7 +68,7 @@ const SignUp = () => {
   };
   return (
     <>
-      <ToastContainer />
+      <ToastContainer stacked />
       <section className="relative w-full">
         <div className="flex my-6">
           <div className="grid justify-center w-full grid-cols-12">

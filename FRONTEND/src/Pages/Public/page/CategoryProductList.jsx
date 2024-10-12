@@ -2,12 +2,15 @@
 // import Card from "../PublicComponents/Card";
 import HorizontalCarousel from "../Components/HorizontalCarousel";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { useEffect } from "react";
 import { HiArrowLongRight } from "react-icons/hi2";
 import { productActionRequest } from "../../../Stores/Saga/Actions/ProductsAction";
-const GetDataCategory = () => {
-  const params = useParams();
+const CategoryProductList = () => {
+  // eslint-disable-next-line no-unused-vars
+  const [userparams, setparamas] = useSearchParams();
+  const categ = userparams.get("category");
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const data = useSelector((state) => state.products);
@@ -15,9 +18,9 @@ const GetDataCategory = () => {
   useEffect(() => {
     dispatch({
       type: productActionRequest.SUB_CATEGORY_REQUEST_SAGA,
-      payload: params.category,
+      payload: { category: categ },
     });
-  }, [dispatch, params]);
+  }, [dispatch, categ]);
   return (
     <div className="">
       <div className="container px-4 text-xs breadcrumbs">
@@ -26,8 +29,8 @@ const GetDataCategory = () => {
             <Link to={`/`}>HOME</Link>
           </li>
           <li>
-            <Link to={`/${params.category}`}>
-              {params?.category.toUpperCase()}
+            <Link to={`/category?category=${categ}`}>
+              {categ.toUpperCase()}
             </Link>
           </li>
         </ul>
@@ -42,10 +45,12 @@ const GetDataCategory = () => {
             return (
               <div key={i} className="p-3 m-4 border-2 rounded-lg ">
                 <div className="flex justify-between py-2 mb-4 text-xl font-bold">
-                  <div>Category - {val.subCategory}</div>
+                  <div>Category - {val.subCategory.toUpperCase()}</div>
                   <div
                     onClick={() =>
-                      navigate(`/${params.category}/${val.subCategory}`)
+                      navigate(
+                        `/products?category=${val.category}&subc=${val.subCategory}`
+                      )
                     }
                     className="flex items-center px-2 py-1 text-sm transition-colors delay-200 rounded-md cursor-pointer hover:underline text-personal-900"
                   >
@@ -81,7 +86,7 @@ const GetDataCategory = () => {
                                 <button
                                   onClick={() =>
                                     navigate(
-                                      `/${params.category}/${val.subCategory}/${item._id}/?pid=${item._id}&brand=${item?.brand?.name}`
+                                      `/s?pid=${item?._id}&brand=${item?.brand?.name}`
                                     )
                                   }
                                   className="btn btn-primary"
@@ -103,7 +108,7 @@ const GetDataCategory = () => {
   );
 };
 
-export default GetDataCategory;
+export default CategoryProductList;
 // <div>
 //   <section className="flex-wrap p-2 m-1 mx-2 border-2 cursor-pointer card">
 //     <div className="flex flex-col items-center justify-center ">

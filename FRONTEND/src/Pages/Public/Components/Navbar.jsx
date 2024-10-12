@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import {
   IoCartOutline,
   IoClose,
@@ -20,12 +20,19 @@ import Button from "../../../Components/Button.jsx";
 import { publicNavList } from "../../../Utils/NavbarList";
 const Navbar = () => {
   const navigate = useNavigate();
+  const searchref = useRef("");
+
   const { profile } = useSelector((state) => state.user);
   const [istoggle, toggler] = useToggle(false);
   const dispatch = useDispatch();
   const handleOnClickLogout = () => {
     clearTokenLocalStoragePublic();
     window.location.reload();
+  };
+  const handleOnClickLogoutSearch = (e) => {
+    if (e.keyCode === 13 && e.target.value !== "") {
+      console.log(searchref.current.value);
+    }
   };
   useEffect(() => {
     dispatch(PUBLIC_PROFILE_SAGA());
@@ -55,7 +62,10 @@ const Navbar = () => {
             </div>
             <input
               className="w-full px-1 py-1.5 pl-8 rounded-md focus:outline-none"
-              type="search"
+              type="text"
+              ref={searchref}
+              name="search"
+              onKeyUp={(e) => handleOnClickLogoutSearch(e)}
               placeholder="type a search"
             />
           </div>

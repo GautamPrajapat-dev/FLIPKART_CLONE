@@ -1,9 +1,9 @@
 import mongoose from 'mongoose'
 // import whitelistSchema from '../../Schema/product.whiteList'
-import asyncHandler from '../../Utils/asyncHandler.js'
+import asyncHandler from '../Utils/asyncHandler.js'
 // import ProductSchema from '../../Schema/Seller.Product.Schema'
-import PublicAuthSchema from '../../Schema/Public.Auth.Schema.js'
-import errorHandler from '../../Middleware/error.MiddkerWare.js'
+import PublicAuthSchema from '../Schema/Public.Auth.Schema.js'
+import errorHandler from '../Middleware/error.MiddkerWare.js'
 // import ApiError from '../../Utils/ApiError.js'
 
 const WhiteListController = {

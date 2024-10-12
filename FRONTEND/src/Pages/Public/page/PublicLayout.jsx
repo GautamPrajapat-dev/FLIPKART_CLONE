@@ -5,7 +5,7 @@ import Loading from "../../../Components/Loading";
 
 const PublicLayout = () => {
   const navigation = useNavigation();
-  console.log(navigation.state);
+  // console.log(navigation.state);
   if (navigation.state === "loading") return <Loading />;
   return (
     <div>

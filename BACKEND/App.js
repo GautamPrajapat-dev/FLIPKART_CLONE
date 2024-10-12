@@ -1,9 +1,8 @@
 import 'dotenv/config'
-import dotenv from 'dotenv'
-
-dotenv.config({ path: `.env.${process.env.NODE_ENV}`, override: true })
-import('./src/servers.js')
-import db from './src/Utils/db.js'
+// import dotenv from 'dotenv'
+// dotenv.config({ path: `.env.${process.env.NODE_ENV}`, override: true })
+import './src/Service/servers.js'
+import db from './src/Service/db.js'
 import express from 'express'
 import cors from 'cors'
 import PublicRouter from './src/Routes/Public.Auth.Routes.js'
@@ -17,12 +16,13 @@ import { createServer } from 'http'
 import NotificationRoutes from './src/Routes/Notification.Routes.js'
 import socketServer from './src/Utils/Socket.io.Server.js'
 import errorHandler from './src/Middleware/error.MiddkerWare.js'
+import logger from './src/Utils/logger.js'
+import DeveloperRoute from './src/Routes/Developer.Routes.js'
 const app = express()
 app.use(helmet())
 app.set('trust proxy', 1)
 app.use(express.urlencoded({ extended: true }))
 const httpServer = createServer(app)
-
 app.use(function (req, res, next) {
     res.setHeader('Cache-Control', 'no-cache,private,no-store,must-revalidate,max-stale=0,post-check=0,pre-check=0, max-age=3600')
     next()
@@ -37,6 +37,8 @@ app.use(
 )
 app.use(express.json())
 // product routes
+app.use('/', DeveloperRoute)
+// product routes
 app.use('/products/v1', ProductRouter)
 // public routes
 app.use('/public', PublicRouter)
@@ -50,7 +52,14 @@ app.use('/notificatios', NotificationRoutes)
 app.use(errorHandler)
 // listion server on port 3031
 db().then(() => {
-    httpServer.listen(config.get('_PORT'), () => console.warn(` app listening on port http://localhost:${config.get('_PORT')}`))
+    httpServer.listen(config.get('_PORT'), () =>
+        logger.info('CONNECTION', {
+            meta: {
+                port: config.get('_PORT'),
+                serverUrl: `http://localhost:${config.get('_PORT')}`
+            }
+        })
+    )
     const io = new Server(httpServer)
     socketServer(io)
 })

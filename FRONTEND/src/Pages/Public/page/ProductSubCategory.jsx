@@ -1,5 +1,5 @@
 import { LuHeart } from "react-icons/lu";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useCallback, useEffect, useState } from "react";
 import {
@@ -8,33 +8,36 @@ import {
 } from "../../../Stores/Saga/Actions/ProductsAction";
 import { FcLike } from "react-icons/fc";
 import { ToastContainer } from "react-toastify";
+import { getTokenLocalStoragePublic } from "../../../Utils/LocalStorage";
+import Pagination from "../../../Components/pagination";
 
 const ProductSubCategory = () => {
   const navigate = useNavigate();
-
-  const urlPath = useParams();
+  const [userparams, setparamas] = useSearchParams();
+  const subcategory = userparams.get("subc");
+  const category = userparams.get("category");
+  const page = userparams.get("page");
+  const search = userparams.get("search");
   const dispatch = useDispatch();
-  const path = useParams();
+
   const { data, isloading } = useSelector(
     (state) => state.products.subCategoryProducts
   );
-
-  console.log(data);
   const { msg } = useSelector((state) => state.products.whitelist);
-  const [page, setpage] = useState(1);
+  // const [page, setpage] = useState(1);
 
-  const handleOnPrevPage = useCallback(() => {
-    if (page === 1) {
-      setpage(page);
-    } else {
-      setpage(page - 1);
-    }
-  }, [page]);
-  const handleOnNextPage = useCallback(() => {
-    if (data?.totalPages > page) {
-      setpage(page + 1);
-    }
-  }, [data.totalPages, page]);
+  // const handleOnPrevPage = useCallback(() => {
+  //   if (page === 1) {
+  //     setpage(page);
+  //   } else {
+  //     setpage(page - 1);
+  //   }
+  // }, [page]);
+  // const handleOnNextPage = useCallback(() => {
+  //   if (data?.totalPages > page) {
+  //     setpage(page + 1);
+  //   }
+  // }, [data.totalPages, page]);
 
   const handleOnWhiteList = (id) => {
     dispatch({
@@ -50,16 +53,23 @@ const ProductSubCategory = () => {
   };
 
   useEffect(() => {
-    if (path) {
+    if (category && subcategory) {
+      setparamas({ category: category, subc: subcategory });
       dispatch({
         type: productActionRequest.SUB_CATEGORY_ALl_DATA_REQUEST_SAGA,
-        payload: { path, page },
+        payload: { category, subcategory, page, search },
+      });
+    } else if (search) {
+      setparamas({ search: search });
+      dispatch({
+        type: productActionRequest.SUB_CATEGORY_ALl_DATA_REQUEST_SAGA,
+        payload: { search },
       });
     }
     if (msg?.status === true) {
       dispatch({
         type: productActionRequest.SUB_CATEGORY_ALl_DATA_REQUEST_SAGA,
-        payload: { path, page },
+        payload: { category, subcategory, page, search },
       });
     }
     return () =>
@@ -67,24 +77,28 @@ const ProductSubCategory = () => {
         type: productActionSuccess.ADD_WHITELIST_SUCCESS,
         payload: {},
       });
-  }, [dispatch, path, page, msg?.status]);
+  }, [dispatch, category, search, setparamas, subcategory, page, msg?.status]);
   return (
     <>
-      <ToastContainer />
+      <ToastContainer stacked />
       <div className="container px-4 text-xs breadcrumbs">
         <ul>
           <li>
             <Link to={`/`}>HOME</Link>
           </li>
           <li>
-            <Link to={`/${urlPath.category}`}>
-              {urlPath?.category.toUpperCase()}
-            </Link>
+            {category && (
+              <Link to={`/category?category=${category}`}>
+                {category.toUpperCase()}
+              </Link>
+            )}
           </li>
           <li>
-            <Link to={`/${urlPath.category}/${urlPath?.subcategory}`}>
-              {urlPath?.subcategory.toUpperCase()}
-            </Link>
+            {category && subcategory && (
+              <Link to={`/products?category=${category}&subc=${subcategory}`}>
+                {subcategory.toUpperCase()}
+              </Link>
+            )}
           </li>
         </ul>
       </div>
@@ -162,21 +176,25 @@ const ProductSubCategory = () => {
                       alt="image"
                     />
                     <div className="absolute text-xl cursor-pointer top-2 lg:top-4 right-2 lg:right-7">
-                      {item.inWhiteList ? (
-                        <FcLike
-                          onClick={() => removewhiteListHandler(item._id)}
-                        />
+                      {getTokenLocalStoragePublic() ? (
+                        item.inWhiteList ? (
+                          <FcLike
+                            onClick={() => removewhiteListHandler(item._id)}
+                          />
+                        ) : (
+                          <LuHeart
+                            onClick={() => handleOnWhiteList(item._id)}
+                          />
+                        )
                       ) : (
-                        <LuHeart onClick={() => handleOnWhiteList(item._id)} />
+                        <LuHeart onClick={() => navigate("/login")} />
                       )}
                     </div>
                   </div>
 
                   <div
                     onClick={() =>
-                      navigate(
-                        `${item?._id}/?pid=${item?._id}&brand=${item?.brand?.name}`
-                      )
+                      navigate(`/s?pid=${item?._id}&brand=${item?.brand?.name}`)
                     }
                     className="col-span-2 cursor-pointer peer"
                   >
@@ -212,58 +230,7 @@ const ProductSubCategory = () => {
                 </div>
               );
             })}
-        <div className="py-4 mb-32 ">
-          <div className="flex justify-between px-3">
-            <div>
-              page {data?.page} of {data?.totalPages}
-            </div>
-            <div>
-              <div className="join ">
-                <button
-                  onClick={handleOnPrevPage}
-                  className="join-item btn btn-sm"
-                >
-                  Previous
-                </button>
-                {data.prevPages &&
-                  data.prevPages.map((page, index) => {
-                    return (
-                      <button
-                        key={index}
-                        onClick={() => setpage(page)}
-                        className="join-item btn btn-sm"
-                      >
-                        {page}
-                      </button>
-                    );
-                  })}
-                <div className="relative inline-flex items-center text-sm font-semibold text-gray-700 bg-personal-50 ring-1 ring-inset ring-gray-300 focus:outline-offset-0 join-item btn btn-sm">
-                  {data?.page}
-                </div>
-
-                {data.nextPages &&
-                  data.nextPages.map((page, index) => {
-                    return (
-                      <button
-                        key={index}
-                        onClick={() => setpage(page)}
-                        className="join-item btn btn-sm"
-                      >
-                        {page}
-                      </button>
-                    );
-                  })}
-
-                <button
-                  onClick={handleOnNextPage}
-                  className="join-item btn btn-sm"
-                >
-                  Next
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
+        <Pagination data={data} />
       </div>
     </>
   );

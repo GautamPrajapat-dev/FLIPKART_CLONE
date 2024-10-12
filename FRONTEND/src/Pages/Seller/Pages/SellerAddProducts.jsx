@@ -37,7 +37,7 @@ const SellerAddProducts = () => {
   console.log(cat);
   return (
     <>
-      <ToastContainer />
+      <ToastContainer stacked />
       <div className="">
         <DashBoardNavbar name="Add Products" />
 

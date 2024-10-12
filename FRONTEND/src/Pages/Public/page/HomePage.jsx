@@ -7,7 +7,7 @@ import { useEffect } from "react";
 import { productActionRequest } from "../../../Stores/Saga/Actions/ProductsAction";
 // import Dropdown from "../../Seller/SellerComponents/Dropdown";
 import { FcApproval } from "react-icons/fc";
-const PublicHomePage = () => {
+const HomePage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const data = useSelector((state) => state?.products?.category);
@@ -16,7 +16,7 @@ const PublicHomePage = () => {
     dispatch({ type: productActionRequest.CATEGORY_REQUEST_SAGA });
   }, [dispatch]);
   const handlenClick = (c) => {
-    navigate(`/${c.category}`);
+    navigate(`/category?category=${c.category}`);
   };
   return (
     <div className="">
@@ -100,4 +100,4 @@ const PublicHomePage = () => {
   );
 };
 
-export default PublicHomePage;
+export default HomePage;

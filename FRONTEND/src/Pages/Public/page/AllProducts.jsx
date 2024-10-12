@@ -1,8 +1,13 @@
 import { LuHeart } from "react-icons/lu";
+import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 const AllProducts = () => {
   const navigate = useNavigate();
+  const { data, isloading } = useSelector(
+    (state) => state.products.subCategoryProducts
+  );
+  console.log(data);
   return (
     <div>
       <div className="container w-4/5 mx-auto divide-y-2">

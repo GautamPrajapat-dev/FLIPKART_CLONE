@@ -20,7 +20,7 @@ const ApiFeatures = async (query, ProductSchema) => {
     const pages = parseInt(page) || 1
     const limits = parseInt(limit) || 3
     const pipeline = []
-    if (pid) {
+    if (pid && pid !== '') {
         pipeline.push({
             $match: {
                 _id: productId
@@ -112,7 +112,7 @@ const ApiFeatures = async (query, ProductSchema) => {
 
     const results = await ProductSchema.aggregate(pipeline).exec()
     const { prevPages, nextPages, hasOwnPage } = calculatePagination(pages, totalPages, results)
-    console.log(pipeline)
+
     const data = {
         page: Number(page),
         productperPage: results.length,
@@ -124,7 +124,7 @@ const ApiFeatures = async (query, ProductSchema) => {
         hasOwnPage,
         prevPage: pages === 1 ? 1 : pages - 1,
         nextPage: pages + 1,
-        products: results
+        data: results
     }
     return data
 }

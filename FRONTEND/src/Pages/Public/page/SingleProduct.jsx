@@ -1,20 +1,23 @@
 import { LuHeart } from "react-icons/lu";
 import Button from "../../../Components/Button.jsx";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import { getTokenLocalStoragePublic } from "../../../Utils/LocalStorage.jsx";
+import { FcLike } from "react-icons/fc";
 
 // import { useNavigate } from "react-router-dom";
 
 const SingleProduct = () => {
   const urlPath = useParams();
+  const navigate = useNavigate();
 
   return (
     <>
-      <div className="breadcrumbs text-xs">
+      <div className="text-xs breadcrumbs">
         <ul>
           <li>
             <Link to={`/`}>Home</Link>
           </li>
-          <li>
+          {/* <li>
             <Link to={`/${urlPath.category}`}>
               {urlPath?.category.toUpperCase()}
             </Link>
@@ -23,7 +26,7 @@ const SingleProduct = () => {
             <Link to={`/${urlPath.category}/${urlPath?.subcategory}`}>
               {urlPath?.subcategory.toUpperCase()}
             </Link>
-          </li>
+          </li> */}
         </ul>
       </div>
       <div className="container w-4/5 mx-auto my-6 divide-y-2 lg:h-[100vh]">
@@ -35,7 +38,15 @@ const SingleProduct = () => {
               alt=""
             />
             <div className="absolute cursor-pointer top-2 lg:top-4 right-2 lg:right-7">
-              <LuHeart />
+              {getTokenLocalStoragePublic() ? (
+                getTokenLocalStoragePublic() ? (
+                  <FcLike />
+                ) : (
+                  <LuHeart />
+                )
+              ) : (
+                <LuHeart onClick={() => navigate("/login")} />
+              )}
             </div>
             <div className="flex w-[90%] gap-2 mt-12 ">
               <Button className="px-6 py-2 bg-orange-500">Add to Cart</Button>

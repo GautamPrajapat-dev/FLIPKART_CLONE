@@ -47,7 +47,7 @@ const Signup = () => {
 
   return (
     <>
-      <ToastContainer />
+      <ToastContainer stacked />
       <section className="relative w-full py-8 bg-gradient-to-br from-personal-900 to-rose-800">
         <div className="grid justify-center w-full grid-cols-12 ">
           <div className="w-full col-span-12 px-3 py-8 lg:rounded-lg lg:col-start-4 lg:col-span-6 bg-mariner-50 ">

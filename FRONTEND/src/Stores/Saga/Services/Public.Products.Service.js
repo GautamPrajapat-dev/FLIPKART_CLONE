@@ -10,10 +10,10 @@ import { jwtDecode } from "jwt-decode";
 // eslint-disable-next-line no-undef
 const URL = import.meta.env.VITE_URL;
 const token = getTokenLocalStoragePublic();
-
+let decodedToken;
 if (token) {
+  decodedToken = jwtDecode(token);
   try {
-    let decodedToken = jwtDecode(token);
     // console.log(decodedToken);
     // JWT exp is in secondss
     if (Date.now() >= decodedToken.exp * 1000) {
@@ -42,7 +42,6 @@ export const getDetials = async () => {
       },
     });
     const data = await res.data;
-
     return data;
   } catch (error) {
     console.log(error.message);
@@ -57,13 +56,14 @@ export const category = async () => {
     console.log(error);
   }
 };
-export const subcategorywithproducts = async (subcategory) => {
+export const subcategorywithproducts = async (payload) => {
+  const { category } = payload;
   try {
-    if (!subcategory) {
+    if (!category) {
       return false;
     }
     const res = await axios.get(
-      `${URL}/products/v1/category/${subcategory}`,
+      `${URL}/products/v1/category/${category}`,
       config
     );
     const data = await res.data;
@@ -73,17 +73,32 @@ export const subcategorywithproducts = async (subcategory) => {
   }
 };
 export const subcategoryAllproducts = async (payload) => {
-  const { path, page } = payload;
+  const { category, subcategory, search, page } = payload;
 
   try {
-    if (!path.subcategory) {
+    if (!category || !subcategory) {
       return false;
     }
-    const res = await axios.get(
-      `${URL}/products/v1/category/${path.category}/${path.subcategory}/?category.subCategory=${path.subcategory}&category.category=${path.category}&limit=3&page=${page}`,
-      config
-    );
+    let url = `${URL}/products/v1/product?limit=3`;
 
+    if (search) {
+      url += `&search=${search}`;
+    }
+    if (category) {
+      url += `&category=${category}`;
+    }
+    if (subcategory) {
+      url += `&subcategory=${subcategory}`;
+    }
+    if (page) {
+      url += `&page=${page}`;
+    }
+    console.warn("this is a url ====", url);
+    const res = await axios.get(url, config);
+    // const res = await axios.get(
+    //   `${URL}/products/v1/category/${path.category}/${path.subcategory}/?category.subCategory=${path.subcategory}&category.category=${path.category}&limit=3&page=${page}`,
+    //   config
+    // );
     const data = await res.data;
 
     return data;
