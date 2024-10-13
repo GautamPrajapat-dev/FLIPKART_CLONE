@@ -5,7 +5,7 @@ const ApiFeatures = async (query, ProductSchema) => {
     const {
         search = '',
         category = '',
-        subcategory = '',
+        subc = '',
         minPrice = 0,
         maxPrice = Infinity,
         sortBy = 'views',
@@ -31,16 +31,33 @@ const ApiFeatures = async (query, ProductSchema) => {
             $match: {
                 $and: [
                     category ? { 'category.category': { $regex: category, $options: 'i' } } : {},
-                    subcategory ? { 'category.subCategory': { $regex: subcategory, $options: 'i' } } : {},
+                    subc ? { 'category.subCategory': { $regex: subc, $options: 'i' } } : {},
                     minPrice ? { 'price.mrp': { $gte: minPrice, $lte: maxPrice } } : {}
                 ]
             }
+            // Search stage if search term is provided
         })
-        // Search stage if search term is provided
         if (search) {
+            // const extractSearchTermAndPriceLimit = (query) => {
+            //     // Extract price limit
+            //     const priceMatch = query.match(/(?:under|max)\s+(\d+)/i)
+
+            //     const priceLimit = priceMatch ? priceMatch[1] : null
+            //     const searchT = query.replace(/(?:under|max)\s+\d+/i, '').trim()
+            //     return { searchT, priceLimit }
+            // }
+            // const { searchT, priceLimit } = extractSearchTermAndPriceLimit(search)
+            // console.log(searchT, priceLimit)
             pipeline.push({
                 $match: {
-                    $or: [{ title: { $regex: search, $options: 'i' } }, { description: { $regex: search, $options: 'i' } }]
+                    $or: [
+                        { title: { $regex: search, $options: 'i' } },
+                        {
+                            description: { $regex: search, $options: 'i' }
+                        },
+                        { 'category.category': { $regex: search, $options: 'i' } },
+                        { 'category.subCategory': { $regex: search, $options: 'i' } }
+                    ]
                 }
             })
         } else {

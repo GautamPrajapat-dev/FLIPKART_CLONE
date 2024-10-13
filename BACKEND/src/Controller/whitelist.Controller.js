@@ -7,7 +7,7 @@ import errorHandler from '../Middleware/error.MiddkerWare.js'
 // import ApiError from '../../Utils/ApiError.js'
 
 const WhiteListController = {
-    addWhitelist: asyncHandler(async (req, res, next) => {
+    addWhitelist: asyncHandler(async (req, res) => {
         const userid = new mongoose.Types.ObjectId(res.user.userId)
         const alreadyExists = await PublicAuthSchema.findOne({
             'whiteList.productId': req.body.productId

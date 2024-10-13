@@ -13,6 +13,7 @@ const token = getTokenLocalStoragePublic();
 let decodedToken;
 if (token) {
   decodedToken = jwtDecode(token);
+
   try {
     // console.log(decodedToken);
     // JWT exp is in secondss
@@ -73,34 +74,19 @@ export const subcategorywithproducts = async (payload) => {
   }
 };
 export const subcategoryAllproducts = async (payload) => {
-  const { category, subcategory, search, page } = payload;
+  const { location } = payload;
 
   try {
-    if (!category || !subcategory) {
-      return false;
-    }
-    let url = `${URL}/products/v1/product?limit=3`;
+    let url = `${URL}/products/v1/product${location}&uid=${decodedToken.userId}`;
 
-    if (search) {
-      url += `&search=${search}`;
-    }
-    if (category) {
-      url += `&category=${category}`;
-    }
-    if (subcategory) {
-      url += `&subcategory=${subcategory}`;
-    }
-    if (page) {
-      url += `&page=${page}`;
-    }
-    console.warn("this is a url ====", url);
+    console.log("this is a url ====", url);
     const res = await axios.get(url, config);
     // const res = await axios.get(
     //   `${URL}/products/v1/category/${path.category}/${path.subcategory}/?category.subCategory=${path.subcategory}&category.category=${path.category}&limit=3&page=${page}`,
     //   config
     // );
     const data = await res.data;
-
+    // console.log("first data ====", data);
     return data;
   } catch (error) {
     console.log(error);
@@ -109,8 +95,11 @@ export const subcategoryAllproducts = async (payload) => {
 
 export const getWhitelistService = async () => {
   try {
-    const res = await axios.get(`${URL}/products/v1/whitelist`, config);
-
+    const res = await axios.get(`${URL}/products/v1/whitelist`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
     const data = await res.data;
     return data;
   } catch (error) {

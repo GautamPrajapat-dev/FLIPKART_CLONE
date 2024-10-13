@@ -15,7 +15,7 @@ import App from "./App";
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.Fragment>
-    {!window.navigator.onLine && <OfflineStatus />}
+    {/* {!window.navigator.onLine && <OfflineStatus />} */}
     <Provider store={Store}>
       <App />
     </Provider>

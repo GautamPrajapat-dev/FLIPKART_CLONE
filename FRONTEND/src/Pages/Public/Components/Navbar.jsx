@@ -8,7 +8,7 @@ import {
 import { HiOutlineDotsVertical } from "react-icons/hi";
 import { LuSearch, LuUser2 } from "react-icons/lu";
 import { AiOutlineShop } from "react-icons/ai";
-import { Link, NavLink, useNavigate } from "react-router-dom";
+import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import {
   clearTokenLocalStoragePublic,
   getTokenLocalStoragePublic,
@@ -20,9 +20,11 @@ import Button from "../../../Components/Button.jsx";
 import { publicNavList } from "../../../Utils/NavbarList";
 const Navbar = () => {
   const navigate = useNavigate();
-  const searchref = useRef("");
-
+  const location = useLocation();
+  const useparams = new URLSearchParams(location.search);
   const { profile } = useSelector((state) => state.user);
+  const search = useparams.get("search");
+  const searchref = useRef(search);
   const [istoggle, toggler] = useToggle(false);
   const dispatch = useDispatch();
   const handleOnClickLogout = () => {
@@ -31,11 +33,17 @@ const Navbar = () => {
   };
   const handleOnClickLogoutSearch = (e) => {
     if (e.keyCode === 13 && e.target.value !== "") {
-      console.log(searchref.current.value);
+      navigate(`/products?search=${searchref.current.value}`);
     }
   };
   useEffect(() => {
+    if (search && search !== null) {
+      searchref.current.value = search;
+    }
     dispatch(PUBLIC_PROFILE_SAGA());
+    return () => {
+      searchref.current = "";
+    };
   }, [dispatch]);
   return (
     <>

@@ -1,13 +1,30 @@
 import { LuHeart } from "react-icons/lu";
-import { useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
+
+import { useEffect } from "react";
+import { productActionRequest } from "../../../Stores/Saga/Actions/ProductsAction";
 
 const AllProducts = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const location = useLocation();
+  console.log(location);
+  const [userparams, setparamas] = useSearchParams();
+  const page = userparams.get("page");
+  const search = userparams.get("search");
   const { data, isloading } = useSelector(
     (state) => state.products.subCategoryProducts
   );
   console.log(data);
+  useEffect(() => {
+    if (search) {
+      dispatch({
+        type: productActionRequest.SUB_CATEGORY_ALl_DATA_REQUEST_SAGA,
+        payload: { search: search, page: Number(page) },
+      });
+    }
+  }, [search, dispatch, page]);
   return (
     <div>
       <div className="container w-4/5 mx-auto divide-y-2">

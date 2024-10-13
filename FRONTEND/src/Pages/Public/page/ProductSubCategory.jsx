@@ -1,7 +1,12 @@
 import { LuHeart } from "react-icons/lu";
-import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import {
+  Link,
+  useLocation,
+  useNavigate,
+  useSearchParams,
+} from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import {
   productActionRequest,
   productActionSuccess,
@@ -9,35 +14,34 @@ import {
 import { FcLike } from "react-icons/fc";
 import { ToastContainer } from "react-toastify";
 import { getTokenLocalStoragePublic } from "../../../Utils/LocalStorage";
-import Pagination from "../../../Components/pagination";
 
 const ProductSubCategory = () => {
   const navigate = useNavigate();
-  const [userparams, setparamas] = useSearchParams();
-  const subcategory = userparams.get("subc");
-  const category = userparams.get("category");
-  const page = userparams.get("page");
-  const search = userparams.get("search");
-  const dispatch = useDispatch();
+  const location = useLocation();
+  const [useParams, setParam] = useSearchParams(location.search);
+  const Url = new URLSearchParams(location.search);
+  const subcategory = useParams.get("subc");
+  const category = useParams.get("category");
+  const search = useParams.get("search");
 
+  const dispatch = useDispatch();
   const { data, isloading } = useSelector(
     (state) => state.products.subCategoryProducts
   );
+  const [page, setPage] = useState(1);
   const { msg } = useSelector((state) => state.products.whitelist);
-  // const [page, setpage] = useState(1);
-
-  // const handleOnPrevPage = useCallback(() => {
-  //   if (page === 1) {
-  //     setpage(page);
-  //   } else {
-  //     setpage(page - 1);
-  //   }
-  // }, [page]);
-  // const handleOnNextPage = useCallback(() => {
-  //   if (data?.totalPages > page) {
-  //     setpage(page + 1);
-  //   }
-  // }, [data.totalPages, page]);
+  const prevPage = useCallback(() => {
+    if (page === 1) {
+      setPage(page);
+    } else {
+      setPage(page - 1);
+    }
+  }, [page]);
+  const nextPage = useCallback(() => {
+    if (data?.totalPages > page) {
+      setPage(page + 1);
+    }
+  }, [data.totalPages, page]);
 
   const handleOnWhiteList = (id) => {
     dispatch({
@@ -51,33 +55,38 @@ const ProductSubCategory = () => {
       payload: { id },
     });
   };
-
   useEffect(() => {
-    if (category && subcategory) {
-      setparamas({ category: category, subc: subcategory });
-      dispatch({
-        type: productActionRequest.SUB_CATEGORY_ALl_DATA_REQUEST_SAGA,
-        payload: { category, subcategory, page, search },
-      });
-    } else if (search) {
-      setparamas({ search: search });
-      dispatch({
-        type: productActionRequest.SUB_CATEGORY_ALl_DATA_REQUEST_SAGA,
-        payload: { search },
-      });
-    }
+    Url.set("page", page);
+    category && Url.set("category", category);
+    subcategory && Url.set("subcategory", subcategory);
+    setParam(Url);
+    // setparams({ category: category, subc: subcategory });
+    dispatch({
+      type: productActionRequest.SUB_CATEGORY_ALl_DATA_REQUEST_SAGA,
+      payload: { location: location.search },
+    });
+
     if (msg?.status === true) {
       dispatch({
         type: productActionRequest.SUB_CATEGORY_ALl_DATA_REQUEST_SAGA,
-        payload: { category, subcategory, page, search },
+        payload: { location: location.search },
       });
     }
-    return () =>
+    return () => {
       dispatch({
         type: productActionSuccess.ADD_WHITELIST_SUCCESS,
         payload: {},
       });
-  }, [dispatch, category, search, setparamas, subcategory, page, msg?.status]);
+    };
+  }, [
+    dispatch,
+    category,
+    page,
+    setParam,
+    subcategory,
+    location.search,
+    msg?.status,
+  ]);
   return (
     <>
       <ToastContainer stacked />
@@ -86,20 +95,28 @@ const ProductSubCategory = () => {
           <li>
             <Link to={`/`}>HOME</Link>
           </li>
-          <li>
-            {category && (
+          {category && (
+            <li>
               <Link to={`/category?category=${category}`}>
                 {category.toUpperCase()}
               </Link>
-            )}
-          </li>
-          <li>
-            {category && subcategory && (
+            </li>
+          )}
+          {category && subcategory && (
+            <li>
               <Link to={`/products?category=${category}&subc=${subcategory}`}>
                 {subcategory.toUpperCase()}
               </Link>
-            )}
-          </li>
+            </li>
+          )}
+          {!category && !subcategory && search && (
+            <li>
+              <Link to={{ search: `search=${search}` }}>
+                Also Related Searching &nbsp;
+                <span className="font-bold ">"{search}" </span>
+              </Link>
+            </li>
+          )}
         </ul>
       </div>
       <div className="container w-4/5 mx-auto divide-y-2">
@@ -230,7 +247,56 @@ const ProductSubCategory = () => {
                 </div>
               );
             })}
-        <Pagination data={data} />
+        <div className="py-4 mb-32 ">
+          <div className="flex justify-between px-3">
+            <div>
+              page {data?.page} of {data?.totalPages}
+            </div>
+            <div>
+              <div className="join ">
+                <button onClick={prevPage} className="join-item btn btn-sm">
+                  Previous
+                </button>
+                {data?.prevPages &&
+                  data.prevPages.map((page, index) => {
+                    return (
+                      <button
+                        key={index}
+                        onClick={() => {
+                          setPage(page);
+                        }}
+                        className="join-item btn btn-sm"
+                      >
+                        {page}
+                      </button>
+                    );
+                  })}
+                <div className="relative inline-flex items-center text-sm font-semibold text-gray-700 bg-personal-50 ring-1 ring-inset ring-gray-300 focus:outline-offset-0 join-item btn btn-sm">
+                  {data?.page}
+                </div>
+
+                {data?.nextPages &&
+                  data?.nextPages.map((page, index) => {
+                    return (
+                      <button
+                        key={index}
+                        onClick={() => {
+                          setPage(page);
+                        }}
+                        className="join-item btn btn-sm"
+                      >
+                        {page}
+                      </button>
+                    );
+                  })}
+
+                <button onClick={nextPage} className="join-item btn btn-sm">
+                  Next
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </>
   );

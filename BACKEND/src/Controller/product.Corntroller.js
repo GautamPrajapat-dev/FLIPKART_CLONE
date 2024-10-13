@@ -9,7 +9,6 @@ const Product = {
     AllProduct: asyncHandler(async (req, res) => {
         const data = await ApiFeatures(req.query, ProductSchema, res)
         res.json({ status: true, path: req.url, ...data })
-        return false
     }),
     // AllProduct: asyncHandler(async (req, res) => {
     //     const page = parseInt(req.query.page) || 1

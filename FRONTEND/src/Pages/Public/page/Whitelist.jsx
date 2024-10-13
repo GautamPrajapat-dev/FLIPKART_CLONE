@@ -1,5 +1,4 @@
 import { FcLike } from "react-icons/fc";
-import { LuHeart } from "react-icons/lu";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
@@ -16,13 +15,8 @@ const Whitelist = () => {
   useEffect(() => {
     dispatch({ type: productActionRequest.GET_WHITELIST_REQUEST_SAGA });
   }, [dispatch]);
-  const HandleWhiteListAdd = (id) => {
-    dispatch({
-      type: productActionRequest.ADD_WHITELIST_REQUEST_SAGA,
-      payload: { id },
-    });
-  };
-  const hanleRemoveWhiteList = (id) => {
+
+  const handleRemoveWhiteList = (id) => {
     dispatch({
       type: productActionRequest.REMOVE_WHITELIST_REQUEST_SAGA,
       payload: { id },
@@ -61,15 +55,9 @@ const Whitelist = () => {
                           alt="image"
                         />
                         <div className="absolute text-xl cursor-pointer top-2 lg:top-4 right-2 lg:right-7">
-                          {item.inWhiteList ? (
-                            <FcLike
-                              onClick={() => hanleRemoveWhiteList(item._id)}
-                            />
-                          ) : (
-                            <LuHeart
-                              onClick={() => HandleWhiteListAdd(item._id)}
-                            />
-                          )}
+                          <FcLike
+                            onClick={() => handleRemoveWhiteList(item._id)}
+                          />
                         </div>
                       </div>
 

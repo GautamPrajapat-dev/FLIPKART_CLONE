@@ -21,7 +21,7 @@ const SingleProduct = () => {
             <Link to={`/${urlPath.category}`}>
               {urlPath?.category.toUpperCase()}
             </Link>
-          </li>
+          </li> 
           <li>
             <Link to={`/${urlPath.category}/${urlPath?.subcategory}`}>
               {urlPath?.subcategory.toUpperCase()}
@@ -37,7 +37,7 @@ const SingleProduct = () => {
               src="https://rukminim2.flixcart.com/image/312/312/xif0q/dslr-camera/i/o/c/eos-r100-24-1-eos-r100-kit-canon-original-imagqeydhsxgacxp.jpeg?q=70"
               alt=""
             />
-            <div className="absolute cursor-pointer top-2 lg:top-4 right-2 lg:right-7">
+            <div className="absolute z-50 cursor-pointer top-2 lg:top-4 right-2 lg:right-7">
               {getTokenLocalStoragePublic() ? (
                 getTokenLocalStoragePublic() ? (
                   <FcLike />
