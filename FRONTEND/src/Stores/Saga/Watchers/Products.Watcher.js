@@ -1,4 +1,4 @@
-import { all, takeLatest } from "redux-saga/effects";
+import { all, takeEvery, takeLatest } from "redux-saga/effects";
 import {
   addwhiteListHandler,
   CategoryHandler,
@@ -22,7 +22,7 @@ export function* subcategoryWatcher() {
   );
 }
 export function* subcategoryAllproductWatcher() {
-  yield takeLatest(
+  yield takeEvery(
     productActionRequest.SUB_CATEGORY_ALl_DATA_REQUEST_SAGA,
     subCategoryWithproductHandler
   );

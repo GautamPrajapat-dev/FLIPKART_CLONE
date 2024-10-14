@@ -12,12 +12,16 @@ const SingleProduct = () => {
 
   return (
     <>
-      <div className="text-xs breadcrumbs">
-        <ul>
-          <li>
-            <Link to={`/`}>Home</Link>
-          </li>
-          {/* <li>
+      <div className="container bg-white w-4/5 mx-auto my-6 divide-y-2 lg:h-[100vh]">
+        <div className="pl-2 text-xs breadcrumbs">
+          <ul>
+            <li>
+              <Link to={`/`}>Home</Link>
+            </li>
+            <li>
+              <Link to={-1}>Go Back</Link>
+            </li>
+            {/* <li>
             <Link to={`/${urlPath.category}`}>
               {urlPath?.category.toUpperCase()}
             </Link>
@@ -27,10 +31,9 @@ const SingleProduct = () => {
               {urlPath?.subcategory.toUpperCase()}
             </Link>
           </li> */}
-        </ul>
-      </div>
-      <div className="container w-4/5 mx-auto my-6 divide-y-2 lg:h-[100vh]">
-        <div className="grid grid-cols-1 gap-5 py-2 lg:gap-2 md:grid-cols-3 ">
+          </ul>
+        </div>
+        <div className="grid grid-cols-1 gap-5 p-4 lg:gap-2 md:grid-cols-3 ">
           <div className="relative flex flex-col items-center justify-center ">
             <img
               className="w-64 lg:w-96"

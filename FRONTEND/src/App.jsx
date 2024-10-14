@@ -4,9 +4,8 @@ import HomePage from "./Pages/Public/page/HomePage";
 import Login from "./Pages/Public/page/Authentication/Login";
 import SignUp from "./Pages/Public/page/Authentication/SignUp";
 import CategoryProductList from "./Pages/Public/page/CategoryProductList";
-import ProductSubCategory from "./Pages/Public/page/ProductSubCategory";
+import ProductList from "./Pages/Public/page/ProductList";
 import SingleProduct from "./Pages/Public/page/SingleProduct";
-import AllProducts from "./Pages/Public/page/AllProducts";
 import Cart from "./Pages/Public/page/Cart";
 import Whitelist from "./Pages/Public/page/Whitelist";
 import NotFound from "./Components/NotFound";
@@ -45,15 +44,11 @@ const App = () => {
         },
         {
           path: "/products",
-          element: <ProductSubCategory />,
+          element: <ProductList />,
         },
         {
           path: "/s",
           element: <SingleProduct />,
-        },
-        {
-          path: "/search",
-          element: <AllProducts />,
         },
         // { path: "/products/:SingleProduct", element: <SingleProduct /> },
         { path: "/cart", element: <Cart /> },

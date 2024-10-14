@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { productActionRequest } from "../../../Stores/Saga/Actions/ProductsAction";
 // import Dropdown from "../../Seller/SellerComponents/Dropdown";
-import { FcApproval } from "react-icons/fc";
+// import { FcApproval } from "react-icons/fc";
 const HomePage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -20,8 +20,8 @@ const HomePage = () => {
   };
   return (
     <div className="">
-      <div className="my-8">
-        <div className="relative flex w-full gap-5 justify-evenly ">
+      <div className="py-2 bg-white border-b shadow ">
+        <div className="relative flex items-center w-full gap-5 justify-evenly ">
           {data?.isloading
             ? Array.from({ length: 4 }).map((_, i) => (
                 <div key={i} className="w-24 h-6 skeleton"></div>
@@ -31,9 +31,9 @@ const HomePage = () => {
                   <div key={k}>
                     <div
                       onClick={() => handlenClick(c)}
-                      className="relative z-50 flex flex-col items-center justify-center capitalize cursor-pointer"
+                      className="relative z-50 flex flex-col items-center justify-center text-black capitalize cursor-pointer "
                     >
-                      <FcApproval className="text-5xl" />
+                      {/* <FcApproval className="text-5xl" /> */}
                       {c.category}
                       {/* <Dropdown trigger={c.category}>
                         {c?.subcategories &&
@@ -48,11 +48,11 @@ const HomePage = () => {
         </div>
       </div>
 
-      <div className="py-3">
+      <div className="pb-3 mt-2">
         <HorizontalCarousel />
       </div>
 
-      <div className="p-3 m-4 border-2 ">
+      <div className="p-3 m-4 bg-white border-2">
         <div className="flex justify-between py-2 mb-4 text-xl font-bold">
           <div>Best Of Electronics</div>
           <div className="flex items-center px-1 rounded-full bg-personal-900 text-personal-10">
@@ -74,7 +74,7 @@ const HomePage = () => {
           })}
         </div>
       </div>
-      <div className="p-3 m-4 border-2 ">
+      <div className="p-3 m-4 bg-white border-2">
         <div className="flex justify-between py-2 mb-4 text-xl font-bold">
           <div>Best Of Furniture</div>
           <div className="flex items-center px-1 rounded-full bg-personal-900 text-personal-10">

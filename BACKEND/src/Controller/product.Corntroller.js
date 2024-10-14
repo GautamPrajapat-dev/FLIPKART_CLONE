@@ -343,7 +343,6 @@ const Product = {
                         _id: 0,
                         title: 1,
                         category: 1,
-
                         description: { $substr: ['$description', 0, 100] }
                     }
                 },

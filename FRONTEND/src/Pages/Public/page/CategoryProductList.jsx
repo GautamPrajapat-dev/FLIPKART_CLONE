@@ -43,7 +43,7 @@ const CategoryProductList = () => {
         {data?.subcategory?.data &&
           data?.subcategory?.data.map((val, i) => {
             return (
-              <div key={i} className="p-3 m-4 border-2 rounded-lg ">
+              <div key={i} className="p-3 m-4 bg-white border-2 rounded-lg ">
                 <div className="flex justify-between py-2 mb-4 text-xl font-bold">
                   <div>Category - {val.subCategory.toUpperCase()}</div>
                   <div

@@ -44,7 +44,7 @@ const Navbar = () => {
     return () => {
       searchref.current = "";
     };
-  }, [dispatch]);
+  }, [dispatch, search]);
   return (
     <>
       <header className="relative dark:bg-daintree-500 text-daintree-950 bg-mariner-100 dark:text-daintree-50">
