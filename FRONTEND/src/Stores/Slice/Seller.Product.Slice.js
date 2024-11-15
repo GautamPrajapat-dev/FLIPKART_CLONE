@@ -14,6 +14,7 @@ const SellerProductSlice = createSlice({
     Images: {},
     dashboard: {},
     delete: {},
+    debugger: {},
   },
 
   reducers: {
