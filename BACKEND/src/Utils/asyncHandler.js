@@ -8,11 +8,14 @@
 //       // res.status(500).json({ status: false, errorMessage: error.message });
 //     });
 //   };
+
+import HttpError from './ApiError.js'
+
 // };
 const asyncHandler = (fun) => {
     return (req, res, next) =>
         Promise.resolve(fun(req, res, next)).catch((error) => {
-            next(error)
+            HttpError(next, error, error.satus, req, res)
         })
 }
 export default asyncHandler

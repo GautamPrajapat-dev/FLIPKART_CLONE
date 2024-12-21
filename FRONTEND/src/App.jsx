@@ -4,7 +4,7 @@ import HomePage from "./Pages/Public/page/HomePage";
 import Login from "./Pages/Public/page/Authentication/Login";
 import SignUp from "./Pages/Public/page/Authentication/SignUp";
 import CategoryProductList from "./Pages/Public/page/CategoryProductList";
-import ProductList from "./Pages/Public/page/ProductList";
+import ProductList from "./Pages/Public/page/Products_List";
 import SingleProduct from "./Pages/Public/page/SingleProduct";
 import Cart from "./Pages/Public/page/Cart";
 import Whitelist from "./Pages/Public/page/Whitelist";

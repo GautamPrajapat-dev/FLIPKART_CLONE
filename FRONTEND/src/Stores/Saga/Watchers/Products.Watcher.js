@@ -7,37 +7,32 @@ import {
   subCategoryWithproductHandler,
   whiteListHandler,
 } from "../Handler/Products.Handler";
-import { productActionRequest } from "../Actions/ProductsAction";
+import {
+  CategoryRequestSaga,
+  GetWhiteListReqSaga,
+  productActionRequest,
+  SubCategoryDataSaga,
+  AddWhiteListReqSaga,
+  SubCategoryReqSaga,
+} from "../Actions/ProductsAction";
 
 // export function* AllProductsWatcher() {
 //   yield takeLatest("all/r", AllProductsHandler);
 // }
 export function* categoryWatcher() {
-  yield takeLatest(productActionRequest.CATEGORY_REQUEST_SAGA, CategoryHandler);
+  yield takeLatest(CategoryRequestSaga().type, CategoryHandler);
 }
 export function* subcategoryWatcher() {
-  yield takeLatest(
-    productActionRequest.SUB_CATEGORY_REQUEST_SAGA,
-    subCategoryHandler
-  );
+  yield takeLatest(SubCategoryReqSaga().type, subCategoryHandler);
 }
 export function* subcategoryAllproductWatcher() {
-  yield takeEvery(
-    productActionRequest.SUB_CATEGORY_ALl_DATA_REQUEST_SAGA,
-    subCategoryWithproductHandler
-  );
+  yield takeEvery(SubCategoryDataSaga().type, subCategoryWithproductHandler);
 }
 export function* getWhhiteListWatcher() {
-  yield takeLatest(
-    productActionRequest.GET_WHITELIST_REQUEST_SAGA,
-    whiteListHandler
-  );
+  yield takeLatest(GetWhiteListReqSaga().type, whiteListHandler);
 }
 export function* addWhhiteListWatcher() {
-  yield takeLatest(
-    productActionRequest.ADD_WHITELIST_REQUEST_SAGA,
-    addwhiteListHandler
-  );
+  yield takeLatest(AddWhiteListReqSaga().type, addwhiteListHandler);
 }
 export function* removeWhhiteListWatcher() {
   yield takeLatest(

@@ -15,7 +15,7 @@ const consoleLogFormat = winston.format.printf((info) => {
 })
 
 const consolTransport = () => {
-    if (process.env.NODE_ENV === 'development') {
+    if (typeof process !== 'undefined' && process.env.NODE_ENV === 'development') {
         return [
             new transports.Console({
                 level: 'info',
@@ -25,6 +25,7 @@ const consolTransport = () => {
     }
     return []
 }
+
 export default createLogger({
     defaultMeta: {
         meta: {}

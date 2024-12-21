@@ -4,7 +4,7 @@ import Card from "../Components/Card";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
-import { productActionRequest } from "../../../Stores/Saga/Actions/ProductsAction";
+import { CategoryRequestSaga } from "../../../Stores/Saga/Actions/ProductsAction";
 // import Dropdown from "../../Seller/SellerComponents/Dropdown";
 // import { FcApproval } from "react-icons/fc";
 const HomePage = () => {
@@ -12,12 +12,12 @@ const HomePage = () => {
   const dispatch = useDispatch();
   const data = useSelector((state) => state?.products?.category);
 
-  useEffect(() => {
-    dispatch({ type: productActionRequest.CATEGORY_REQUEST_SAGA });
-  }, [dispatch]);
-  const handlenClick = (c) => {
+  const handleOnClick = (c) => {
     navigate(`/category?category=${c.category}`);
   };
+  useEffect(() => {
+    dispatch(CategoryRequestSaga());
+  }, [dispatch]);
   return (
     <div className="">
       <div className="py-2 bg-white border-b shadow ">
@@ -28,20 +28,20 @@ const HomePage = () => {
               ))
             : data?.data.map((c, k) => {
                 return (
-                  <div key={k}>
+                  <div key={k} className="relative">
                     <div
-                      onClick={() => handlenClick(c)}
+                      onClick={() => handleOnClick(c)}
                       className="relative z-50 flex flex-col items-center justify-center text-black capitalize cursor-pointer "
                     >
                       {/* <FcApproval className="text-5xl" /> */}
                       {c.category}
-                      {/* <Dropdown trigger={c.category}>
-                        {c?.subcategories &&
-                          c?.subcategories?.map((sub, i) => {
-                            return <div key={i}>{sub}</div>;
-                          })}
-                      </Dropdown> */}
                     </div>
+                    {/* <Dropdown trigger={c.category}>
+                      {c?.subcategories &&
+                        c?.subcategories?.map((sub, i) => {
+                          return <div key={i}>{sub}</div>;
+                        })}
+                    </Dropdown> */}
                   </div>
                 );
               })}
@@ -52,7 +52,7 @@ const HomePage = () => {
         <HorizontalCarousel />
       </div>
 
-      <div className="p-3 m-4 bg-white border-2">
+      <div className="p-3 my-4 bg-white border-2">
         <div className="flex justify-between py-2 mb-4 text-xl font-bold">
           <div>Best Of Electronics</div>
           <div className="flex items-center px-1 rounded-full bg-personal-900 text-personal-10">
@@ -74,7 +74,7 @@ const HomePage = () => {
           })}
         </div>
       </div>
-      <div className="p-3 m-4 bg-white border-2">
+      <div className="p-3 my-4 bg-white border-2">
         <div className="flex justify-between py-2 mb-4 text-xl font-bold">
           <div>Best Of Furniture</div>
           <div className="flex items-center px-1 rounded-full bg-personal-900 text-personal-10">

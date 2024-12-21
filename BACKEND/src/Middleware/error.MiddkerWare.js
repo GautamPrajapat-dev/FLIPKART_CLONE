@@ -1,9 +1,9 @@
-const errorHandler = (statusCode, msg, res, next) => {
+const errorHandler = (statusCode, err, res, next) => {
     if (res.headersSent) {
         return next(err)
     }
     const statusNum = statusCode || 500
-    const message = msg || 'Internal Server Error'
+    const message = err || 'Internal Server Error'
     if (res) {
         return res.status(statusNum).json({
             status: false,

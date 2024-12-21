@@ -16,6 +16,7 @@ const PublicAuthController = {
         const user = await PublicAuthSchema.findById(
             { _id: res.user.userId },
             {
+                email: 0,
                 password: 0,
                 resetoken: 0,
                 updatedAt: 0,

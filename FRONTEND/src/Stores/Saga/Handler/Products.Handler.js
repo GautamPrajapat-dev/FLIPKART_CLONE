@@ -4,7 +4,7 @@ import {
   category,
   getWhitelistService,
   removeProductWhitelistService,
-  subcategoryAllproducts,
+  all_products,
   subcategorywithproducts,
 } from "../Services/Public.Products.Service";
 import { productActionSuccess } from "../Actions/ProductsAction";
@@ -40,7 +40,7 @@ export function* subCategoryWithproductHandler(action) {
   try {
     const path = action.payload;
 
-    const data = yield call(subcategoryAllproducts, path);
+    const data = yield call(all_products, path);
 
     yield put({
       type: productActionSuccess.SUB_CATEGORY_ALL_DATA_REQUEST_SUCCESS,

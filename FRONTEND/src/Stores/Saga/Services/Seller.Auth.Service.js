@@ -25,8 +25,6 @@ if (token) {
   } catch (error) {
     console.log("token error");
   }
-} else {
-  console.log("Invalid Token");
 }
 
 // const config = {

@@ -3,18 +3,16 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import {
+  GetWhiteListReqSaga,
   productActionRequest,
-  productActionSuccess,
 } from "../../../Stores/Saga/Actions/ProductsAction";
-import { ToastContainer } from "react-toastify";
+
+import { getTokenLocalStoragePublic } from "../../../Utils/LocalStorage";
 
 const Whitelist = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { data, msg } = useSelector((state) => state.products.whitelist);
-  useEffect(() => {
-    dispatch({ type: productActionRequest.GET_WHITELIST_REQUEST_SAGA });
-  }, [dispatch]);
 
   const handleRemoveWhiteList = (id) => {
     dispatch({
@@ -24,20 +22,20 @@ const Whitelist = () => {
   };
 
   useEffect(() => {
-    if (msg?.status === true) {
-      dispatch({ type: productActionRequest.GET_WHITELIST_REQUEST_SAGA });
+    if (!getTokenLocalStoragePublic()) {
+      navigate("/login");
+      return;
     }
-    return () =>
-      dispatch({
-        type: productActionSuccess.REMOVE_WHITELIST_SUCCESS,
-        payload: {},
-      });
-  }, [msg?.status, dispatch]);
+    dispatch(GetWhiteListReqSaga());
+    if (msg?.status === true) {
+      dispatch(GetWhiteListReqSaga());
+    }
+    return () => dispatch(GetWhiteListReqSaga({}));
+  }, [msg?.status, navigate, dispatch]);
   return (
     <>
-      <ToastContainer stacked />
       <div className="container w-4/5 mx-auto divide-y-2">
-        {data.product && data.product.length !== 0 ? (
+        {data && data.product && data.product.length !== 0 ? (
           data.product &&
           data.product.map((p, i) => {
             return (

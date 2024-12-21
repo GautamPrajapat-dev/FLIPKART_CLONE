@@ -3,34 +3,31 @@
 import HorizontalCarousel from "../Components/HorizontalCarousel";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect, useTransition } from "react";
 import { HiArrowLongRight } from "react-icons/hi2";
-import { productActionRequest } from "../../../Stores/Saga/Actions/ProductsAction";
+import { SubCategoryReqSaga } from "../../../Stores/Saga/Actions/ProductsAction";
 const CategoryProductList = () => {
   // eslint-disable-next-line no-unused-vars
-  const [userparams, setparamas] = useSearchParams();
-  const categ = userparams.get("category");
-
+  // const [isPending, startTransition] = useTransition();
+  const [params] = useSearchParams();
+  const CategoryParam = params.get("category");
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const data = useSelector((state) => state.products);
 
   useEffect(() => {
-    dispatch({
-      type: productActionRequest.SUB_CATEGORY_REQUEST_SAGA,
-      payload: { category: categ },
-    });
-  }, [dispatch, categ]);
+    dispatch(SubCategoryReqSaga({ category: CategoryParam }));
+  }, [dispatch, CategoryParam]);
   return (
-    <div className="">
+    <div>
       <div className="container px-4 text-xs breadcrumbs">
         <ul>
           <li>
             <Link to={`/`}>HOME</Link>
           </li>
           <li>
-            <Link to={`/category?category=${categ}`}>
-              {categ.toUpperCase()}
+            <Link to={`/category?category=${CategoryParam}`}>
+              {CategoryParam.toUpperCase()}
             </Link>
           </li>
         </ul>
@@ -40,28 +37,31 @@ const CategoryProductList = () => {
           <HorizontalCarousel />
         </div>
 
-        {data?.subcategory?.data &&
-          data?.subcategory?.data.map((val, i) => {
+        {data?.subcategory.isloading ? (
+          <h1 className="text-2xl text-center ">Please Wait</h1>
+        ) : (
+          data?.subcategory?.data &&
+          data?.subcategory?.data.map((val) => {
             return (
-              <div key={i} className="p-3 m-4 bg-white border-2 rounded-lg ">
+              <div
+                key={val._id}
+                className="p-3 m-4 bg-white border-2 rounded-lg "
+              >
                 <div className="flex justify-between py-2 mb-4 text-xl font-bold">
                   <div>Category - {val.subCategory.toUpperCase()}</div>
-                  <div
-                    onClick={() =>
-                      navigate(
-                        `/products?category=${val.category}&subc=${val.subCategory}`
-                      )
-                    }
+                  <Link
+                    to={`/products?category=${val.category}&subcategory=${val.subCategory}`}
+                    // onClick={() => handleViewAllProd(val)}
                     className="flex items-center px-2 py-1 text-sm transition-colors delay-200 rounded-md cursor-pointer hover:underline text-personal-900"
                   >
                     View All <HiArrowLongRight className="pl-1 text-xl" />
-                  </div>
+                  </Link>
                 </div>
                 <div className="gap-4 carousel carousel-center ">
-                  {val.products &&
-                    val.products.map((item, i) => {
+                  {val?.products &&
+                    val?.products.map((item) => {
                       return (
-                        <div key={i} className="carousel-item">
+                        <div key={item._id} className="carousel-item">
                           <div className="w-56 border card bg-base-200">
                             <figure className="px-4 pt-4">
                               <img
@@ -82,7 +82,7 @@ const CategoryProductList = () => {
                                 Price : &#8377;
                                 {item?.price?.mrp.toLocaleString("en-In")}
                               </div>
-                              <div className="card-actions">
+                              <div className="card-actions ">
                                 <button
                                   onClick={() =>
                                     navigate(
@@ -102,7 +102,8 @@ const CategoryProductList = () => {
                 </div>
               </div>
             );
-          })}
+          })
+        )}
       </div>
     </div>
   );

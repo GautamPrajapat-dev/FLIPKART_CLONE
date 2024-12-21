@@ -1,6 +1,4 @@
 import 'dotenv/config'
-// import dotenv from 'dotenv'
-// dotenv.config({ path: `.env.${process.env.NODE_ENV}`, override: true })
 import './src/Service/servers.js'
 import db from './src/Service/db.js'
 import express from 'express'
@@ -18,16 +16,17 @@ import socketServer from './src/Utils/Socket.io.Server.js'
 import errorHandler from './src/Middleware/error.MiddkerWare.js'
 import logger from './src/Utils/logger.js'
 import DeveloperRoute from './src/Routes/Developer.Routes.js'
+import FilterRoute from './src/Routes/filter.Routes.js'
 const app = express()
 app.use(helmet())
 app.set('trust proxy', 1)
 app.use(express.urlencoded({ extended: true }))
 const httpServer = createServer(app)
 // ############ cache control ###########
-// app.use(function (req, res, next) {
-//     res.setHeader('Cache-Control', 'no-cache,private,no-store,must-revalidate,max-stale=0,post-check=0,pre-check=0, max-age=3600')
-//     next()
-// })
+app.use(function (req, res, next) {
+    res.setHeader('Cache-Control', 'no-cache,private,no-store,must-revalidate,max-stale=0,post-check=0,pre-check=0, max-age=3600')
+    next()
+})
 // ########### user cors policy ###############
 app.use(
     cors({
@@ -41,6 +40,7 @@ app.use(express.json())
 app.use('/', DeveloperRoute)
 // product routes
 app.use('/products/v1', ProductRouter)
+app.use('/filter', FilterRoute)
 // public routes
 app.use('/public', PublicRouter)
 // seller Routes

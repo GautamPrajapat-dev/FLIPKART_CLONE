@@ -10,12 +10,11 @@ import { jwtDecode } from "jwt-decode";
 // eslint-disable-next-line no-undef
 const URL = import.meta.env.VITE_URL;
 const token = getTokenLocalStoragePublic();
+
 let decodedToken;
 if (token) {
   decodedToken = jwtDecode(token);
-
   try {
-    // console.log(decodedToken);
     // JWT exp is in secondss
     if (Date.now() >= decodedToken.exp * 1000) {
       window.location.href = "/seller/login";
@@ -25,16 +24,23 @@ if (token) {
   } catch (error) {
     console.log("token error");
   }
-} else {
-  console.log("Invalid Token");
 }
+
+// else {
+//   console.log("Invalid Token");
+// }
 const config = {
   headers: {
     "Content-Type": "application/json",
     Authorization: `Bearer ${token}`,
   },
 };
-
+const axiosConf = axios.create({
+  baseURL: URL,
+  headers: {
+    Authorization: `Bearer ${token}`,
+  },
+});
 export const getDetials = async () => {
   try {
     const res = await axios.get(`${URL}/public/getDetails`, {
@@ -73,20 +79,17 @@ export const subcategorywithproducts = async (payload) => {
     console.log(error);
   }
 };
-export const subcategoryAllproducts = async (payload) => {
+export const all_products = async (payload) => {
   const { location } = payload;
 
   try {
-    let url = `${URL}/products/v1/product${location}&uid=${decodedToken.userId}`;
+    const url = decodedToken.userId
+      ? `/products/v1/product/?${location}&uid=${decodedToken.userId}`
+      : `${URL}/products/v1/product/?${location}`;
 
-    console.log("this is a url ====", url);
-    const res = await axios.get(url, config);
-    // const res = await axios.get(
-    //   `${URL}/products/v1/category/${path.category}/${path.subcategory}/?category.subCategory=${path.subcategory}&category.category=${path.category}&limit=3&page=${page}`,
-    //   config
-    // );
+    const res = await axiosConf.get(url);
+    console.log(res);
     const data = await res.data;
-    // console.log("first data ====", data);
     return data;
   } catch (error) {
     console.log(error);
@@ -107,13 +110,11 @@ export const getWhitelistService = async () => {
   }
 };
 export const addProductWhitelistService = async (action) => {
-  const { id } = action.payload;
-
   try {
     const res = await axios.post(
       `${URL}/products/v1/whitelist`,
       {
-        productId: id,
+        productId: action.payload,
       },
       config
     );

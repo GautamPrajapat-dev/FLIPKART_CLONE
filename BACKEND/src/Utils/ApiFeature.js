@@ -5,7 +5,7 @@ const ApiFeatures = async (query, ProductSchema) => {
     const {
         search = '',
         category = '',
-        subc = '',
+        subcategory = '',
         minPrice = 0,
         maxPrice = Infinity,
         sortBy = 'views',
@@ -31,7 +31,7 @@ const ApiFeatures = async (query, ProductSchema) => {
             $match: {
                 $and: [
                     category ? { 'category.category': { $regex: category, $options: 'i' } } : {},
-                    subc ? { 'category.subCategory': { $regex: subc, $options: 'i' } } : {},
+                    subcategory ? { 'category.subCategory': { $regex: subcategory, $options: 'i' } } : {},
                     minPrice ? { 'price.mrp': { $gte: minPrice, $lte: maxPrice } } : {}
                 ]
             }
@@ -67,6 +67,7 @@ const ApiFeatures = async (query, ProductSchema) => {
         }
     }
     // Count total number of documents
+
     const totalCount = await ProductSchema.aggregate(pipeline).count('totalCount').exec()
     const totalProducts = totalCount[0] ? totalCount[0].totalCount : 0
     const totalPages = Math.ceil(totalProducts / limits)
