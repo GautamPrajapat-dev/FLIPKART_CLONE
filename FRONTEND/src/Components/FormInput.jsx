@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { forwardRef, useState } from "react";
 import { LuEye, LuEyeOff } from "react-icons/lu";
 

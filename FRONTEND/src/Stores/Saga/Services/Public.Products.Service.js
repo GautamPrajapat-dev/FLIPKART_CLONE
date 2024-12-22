@@ -84,11 +84,11 @@ export const all_products = async (payload) => {
 
   try {
     const url = decodedToken.userId
-      ? `/products/v1/product/?${location}&uid=${decodedToken.userId}`
-      : `${URL}/products/v1/product/?${location}`;
+      ? `/products/v1/product/${location}&uid=${decodedToken.userId}`
+      : `${URL}/products/v1/product/${location}`;
 
     const res = await axiosConf.get(url);
-    console.log(res);
+    console.log("data Response:", res);
     const data = await res.data;
     return data;
   } catch (error) {

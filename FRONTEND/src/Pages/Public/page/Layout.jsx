@@ -5,12 +5,12 @@ import Loading from "../../../Components/Loading";
 import { ToastContainer } from "react-toastify";
 
 const PublicLayout = () => {
-  // const navigation = useNavigation();
+  const navigation = useNavigation();
   // console.log(navigation.state);
-  // if (navigation.state === "loading") return <Loading />;
+  if (navigation.state === "loading") return <Loading />;
   return (
     <div>
-      <main className="h-screen overflow-y-scroll no-scroll">
+      <main className="relative h-screen overflow-y-scroll no-scroll">
         <Navbar />
         <div className="container mx-auto">
           <ToastContainer stacked />

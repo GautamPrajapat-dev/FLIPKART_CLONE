@@ -1,4 +1,8 @@
+import { memo } from "react";
+
+/* eslint-disable react/prop-types */
 const Card = ({ img, name, price, width, onClick }) => {
+  console.log("card CaLL");
   return (
     <div>
       <section className="flex-wrap p-2 m-1 mx-2 border-2 cursor-pointer ">
@@ -21,4 +25,4 @@ const Card = ({ img, name, price, width, onClick }) => {
   );
 };
 
-export default Card;
+export default memo(Card);

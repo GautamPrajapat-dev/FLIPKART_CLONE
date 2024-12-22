@@ -8,7 +8,7 @@ const ApiFeatures = async (query, ProductSchema) => {
         subcategory = '',
         minPrice = 0,
         maxPrice = Infinity,
-        sortBy = 'views',
+        sortBy = 'title',
         sortOrder = 'asc',
         page = 1,
         limit,
@@ -52,9 +52,9 @@ const ApiFeatures = async (query, ProductSchema) => {
                 $match: {
                     $or: [
                         { title: { $regex: search, $options: 'i' } },
-                        {
-                            description: { $regex: search, $options: 'i' }
-                        },
+                        // {
+                        //     description: { $regex: search, $options: 'i' }
+                        // },
                         { 'category.category': { $regex: search, $options: 'i' } },
                         { 'category.subCategory': { $regex: search, $options: 'i' } }
                     ]

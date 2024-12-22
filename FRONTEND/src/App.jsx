@@ -9,28 +9,45 @@ import SingleProduct from "./Pages/Public/page/SingleProduct";
 import Cart from "./Pages/Public/page/Cart";
 import Whitelist from "./Pages/Public/page/Whitelist";
 import NotFound from "./Components/NotFound";
-import AdminLayout from "./Pages/Seller/Layout";
-import SellOnlineMainPage from "./Pages/Seller/Pages/SellOnline";
-import ResetPassword from "./Pages/Seller/Pages/Authantication/ResetPassword";
-import { Signup } from "./Stores/Saga/Services/Seller.Product.Services";
-import ForgetPass from "./Pages/Seller/Pages/Authantication/ForgetPass";
-import LoginSeller from "./Pages/Seller/Pages/Authantication/LoginSeller";
-import DashBordLayout from "./Pages/Seller/Pages/Layout";
-import DashbordMainPage from "./Pages/Seller/Pages/DashbordMainPage";
-import SellerInbox from "./Pages/Seller/Pages/SellerInbox";
-import UpdateUserDetails from "./Pages/Seller/Pages/UpdateUserDetails";
-import SellerProducts from "./Pages/Seller/Pages/SellerProducts";
-import ProductDetails from "./Pages/Seller/Pages/ProductDetails";
-import SellerAddProducts from "./Pages/Seller/Pages/SellerAddProducts";
-import SellerProfile from "./Pages/Seller/Pages/SellerProfile";
+// import AdminLayout from "./Pages/Seller/Pages/Layout";
+// import SellOnlineMainPage from "./Pages/Seller/Pages/SellOnline";
+// import ResetPassword from "./Pages/Seller/Pages/Authantication/ResetPassword";
+// import { Signup } from "./Stores/Saga/Services/Seller.Product.Services";
+// import ForgetPass from "./Pages/Seller/Pages/Authantication/ForgetPass";
+// import LoginSeller from "./Pages/Seller/Pages/Authantication/LoginSeller";
+// import DashBordLayout from "./Pages/Seller/Pages/Layout";
+// import DashbordMainPage from "./Pages/Seller/Pages/DashbordMainPage";
+// import SellerInbox from "./Pages/Seller/Pages/SellerInbox";
+// import UpdateUserDetails from "./Pages/Seller/Pages/UpdateUserDetails";
+// import SellerProducts from "./Pages/Seller/Pages/SellerProducts";
+// import ProductDetails from "./Pages/Seller/Pages/ProductDetails";
+// import SellerAddProducts from "./Pages/Seller/Pages/SellerAddProducts";
+// import SellerProfile from "./Pages/Seller/Pages/SellerProfile";
 // import { useDispatch, useSelector } from "react-redux";
 // import { productActionSuccess } from "./Stores/Saga/Actions/ProductsAction";
+import {
+  UpdateUserDetails,
+  ProductDetails,
+  SellerProducts,
+  SellerProfile,
+  DashBordLayout,
+  DashbordMainPage,
+  SellOnlineMainPage,
+  ResetPassword,
+  Signup,
+  ForgetPass,
+  SellerInbox,
+  SellerAddProducts,
+  LoginSeller,
+  AdminLayout,
+} from "./Pages/Seller/Pages/Urls";
 
 const App = () => {
   const Routes = createBrowserRouter([
     {
       path: "/",
       element: <PublicLayout />,
+      errorElement: <NotFound />,
       children: [
         { index: true, element: <HomePage /> },
         {
@@ -54,8 +71,6 @@ const App = () => {
         { path: "/cart", element: <Cart /> },
         { path: "/whitelist", element: <Whitelist /> },
       ],
-
-      errorElement: <NotFound />,
     },
     {
       path: "/seller",

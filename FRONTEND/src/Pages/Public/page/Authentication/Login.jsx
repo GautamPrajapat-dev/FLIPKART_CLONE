@@ -9,7 +9,9 @@ import { ToastContainer, toast } from "react-toastify";
 import {
   getTokenLocalStorage,
   setLocalStorage,
+  setTokenLocalStoragePublic,
 } from "../../../../Utils/LocalStorage";
+import { toastifyOptions } from "../../../../Utils/tostifyDefault.jsx";
 const Login = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
@@ -30,45 +32,19 @@ const Login = () => {
         formData
       );
       if (res.data.status !== true) {
-        toast.warn(res.data.errorMessage, {
-          position: "top-right",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "dark",
-        });
+        toast.warn(res.data.errorMessage, toastifyOptions);
       } else {
         const user = await res.data;
-        toast.success(user.successMessage, {
-          position: "top-right",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "dark",
-        });
-        setLocalStorage(
-          "vT6sGzIEYbcjDaZX8Xt7TO74lWKrw9W2hmCYgwaIrUCBpjzOPV0DdpJ7Prmkj7Tr50QMELWdlwDWcWjY30CH2W4Jah41vXM0XbzdBH1fsEBqL3qZaORQZctYQt1sxaem89f9HicjvmfDYOLx3WSCjRB8E9RxJUMgTHvPo6P3x5Tovktj7HR7YYiOfv8UxAqh2pvQp88Wzcb6kt63sGrCW8kVBLp33UFictHLoTsodGl9LJBFgv7xj7VTJWCMF6otxTGQ7UDjST4BL",
-          user._token__
-        );
+        toast.success(user.successMessage, toastifyOptions);
+        setTokenLocalStoragePublic(user._token__);
+        // setLocalStorage(
+        //   "vT6sGzIEYbcjDaZX8Xt7TO74lWKrw9W2hmCYgwaIrUCBpjzOPV0DdpJ7Prmkj7Tr50QMELWdlwDWcWjY30CH2W4Jah41vXM0XbzdBH1fsEBqL3qZaORQZctYQt1sxaem89f9HicjvmfDYOLx3WSCjRB8E9RxJUMgTHvPo6P3x5Tovktj7HR7YYiOfv8UxAqh2pvQp88Wzcb6kt63sGrCW8kVBLp33UFictHLoTsodGl9LJBFgv7xj7VTJWCMF6otxTGQ7UDjST4BL",
+        //   user._token__
+        // );
         window.location.href = "/";
       }
     } catch (error) {
-      toast.error(error.response.data.errorMessage, {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "dark",
-      });
+      toast.error(error.response.data.errorMessage, toastifyOptions);
     } finally {
       setLoading(false);
     }

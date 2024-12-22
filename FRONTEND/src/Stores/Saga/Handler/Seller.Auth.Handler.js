@@ -9,17 +9,17 @@ import {
   UPDATE_PROFILE_REDUX,
   UPDATE_SELLER_DETAILS_REDUX,
 } from "../../Slice/Seller.Auth.Slice";
-import { startLoading, stopLoading } from "../../Slice/loading.Slice";
+// import { startLoading, stopLoading } from "../../Slice/loading.Slice";
 
 export function* SellerProfileHandler() {
   try {
-    yield put(startLoading());
+    // yield put(startLoading());
     const data = yield call(getDetails);
     yield put(SELLER_PROFILE_REDUX(data));
-    yield put(stopLoading());
+    // yield put(stopLoading());
   } catch (error) {
     // console.log(error);
-    yield put(stopLoading());
+    // yield put(stopLoading());
   }
 }
 export function* SellerProfileUpdate(action) {

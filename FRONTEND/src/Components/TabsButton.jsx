@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { useTransition } from "react";
 
 const TabsButton = ({ children, isActive, onClick }) => {

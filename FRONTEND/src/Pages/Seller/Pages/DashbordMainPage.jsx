@@ -1,20 +1,23 @@
 import { useDispatch, useSelector } from "react-redux";
 import DashBoardNavbar from "../SellerComponents/DashboardNavbar";
-import { useEffect } from "react";
+import { useEffect, useTransition } from "react";
 import { Link } from "react-router-dom";
 import { SortFilter } from "../../../Utils/SellerFilters";
 import { SellerProductActionRequest } from "../../../Stores/Saga/Actions/SellerProductsAction";
 
 const DashbordMainPage = () => {
   const dispatch = useDispatch();
-  const { isLoading } = useSelector((state) => state.loading);
+  const [isPending, startTransition] = useTransition();
+  // const { isLoading } = useSelector((state) => state.loading);
   const data = useSelector((state) => state.SellerProduct.dashboard);
   const details = data?.results;
 
   useEffect(() => {
-    dispatch({
-      type: SellerProductActionRequest.GET_DASHBOARD_DETAILS_SAGA_REQUEST,
-    });
+    startTransition(() =>
+      dispatch({
+        type: SellerProductActionRequest.GET_DASHBOARD_DETAILS_SAGA_REQUEST,
+      })
+    );
   }, [dispatch]);
 
   return (
@@ -131,7 +134,7 @@ const DashbordMainPage = () => {
 
               {/* row 1 */}
 
-              {isLoading ? (
+              {isPending ? (
                 <tbody className="relative ">
                   {details?.lessqty &&
                     details?.lessqty.map((val, i) => {

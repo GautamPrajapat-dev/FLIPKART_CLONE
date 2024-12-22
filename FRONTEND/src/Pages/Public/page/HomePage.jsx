@@ -3,27 +3,30 @@ import { IoIosArrowForward } from "react-icons/io";
 import Card from "../Components/Card";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect } from "react";
+import { useEffect, useTransition } from "react";
 import { CategoryRequestSaga } from "../../../Stores/Saga/Actions/ProductsAction";
 // import Dropdown from "../../Seller/SellerComponents/Dropdown";
 // import { FcApproval } from "react-icons/fc";
 const HomePage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const [isPending, startTransition] = useTransition();
   const data = useSelector((state) => state?.products?.category);
 
   const handleOnClick = (c) => {
     navigate(`/category?category=${c.category}`);
   };
   useEffect(() => {
-    dispatch(CategoryRequestSaga());
+    startTransition(() => {
+      dispatch(CategoryRequestSaga());
+    });
   }, [dispatch]);
   return (
     <div className="">
       <div className="py-2 bg-white border-b shadow ">
         <div className="relative flex items-center w-full gap-5 justify-evenly ">
-          {data?.isloading
-            ? Array.from({ length: 4 }).map((_, i) => (
+          {isPending
+            ? Array.from({ length: 3 }).map((_, i) => (
                 <div key={i} className="w-24 h-6 skeleton"></div>
               ))
             : data?.data.map((c, k) => {

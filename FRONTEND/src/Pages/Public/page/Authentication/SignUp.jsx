@@ -6,12 +6,14 @@ import Button from "../../../../Components/Button.jsx";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
+import { toastifyOptions } from "../../../../Utils/tostifyDefault.jsx";
 const SignUp = () => {
   const navigate = useNavigate();
   const formRef = useRef();
   const handleSubmit = async (e) => {
-    // const data = new FormData(formRef.current);
     e.preventDefault();
+    // const data = new FormData(formRef.current);
+    // console.log("formData", ...data.entries());
 
     try {
       const formData = {
@@ -28,42 +30,15 @@ const SignUp = () => {
       );
 
       if (res.data.status !== true) {
-        toast.warn(res.data.errorMessage, {
-          position: "top-right",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "dark",
-        });
+        toast.warn(res.data.errorMessage, toastifyOptions);
       } else {
         const user = await res.data;
-        toast.success(user.successMessage, {
-          position: "top-right",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "dark",
-        });
+        toast.success(user.successMessage, toastifyOptions);
 
         window.location.href = "/login";
       }
     } catch (error) {
-      toast.error(error.response.data.errorMessage, {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "dark",
-      });
+      toast.error(error.response.data.errorMessage, toastifyOptions);
     }
   };
   return (

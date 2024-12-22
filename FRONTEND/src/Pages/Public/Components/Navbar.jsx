@@ -34,6 +34,8 @@ const Navbar = () => {
   const handleOnClickLogoutSearch = (e) => {
     if (e.keyCode === 13 && e.target.value !== "") {
       navigate(`/products?search=${searchref.current.value}`);
+      console.log(searchref.current.value);
+      searchref.current.value = search;
     }
   };
   useEffect(() => {
@@ -41,9 +43,9 @@ const Navbar = () => {
       searchref.current.value = search;
     }
     dispatch(PUBLIC_PROFILE_SAGA());
-    return () => {
-      searchref.current = "";
-    };
+    // return () => {
+    //   searchref.current = "";
+    // };
   }, [dispatch, search]);
   return (
     <>
@@ -73,7 +75,7 @@ const Navbar = () => {
               type="text"
               ref={searchref}
               name="search"
-              onKeyUp={(e) => handleOnClickLogoutSearch(e)}
+              onKeyDown={(e) => handleOnClickLogoutSearch(e)}
               placeholder="type a search"
             />
           </div>

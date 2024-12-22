@@ -31,10 +31,10 @@ const SellerAddProducts = () => {
     });
   };
   const [cat, setcat] = useState("Electronics");
-  const hanonChange = (e) => {
+  const handleOnChange = (e) => {
     setcat(e.target.value);
   };
-  console.log(cat);
+  // console.log(cat);
   return (
     <>
       <ToastContainer stacked />
@@ -124,7 +124,7 @@ const SellerAddProducts = () => {
                       className="bg-transparent border-2 outline-none dark:bg-gray-900 dark:border-white/30 dark:text-white border-personal-300 select select-primary focus:outline-none focus:ring-0"
                       name="category[category]"
                       id="category"
-                      onChange={(e) => hanonChange(e)}
+                      onChange={(e) => handleOnChange(e)}
                     >
                       {Category.map((_c, i) => {
                         return (

@@ -1,4 +1,6 @@
-import React, { memo } from "react";
+/* eslint-disable react/prop-types */
+
+import { memo } from "react";
 
 const ModalOutsideClick = ({
   id,
@@ -40,5 +42,6 @@ export default memo(ModalOutsideClick);
 //   document.getElementById("update_profile").showModal()
 // }
 // >
+
 // update profile
 // </div>
