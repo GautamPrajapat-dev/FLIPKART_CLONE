@@ -1,8 +1,8 @@
 /* eslint-disable no-undef */
 /* eslint-disable prettier/prettier */
-import { Schema, model } from 'mongoose'
-import jwt from 'jsonwebtoken'
-import bcrypt from 'bcryptjs'
+import { Schema, model } from 'mongoose';
+import jwt from 'jsonwebtoken';
+import bcrypt from 'bcryptjs';
 const addressSchema = new Schema({
     address: { type: String },
     city: { type: String },
@@ -12,7 +12,7 @@ const addressSchema = new Schema({
     state: {
         type: String
     }
-})
+});
 
 const schema = new Schema(
     {
@@ -37,6 +37,12 @@ const schema = new Schema(
             public_id: { type: String },
             path: { type: String }
         },
+        cart: [
+            {
+                productId: { type: Schema.Types.ObjectId, ref: 'products' },
+                quantity: { type: Number, default: 1 }
+            }
+        ],
         orders: [
             {
                 productId: { type: Schema.Types.ObjectId, ref: 'products' }
@@ -56,20 +62,20 @@ const schema = new Schema(
         resetoken: { type: String, default: '' }
     },
     { timestamps: true }
-)
+);
 schema.pre('save', async function (next) {
-    const usr = this
+    const usr = this;
     if (!usr.isModified('password')) {
-        next()
+        next();
     }
     try {
-        const genSalt = await bcrypt.genSalt(10)
-        const hash_password = await bcrypt.hash(usr.password, genSalt)
-        this.password = hash_password
+        const genSalt = await bcrypt.genSalt(10);
+        const hash_password = await bcrypt.hash(usr.password, genSalt);
+        this.password = hash_password;
     } catch (error) {
-        next(error)
+        next(error);
     }
-})
+});
 // schema.pre("updateOne", async function (next) {
 //   const usr = this;
 //   if (!usr.isModified("password")) {
@@ -84,8 +90,8 @@ schema.pre('save', async function (next) {
 //   }
 // });
 schema.methods.comparePassword = async function (password) {
-    return bcrypt.compare(password, this.password)
-}
+    return bcrypt.compare(password, this.password);
+};
 
 schema.methods.genToken = async function () {
     try {
@@ -99,14 +105,13 @@ schema.methods.genToken = async function () {
             {
                 expiresIn: '30d'
             }
-        )
+        );
     } catch (error) {
         throw new Error(error);
-
     }
-}
+};
 schema.methods.compareToken = async function (token) {
-    return await jwt.verify(token, process.env.SECRET_KEY)
-}
-const PublicAuthSchema = model('PublicUser', schema)
-export default PublicAuthSchema
+    return await jwt.verify(token, process.env.SECRET_KEY);
+};
+const PublicAuthSchema = model('PublicUser', schema);
+export default PublicAuthSchema;

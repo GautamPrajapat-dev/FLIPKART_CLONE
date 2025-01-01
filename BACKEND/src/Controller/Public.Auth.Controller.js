@@ -7,6 +7,8 @@ import sendMail from '../Utils/sendMail.js';
 import asyncHandler from '../Utils/asyncHandler.js';
 
 import { v2 as cloudinary } from 'cloudinary';
+import logger from '../Utils/logger.js';
+import mongoose from 'mongoose';
 
 const PublicAuthController = {
     userId: asyncHandler(async (req, res) => {
@@ -401,6 +403,78 @@ const PublicAuthController = {
                 errorMessage: 'please upload avatar form user file'
             });
         }
+    }),
+    cartAdd: asyncHandler(async (req, res) => {
+        const { id, qty } = req.body;
+
+        if (!id) {
+            return res.status(400).json({ status: false, errorMessage: 'Product Id is required' });
+        }
+
+        const resId = new mongoose.Types.ObjectId(id);
+        const usrId = new mongoose.Types.ObjectId(res.user.userId);
+        const user = await PublicAuthSchema.findById({ _id: usrId });
+        if (qty === 0) {
+            await PublicAuthSchema.updateOne({ _id: user._id }, { $pull: { cart: { productId: resId } } });
+            return res.status(200).json({ status: true, successMessage: 'Product Removed from Cart' });
+        }
+        const product = await PublicAuthSchema.aggregate([
+            { $match: { _id: user._id } },
+            { $unwind: '$cart' },
+            {
+                $match: {
+                    'cart.productId': resId // Match the specific productId
+                }
+            },
+            {
+                $project: {
+                    _id: 0,
+                    'cart.productId': 1,
+                    'cart.quantity': 1
+                }
+            }
+        ]);
+
+        if (isNaN(product)) {
+            const updateqty = await PublicAuthSchema.updateOne(
+                { _id: user._id, 'cart.productId': resId },
+                { $set: { 'cart.$.quantity': qty } },
+                { new: true }
+            );
+            res.status(200).json({ status: true, successMessage: 'Cart Updated', updateqty });
+        } else {
+            user.cart.push({ productId: resId, quantity: qty });
+            await user.save();
+            res.status(201).json({ status: true, successMessage: 'New Cart Updated' });
+        }
+    }),
+    getCart: asyncHandler(async (req, res) => {
+        //    get all cart items form schema
+        const user = await PublicAuthSchema.findById({ _id: res.user.userId });
+
+        const productcart = await PublicAuthSchema.aggregate([
+            {
+                $match: {
+                    _id: user._id
+                }
+            },
+            { $lookup: { from: 'products', localField: 'cart.productId', foreignField: '_id', as: 'cart' } },
+            {
+                $addFields: {
+                    totalItems: { $size: '$cart' }
+                }
+            },
+            {
+                $project: {
+                    _id: 0,
+                    cart: 1,
+                    totalItems: 1
+                }
+            }
+        ]);
+
+        //    send all cart items to client
+        res.status(200).json({ status: true, ...productcart[0] });
     })
 };
 

@@ -3,13 +3,30 @@ import Button from '../../../Components/Button.jsx';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { getTokenLocalStoragePublic } from '../../../Utils/LocalStorage.jsx';
 import { FcLike } from 'react-icons/fc';
+import { useDispatch } from 'react-redux';
+import { AddToCartReqSaga, GetCartItemsReqSaga } from '../../../Stores/Actions/ProductsAction.js';
+import { useEffect } from 'react';
 
 // import { useNavigate } from "react-router-dom";
 
 const SingleProduct = () => {
   const urlPath = useSearchParams();
+  console.log(urlPath[0].get('pid'));
+  const dispatch = useDispatch();
   const navigate = useNavigate();
-  const localStorageHandler = (e) => {};
+  const AddToCartHandle = (e) => {
+    console.log(e);
+    if (e.isTrusted) {
+      const payload = {
+        id: urlPath[0].get('pid'),
+        qty: 1,
+      };
+      dispatch(AddToCartReqSaga(payload));
+    }
+  };
+  useEffect(() => {
+    dispatch(GetCartItemsReqSaga());
+  }, [dispatch]);
   return (
     <>
       <div className="container bg-white w-4/5 mx-auto my-6 divide-y-2 lg:h-[100vh]">
@@ -53,7 +70,7 @@ const SingleProduct = () => {
             </div>
             <div className="flex w-[90%] gap-2 mt-12 ">
               <Button
-                onClick={(e) => localStorageHandler(e)}
+                onClick={(e) => AddToCartHandle(e)}
                 className="px-6 py-2 bg-orange-500"
               >
                 Add to Cart

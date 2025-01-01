@@ -1,29 +1,27 @@
-import { useEffect, useRef } from "react";
-import {
-  IoCartOutline,
-  IoClose,
-  IoLogOutOutline,
-  IoMenu,
-} from "react-icons/io5";
-import { HiOutlineDotsVertical } from "react-icons/hi";
-import { LuSearch, LuUser2 } from "react-icons/lu";
-import { AiOutlineShop } from "react-icons/ai";
-import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
+import { useEffect, useRef } from 'react';
+import { IoCartOutline, IoClose, IoLogOutOutline, IoMenu } from 'react-icons/io5';
+import { HiOutlineDotsVertical } from 'react-icons/hi';
+import { LuSearch, LuUser2 } from 'react-icons/lu';
+import { AiOutlineShop } from 'react-icons/ai';
+import { Link, NavLink, useNavigate } from 'react-router-dom';
 import {
   clearTokenLocalStoragePublic,
   getTokenLocalStoragePublic,
-} from "../../../Utils/LocalStorage.jsx";
-import { PUBLIC_PROFILE_SAGA } from "../../../Stores/Slice/Public.Auth.Slice.js";
-import { useDispatch, useSelector } from "react-redux";
-import useToggle from "../../../Hooks/useToggle.jsx";
-import Button from "../../../Components/Button.jsx";
-import { publicNavList } from "../../../Utils/NavbarList";
+} from '../../../Utils/LocalStorage.jsx';
+import { PUBLIC_PROFILE_SAGA } from '../../../Stores/Slice/Public.Auth.Slice.js';
+import { useDispatch, useSelector } from 'react-redux';
+import useToggle from '../../../Hooks/useToggle.jsx';
+import Button from '../../../Components/Button.jsx';
+import { publicNavList } from '../../../Utils/NavbarList';
+import { GetCartItemsReqSaga } from '../../../Stores/Actions/ProductsAction.js';
 const Navbar = () => {
   const navigate = useNavigate();
 
   const useparams = new URLSearchParams(window.location.search);
+  const search = useparams.get('search');
+  const { totalItems } = useSelector((state) => state.cart.cart);
+
   const { profile } = useSelector((state) => state.user);
-  const search = useparams.get("search");
   const searchref = useRef(search);
   const [istoggle, toggler] = useToggle(false);
   const dispatch = useDispatch();
@@ -31,9 +29,9 @@ const Navbar = () => {
     clearTokenLocalStoragePublic();
     window.location.reload();
   };
-  console.log("render Navbar");
+  console.log('render Navbar');
   const handleOnClickLogoutSearch = (e) => {
-    if (e.keyCode === 13 && e.target.value !== "") {
+    if (e.keyCode === 13 && e.target.value !== '') {
       navigate(`/products?search=${searchref.current.value}`);
       searchref.current.value = search;
     }
@@ -46,6 +44,7 @@ const Navbar = () => {
     // return () => {
     //   searchref.current = "";
     // };
+    dispatch(GetCartItemsReqSaga());
   }, [dispatch, search]);
   return (
     <>
@@ -61,7 +60,7 @@ const Navbar = () => {
             <img
               src="https://static-assets-web.flixcart.com/batman-returns/batman-returns/p/images/fkheaderlogo_exploreplus-44005d.svg"
               alt="logo"
-              onClick={() => navigate("/")}
+              onClick={() => navigate('/')}
               className="z-10 cursor-pointer -ml-9 lg:m-auto"
             />
           </div>
@@ -107,7 +106,7 @@ const Navbar = () => {
                       >
                         <li className="">
                           <Link
-                            to={"/login"}
+                            to={'/login'}
                             className="hover:bg-personal-50 dark:hover:bg-personal-400 hover:transition-colors"
                           >
                             SignIn
@@ -115,7 +114,7 @@ const Navbar = () => {
                         </li>
                         <li>
                           <Link
-                            to={"/signup"}
+                            to={'/signup'}
                             className="hover:bg-personal-50 dark:hover:bg-personal-400 hover:transition-colors"
                           >
                             Signup
@@ -133,8 +132,13 @@ const Navbar = () => {
               >
                 <NavLink
                   to="/cart"
-                  className={`flex  items-center gap-2 text-lg `}
+                  className={`flex indicator items-center gap-2 text-lg `}
                 >
+                  {totalItems && (
+                    <span className="text-xs indicator-item badge badge-secondary">
+                      {totalItems && totalItems}
+                    </span>
+                  )}
                   <div className="text-2xl md:text-xl">
                     <IoCartOutline />
                   </div>
@@ -161,7 +165,11 @@ const Navbar = () => {
 
               <div className="hidden lg:block dropdown dropdown-hover dropdown-end">
                 <li>
-                  <div tabIndex={0} role="button" className="">
+                  <div
+                    tabIndex={0}
+                    role="button"
+                    className=""
+                  >
                     <HiOutlineDotsVertical />
                   </div>
                 </li>
@@ -185,18 +193,24 @@ const Navbar = () => {
                       <h1 className="font-semibold text-[100%]">
                         {profile?.user?.fullname
                           ? profile?.user?.fullname && profile?.user?.fullname
-                          : "Hello User"}
+                          : 'Hello User'}
                       </h1>
                     </div>
                   </div>
-                  <ul tabIndex={0} className="">
+                  <ul
+                    tabIndex={0}
+                    className=""
+                  >
                     {publicNavList.map((item, index) => {
                       return (
                         <li
                           key={index}
                           className=" even:divide-y divide-personal-900/20"
                         >
-                          <NavLink className="" to={item.to}>
+                          <NavLink
+                            className=""
+                            to={item.to}
+                          >
                             <span className="font-semibold">{item.icon}</span>
                             {item.link}
                           </NavLink>
@@ -230,7 +244,7 @@ const Navbar = () => {
                   <div
                     className={`fixed  top-0 left-0  h-screen bg-mariner-100    dark:bg-gray-900
              border-r-2 ease-in duration-1000  delay-1000 rounded-r-xl shadow-2xl border-personal-900/40 z-20 ${
-               istoggle ? "w-80  transition" : "w-0"
+               istoggle ? 'w-80  transition' : 'w-0'
              }`}
                   >
                     <div
@@ -269,7 +283,10 @@ const Navbar = () => {
                             className="flex items-center dark:divide-blue-100 even:divide-y divide-personal-900/20"
                           >
                             <span className="font-semibold">{item.icon}</span>
-                            <NavLink className="pl-3" to={item.to}>
+                            <NavLink
+                              className="pl-3"
+                              to={item.to}
+                            >
                               {item.link}
                             </NavLink>
                           </ul>

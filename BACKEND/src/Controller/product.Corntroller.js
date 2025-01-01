@@ -309,6 +309,7 @@ const Product = {
     }),
     searchFeature: asyncHandler(async (req, res) => {
         const searchQuery = req.query.search;
+
         let pipeline = [];
         const extractSearchTermAndPriceLimit = (query) => {
             // Extract price limit
@@ -344,6 +345,7 @@ const Product = {
                     $project: {
                         _id: 0,
                         title: 1,
+                        price: 1,
                         category: 1,
                         description: { $substr: ['$description', 0, 100] }
                     }

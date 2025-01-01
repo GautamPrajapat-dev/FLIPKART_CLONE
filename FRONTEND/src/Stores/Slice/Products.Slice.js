@@ -1,7 +1,7 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit';
 
 const product = createSlice({
-  name: "product",
+  name: 'product',
   initialState: {
     category: {
       isloading: false,
