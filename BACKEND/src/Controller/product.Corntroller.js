@@ -1,14 +1,15 @@
-import mongoose from 'mongoose'
-import ProductSchema from '../Schema/Seller.Product.Schema.js'
+import mongoose from 'mongoose';
+import ProductSchema from '../Schema/Seller.Product.Schema.js';
 // import ApiFeature from'../../Utils/ApiFeatures'
-import asyncHandler from '../Utils/asyncHandler.js'
-import calculatePagination from '../Utils/calculatePagination.js'
-import ApiFeatures from '../Utils/ApiFeature.js'
+import asyncHandler from '../Utils/asyncHandler.js';
+import calculatePagination from '../Utils/calculatePagination.js';
+import ApiFeatures from '../Utils/ApiFeature.js';
+import logger from '../Utils/logger.js';
 
 const Product = {
     AllProduct: asyncHandler(async (req, res) => {
-        const data = await ApiFeatures(req.query, ProductSchema, res)
-        res.json({ status: true, path: req.url, ...data })
+        const data = await ApiFeatures(req.query, ProductSchema, res);
+        res.json({ status: true, path: req.url, ...data });
     }),
     // AllProduct: asyncHandler(async (req, res) => {
     //     const page = parseInt(req.query.page) || 1
@@ -36,15 +37,16 @@ const Product = {
     //     })
     // }),
     getProduct: asyncHandler(async (req, res) => {
+        logger.log(req.params.id);
         const product = await ProductSchema.findById({
             _id: req.params.id
-        })
+        });
 
         if (!product) {
             return res.status(404).json({
                 status: false,
                 errorMessage: 'not found'
-            })
+            });
         }
         const products = await ProductSchema.findOneAndUpdate(
             { _id: req.params.id },
@@ -52,14 +54,14 @@ const Product = {
                 $inc: { views: 1 }
             },
             { new: true }
-        )
+        );
         // product.views += 1;
-        await products.save()
+        await products.save();
         res.status(200).json({
             status: true,
             length: product.length,
             data: product
-        })
+        });
     }),
     Category: asyncHandler(async (req, res) => {
         const product = await ProductSchema.aggregate([
@@ -101,22 +103,22 @@ const Product = {
             {
                 $sort: { category: 1 } // Ensure categories are sorted again if necessary
             }
-        ])
+        ]);
         if (!product) {
             return res.status(404).json({
                 status: false,
                 errorMessage: 'not found'
-            })
+            });
         }
 
         res.status(200).json({
             status: true,
             path: req.path,
             product
-        })
+        });
     }),
     getSubcategory: asyncHandler(async (req, res) => {
-        const params = req.params.category
+        const params = req.params.category;
         const product = await ProductSchema.aggregate([
             {
                 $unwind: '$category'
@@ -171,25 +173,25 @@ const Product = {
             // {
             //   $limit: 6
             // } // Uncomment this line if you want to limit the results
-        ])
+        ]);
 
         if (!product) {
             return res.status(404).json({
                 status: false,
                 errorMessage: 'not found'
-            })
+            });
         }
         res.status(200).json({
             status: true,
             length: product.length,
             product
-        })
+        });
     }),
     getdatabySubcategory: asyncHandler(async (req, res) => {
-        const page = parseInt(req.query.page) || 1
-        const limit = parseInt(req.query.limit) || 3
+        const page = parseInt(req.query.page) || 1;
+        const limit = parseInt(req.query.limit) || 3;
 
-        const user = new mongoose.Types.ObjectId('66bf6214e6f10615decbc8dc')
+        const user = new mongoose.Types.ObjectId('66bf6214e6f10615decbc8dc');
         const pipeline = [
             {
                 $sort: {
@@ -249,15 +251,15 @@ const Product = {
             {
                 $unset: 'productDetails'
             }
-        ]
+        ];
 
         if (req.query.pid && req.query.pid !== '') {
-            const id = new mongoose.Types.ObjectId(req.query.pid)
+            const id = new mongoose.Types.ObjectId(req.query.pid);
             pipeline.unshift({
                 $match: {
                     _id: id
                 }
-            })
+            });
         }
         if (req.params.category && req.params.subcategory) {
             pipeline.unshift({
@@ -265,17 +267,17 @@ const Product = {
                     'category.category': req.params.category,
                     'category.subCategory': req.params.subcategory
                 }
-            })
+            });
         }
         if (req.query.search && req.query.search !== '') {
             pipeline.unshift({
                 $match: {
                     $or: [{ title: { $regex: req.query.search, $options: 'i' } }, { description: { $regex: req.query.search, $options: 'i' } }]
                 }
-            })
+            });
         }
         // console.log(pipeline)
-        const p = await ProductSchema.aggregate(pipeline)
+        const p = await ProductSchema.aggregate(pipeline);
 
         const totalProductsCount = await ProductSchema.find({
             'category.subCategory': {
@@ -284,10 +286,10 @@ const Product = {
             'category.category': {
                 $regex: req.params.category
             }
-        }).countDocuments()
+        }).countDocuments();
 
-        const totalPage = Math.ceil(totalProductsCount / limit)
-        const { prevPages, nextPages, hasOwnPage } = calculatePagination(page, totalPage, p)
+        const totalPage = Math.ceil(totalProductsCount / limit);
+        const { prevPages, nextPages, hasOwnPage } = calculatePagination(page, totalPage, p);
 
         res.status(200).json({
             status: true,
@@ -303,21 +305,21 @@ const Product = {
             page: page,
             hasOwnPage,
             data: p
-        })
+        });
     }),
     searchFeature: asyncHandler(async (req, res) => {
-        const searchQuery = req.query.search
-        let pipeline = []
+        const searchQuery = req.query.search;
+        let pipeline = [];
         const extractSearchTermAndPriceLimit = (query) => {
             // Extract price limit
-            const priceMatch = query.match(/(?:under|max)\s+(\d+)/i)
-            const priceLimit = priceMatch ? parseInt(priceMatch[1], 10) : null
+            const priceMatch = query.match(/(?:under|max)\s+(\d+)/i);
+            const priceLimit = priceMatch ? parseInt(priceMatch[1], 10) : null;
 
-            const searchTerm = query.replace(/(?:under|max)\s+\d+/i, '').trim()
+            const searchTerm = query.replace(/(?:under|max)\s+\d+/i, '').trim();
 
-            return { searchTerm, priceLimit }
-        }
-        const { searchTerm, priceLimit } = extractSearchTermAndPriceLimit(searchQuery)
+            return { searchTerm, priceLimit };
+        };
+        const { searchTerm, priceLimit } = extractSearchTermAndPriceLimit(searchQuery);
 
         if (searchTerm && searchTerm.trim().length > 0) {
             pipeline = [
@@ -354,7 +356,7 @@ const Product = {
                 {
                     $limit: 5 // Limit suggestions to 5
                 }
-            ]
+            ];
         } else {
             pipeline = [
                 {
@@ -368,12 +370,12 @@ const Product = {
                         description: { $substr: ['$description', 0, 100] }
                     }
                 }
-            ]
+            ];
         }
 
-        const product = await ProductSchema.aggregate(pipeline)
-        res.status(200).json(product)
+        const product = await ProductSchema.aggregate(pipeline);
+        res.status(200).json(product);
     })
-}
+};
 
-export default Product
+export default Product;

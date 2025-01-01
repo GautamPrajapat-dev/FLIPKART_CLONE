@@ -20,8 +20,8 @@ import Button from "../../../Components/Button.jsx";
 import { publicNavList } from "../../../Utils/NavbarList";
 const Navbar = () => {
   const navigate = useNavigate();
-  const location = useLocation();
-  const useparams = new URLSearchParams(location.search);
+
+  const useparams = new URLSearchParams(window.location.search);
   const { profile } = useSelector((state) => state.user);
   const search = useparams.get("search");
   const searchref = useRef(search);
@@ -31,10 +31,10 @@ const Navbar = () => {
     clearTokenLocalStoragePublic();
     window.location.reload();
   };
+  console.log("render Navbar");
   const handleOnClickLogoutSearch = (e) => {
     if (e.keyCode === 13 && e.target.value !== "") {
       navigate(`/products?search=${searchref.current.value}`);
-      console.log(searchref.current.value);
       searchref.current.value = search;
     }
   };

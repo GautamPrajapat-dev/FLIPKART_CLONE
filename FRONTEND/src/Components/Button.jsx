@@ -4,7 +4,7 @@ const Button = (props) => {
   return (
     <button
       type={type || ""}
-      className={`w-full   rounded-md bg-mariner-950  ${className}`}
+      className={`w-full rounded-md bg-mariner-950  ${className}`}
       {...props}
     >
       {children}

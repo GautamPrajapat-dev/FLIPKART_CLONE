@@ -1,18 +1,29 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import PublicLayout from "./Pages/Public/page/Layout";
-import HomePage from "./Pages/Public/page/HomePage";
-import Login from "./Pages/Public/page/Authentication/Login";
-import SignUp from "./Pages/Public/page/Authentication/SignUp";
-import CategoryProductList from "./Pages/Public/page/CategoryProductList";
-import ProductList from "./Pages/Public/page/Products_List";
-import SingleProduct from "./Pages/Public/page/SingleProduct";
-import Cart from "./Pages/Public/page/Cart";
-import Whitelist from "./Pages/Public/page/Whitelist";
+// import PublicLayout from "./Pages/Public/page/Layout";
+// import HomePage from "./Pages/Public/page/HomePage";
+// import Login from "./Pages/Public/page/Authentication/Login";
+// import SignUp from "./Pages/Public/page/Authentication/SignUp";
+// import CategoryProductList from "./Pages/Public/page/CategoryProductList";
+// import ProductList from "./Pages/Public/page/Products_List";
+// import SingleProduct from "./Pages/Public/page/SingleProduct";
+// import Cart from "./Pages/Public/page/Cart";
+// import Whitelist from "./Pages/Public/page/Whitelist";
+import {
+  PublicLayout,
+  HomePage,
+  Login,
+  SignUp,
+  CategoryProductList,
+  ProductList,
+  SingleProduct,
+  Cart,
+  Whitelist,
+} from "./Pages/Public/page/Routes";
 import NotFound from "./Components/NotFound";
 // import AdminLayout from "./Pages/Seller/Pages/Layout";
 // import SellOnlineMainPage from "./Pages/Seller/Pages/SellOnline";
 // import ResetPassword from "./Pages/Seller/Pages/Authantication/ResetPassword";
-// import { Signup } from "./Stores/Saga/Services/Seller.Product.Services";
+// import { Signup } from "./Stores/Services/Seller.Product.Services";
 // import ForgetPass from "./Pages/Seller/Pages/Authantication/ForgetPass";
 // import LoginSeller from "./Pages/Seller/Pages/Authantication/LoginSeller";
 // import DashBordLayout from "./Pages/Seller/Pages/Layout";
@@ -24,13 +35,13 @@ import NotFound from "./Components/NotFound";
 // import SellerAddProducts from "./Pages/Seller/Pages/SellerAddProducts";
 // import SellerProfile from "./Pages/Seller/Pages/SellerProfile";
 // import { useDispatch, useSelector } from "react-redux";
-// import { productActionSuccess } from "./Stores/Saga/Actions/ProductsAction";
+// import { productActionSuccess } from "./Stores/Actions/ProductsAction";
 import {
   UpdateUserDetails,
   ProductDetails,
   SellerProducts,
   SellerProfile,
-  DashBordLayout,
+  DashboardLayout,
   DashbordMainPage,
   SellOnlineMainPage,
   ResetPassword,
@@ -40,13 +51,15 @@ import {
   SellerAddProducts,
   LoginSeller,
   AdminLayout,
-} from "./Pages/Seller/Pages/Urls";
+  Orders,
+} from "./Pages/Seller/Pages/Route";
 
 const App = () => {
   const Routes = createBrowserRouter([
     {
       path: "/",
       element: <PublicLayout />,
+
       errorElement: <NotFound />,
       children: [
         { index: true, element: <HomePage /> },
@@ -98,36 +111,40 @@ const App = () => {
     },
     {
       path: "/dashboard",
-      element: <DashBordLayout />,
+      element: <DashboardLayout />,
       children: [
         {
           index: true,
-          path: "/dashboard/main",
+          path: "main",
           element: <DashbordMainPage />,
         },
         {
-          path: "/dashboard/inbox",
+          path: "inbox",
           element: <SellerInbox />,
         },
         {
-          path: "/dashboard/update_your_details",
+          path: "update_your_details",
           element: <UpdateUserDetails />,
         },
         {
-          path: "/dashboard/products",
+          path: "products",
           element: <SellerProducts />,
         },
         {
-          path: "/dashboard/products/:id",
+          path: "products/:id",
           element: <ProductDetails />,
         },
         {
-          path: "/dashboard/addnewproducts",
+          path: "addnewproducts",
           element: <SellerAddProducts />,
         },
         {
-          path: "/dashboard/profile",
+          path: "profile",
           element: <SellerProfile />,
+        },
+        {
+          path: "orders",
+          element: <Orders />,
         },
       ],
     },

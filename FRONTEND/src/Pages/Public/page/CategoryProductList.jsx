@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { useEffect, useTransition } from "react";
 import { HiArrowLongRight } from "react-icons/hi2";
-import { SubCategoryReqSaga } from "../../../Stores/Saga/Actions/ProductsAction";
+import { SubCategoryReqSaga } from "../../../Stores/Actions/ProductsAction";
 const CategoryProductList = () => {
   // eslint-disable-next-line no-unused-vars
   const dispatch = useDispatch();

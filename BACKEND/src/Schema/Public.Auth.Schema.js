@@ -1,3 +1,5 @@
+/* eslint-disable no-undef */
+/* eslint-disable prettier/prettier */
 import { Schema, model } from 'mongoose'
 import jwt from 'jsonwebtoken'
 import bcrypt from 'bcryptjs'
@@ -35,6 +37,11 @@ const schema = new Schema(
             public_id: { type: String },
             path: { type: String }
         },
+        orders: [
+            {
+                productId: { type: Schema.Types.ObjectId, ref: 'products' }
+            }
+        ],
         whiteList: [
             {
                 productId: {
@@ -45,6 +52,7 @@ const schema = new Schema(
                 date: { type: Date, default: Date.now() }
             }
         ],
+        notifications: [{ type: Schema.Types.ObjectId, ref: 'notification' }],
         resetoken: { type: String, default: '' }
     },
     { timestamps: true }
@@ -93,7 +101,8 @@ schema.methods.genToken = async function () {
             }
         )
     } catch (error) {
-        console.log(error)
+        throw new Error(error);
+
     }
 }
 schema.methods.compareToken = async function (token) {

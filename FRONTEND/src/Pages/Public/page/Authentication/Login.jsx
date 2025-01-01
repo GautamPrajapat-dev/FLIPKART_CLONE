@@ -8,7 +8,6 @@ import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import {
   getTokenLocalStorage,
-  setLocalStorage,
   setTokenLocalStoragePublic,
 } from "../../../../Utils/LocalStorage";
 import { toastifyOptions } from "../../../../Utils/tostifyDefault.jsx";

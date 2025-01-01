@@ -9,13 +9,13 @@
 //     });
 //   };
 
-import HttpError from './ApiError.js'
+import HttpError from './ApiError.js';
 
 // };
 const asyncHandler = (fun) => {
     return (req, res, next) =>
         Promise.resolve(fun(req, res, next)).catch((error) => {
-            HttpError(next, error, error.satus, req, res)
-        })
-}
-export default asyncHandler
+            HttpError(next, error, error.satus, req, res);
+        });
+};
+export default asyncHandler;

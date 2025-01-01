@@ -1,5 +1,5 @@
-import mongoose from 'mongoose'
-import calculatePagination from './calculatePagination.js'
+import mongoose from 'mongoose';
+import calculatePagination from './calculatePagination.js';
 
 const ApiFeatures = async (query, ProductSchema) => {
     const {
@@ -14,18 +14,18 @@ const ApiFeatures = async (query, ProductSchema) => {
         limit,
         pid,
         uid
-    } = query
+    } = query;
 
-    const productId = new mongoose.Types.ObjectId(pid)
-    const pages = parseInt(page) || 1
-    const limits = parseInt(limit) || 3
-    const pipeline = []
+    const productId = new mongoose.Types.ObjectId(pid);
+    const pages = parseInt(page) || 1;
+    const limits = parseInt(limit) || 3;
+    const pipeline = [];
     if (pid && pid !== '') {
         pipeline.push({
             $match: {
                 _id: productId
             }
-        })
+        });
     } else {
         pipeline.push({
             $match: {
@@ -36,7 +36,7 @@ const ApiFeatures = async (query, ProductSchema) => {
                 ]
             }
             // Search stage if search term is provided
-        })
+        });
         if (search) {
             // const extractSearchTermAndPriceLimit = (query) => {
             //     // Extract price limit
@@ -59,23 +59,23 @@ const ApiFeatures = async (query, ProductSchema) => {
                         { 'category.subCategory': { $regex: search, $options: 'i' } }
                     ]
                 }
-            })
+            });
         } else {
             pipeline.push({
                 $sample: { size: 5 } // Randomly select 5 products
-            })
+            });
         }
     }
     // Count total number of documents
 
-    const totalCount = await ProductSchema.aggregate(pipeline).count('totalCount').exec()
-    const totalProducts = totalCount[0] ? totalCount[0].totalCount : 0
-    const totalPages = Math.ceil(totalProducts / limits)
-    pipeline.push({ $sort: { [sortBy]: sortOrder === 'asc' ? 1 : -1 } })
-    pipeline.push({ $skip: (pages - 1) * limits })
-    pipeline.push({ $limit: limits })
+    const totalCount = await ProductSchema.aggregate(pipeline).count('totalCount').exec();
+    const totalProducts = totalCount[0] ? totalCount[0].totalCount : 0;
+    const totalPages = Math.ceil(totalProducts / limits);
+    pipeline.push({ $sort: { [sortBy]: sortOrder === 'asc' ? 1 : -1 } });
+    pipeline.push({ $skip: (pages - 1) * limits });
+    pipeline.push({ $limit: limits });
     if (uid) {
-        const user = new mongoose.Types.ObjectId(uid)
+        const user = new mongoose.Types.ObjectId(uid);
 
         pipeline.push(
             {
@@ -125,11 +125,11 @@ const ApiFeatures = async (query, ProductSchema) => {
             {
                 $unset: 'productDetails'
             }
-        )
+        );
     }
 
-    const results = await ProductSchema.aggregate(pipeline).exec()
-    const { prevPages, nextPages, hasOwnPage } = calculatePagination(pages, totalPages, results)
+    const results = await ProductSchema.aggregate(pipeline).exec();
+    const { prevPages, nextPages, hasOwnPage } = calculatePagination(pages, totalPages, results);
 
     const data = {
         page: Number(page),
@@ -143,7 +143,7 @@ const ApiFeatures = async (query, ProductSchema) => {
         prevPage: pages === 1 ? 1 : pages - 1,
         nextPage: pages + 1,
         data: results
-    }
-    return data
-}
-export default ApiFeatures
+    };
+    return data;
+};
+export default ApiFeatures;

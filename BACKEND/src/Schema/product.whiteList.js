@@ -1,5 +1,6 @@
-import { Schema, model } from 'mongoose'
-import jwt from 'jsonwebtoken'
+import { Schema, model } from 'mongoose';
+import jwt from 'jsonwebtoken';
+import logger from '../Utils/logger';
 // import bcrypt from 'bcryptjs'
 const schema = new Schema(
     {
@@ -13,7 +14,7 @@ const schema = new Schema(
         date: { type: Date, default: Date.now() }
     },
     { timestamps: true }
-)
+);
 
 schema.methods.genToken = async function () {
     try {
@@ -27,13 +28,13 @@ schema.methods.genToken = async function () {
             {
                 expiresIn: '30d'
             }
-        )
+        );
     } catch (error) {
-        console.log(error)
+        logger.log(error);
     }
-}
+};
 schema.methods.compareToken = async function (token) {
-    return await jwt.verify(token, process.env.SECRET_KEY)
-}
-const whitelistSchema = model('whitelist', schema)
-export default whitelistSchema
+    return await jwt.verify(token, process.env.SECRET_KEY);
+};
+const whitelistSchema = model('whitelist', schema);
+export default whitelistSchema;

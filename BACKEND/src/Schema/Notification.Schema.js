@@ -1,19 +1,22 @@
-import { Schema, model } from 'mongoose'
-import jwt from 'jsonwebtoken'
+import { Schema, model } from 'mongoose';
+import jwt from 'jsonwebtoken';
+import logger from '../Utils/logger.js';
 
 const schema = new Schema(
     {
+        recipientId: { type: Schema.Types.ObjectId, required: true },
+        recipientType: { type: String, enum: ['User', 'Seller'], required: true },
         title: { type: String },
-        read: { type: Boolean, default: false },
+        isRead: { type: Boolean, default: false },
         readAll: { type: Boolean, default: false },
-        sellerId: { type: Schema.Types.ObjectId, ref: 'sellerUser' },
-        userId: { type: Schema.Types.ObjectId, ref: 'pulbicuser' },
-        productId: { type: Schema.Types.ObjectId, ref: 'products' },
+        link: { type: String },
+        // productId: { type: Schema.Types.ObjectId, ref: 'products' },
         notificationLength: { type: Number, default: 0 },
         noficationDate: { type: Date, default: Date.now() }
     },
     { timestamps: true }
-)
+);
+
 schema.methods.genToken = async function () {
     try {
         return jwt.sign(
@@ -26,14 +29,14 @@ schema.methods.genToken = async function () {
             {
                 expiresIn: '30d'
             }
-        )
+        );
     } catch (error) {
-        console.log(error)
+        logger.log(error);
     }
-}
+};
 
 schema.methods.compareToken = async function (token) {
-    return await jwt.verify(token, process.env.SECRET_KEY)
-}
-const NotificationSchema = model('notification', schema)
-export default NotificationSchema
+    return await jwt.verify(token, process.env.SECRET_KEY);
+};
+const NotificationSchema = model('notification', schema);
+export default NotificationSchema;

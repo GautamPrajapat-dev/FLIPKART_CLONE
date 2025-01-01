@@ -1,6 +1,6 @@
 /* eslint-disable no-undef */
 import daisyui from "daisyui";
-/** @type {import('tailwindcss').Config} */
+/**@type { import('tailwindcss').Config }*/
 export default {
   content: ["./src/**/*.{html,jsx,js}"],
   theme: {
@@ -132,13 +132,5 @@ export default {
   },
   plugins: [
     daisyui,
-    function ({ addUtilities }) {
-      const newUtilities = {
-        "*:-webkit-scrollbar": {
-          display: "none",
-        },
-      };
-      addUtilities(newUtilities);
-    },
   ],
-};
+}

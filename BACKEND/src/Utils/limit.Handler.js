@@ -1,4 +1,4 @@
-import { rateLimit } from 'express-rate-limit'
+import { rateLimit } from 'express-rate-limit';
 
 const limit = {
     loginlimit: rateLimit({
@@ -8,8 +8,8 @@ const limit = {
             res.status(429).json({
                 status: false,
                 errorMessage: 'We have Received too many requests for this ip.Please try After One Hour'
-            })
-            return false
+            });
+            return false;
         }
     }),
     changePassLImit: rateLimit({
@@ -19,9 +19,9 @@ const limit = {
             return res.status(429).json({
                 status: false,
                 errorMessage: 'to many arguments.Please try After One Hour'
-            })
+            });
         }
     })
-}
+};
 
-export default limit
+export default limit;

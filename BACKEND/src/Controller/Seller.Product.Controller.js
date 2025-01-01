@@ -1,33 +1,34 @@
-import mongoose from 'mongoose'
-import { v2 as cloudinary } from 'cloudinary'
-import moment from 'moment'
-import ProductSchema from '../Schema/Seller.Product.Schema.js'
-import SellerAuhSchema from '../Schema/Seller.Auth.Schema.js'
-import ApiFeature from '../Utils/ApiFeatures.js'
-import asyncHandler from '../Utils/asyncHandler.js'
-import calculatePagination from '../Utils/calculatePagination.js'
-import errorHandler from '../Middleware/error.MiddkerWare.js'
+import mongoose from 'mongoose';
+import { v2 as cloudinary } from 'cloudinary';
+import moment from 'moment';
+import ProductSchema from '../Schema/Seller.Product.Schema.js';
+import SellerAuhSchema from '../Schema/Seller.Auth.Schema.js';
+import ApiFeature from '../Utils/ApiFeatures.js';
+import asyncHandler from '../Utils/asyncHandler.js';
+import calculatePagination from '../Utils/calculatePagination.js';
+import errorHandler from '../Middleware/error.MiddkerWare.js';
+import logger from '../Utils/logger.js';
 
 const SellerProduct = {
     addNewProduct: asyncHandler(async (req, res, next) => {
-        const { title, brand, qty, description, category, features, price, rating } = req.body
-        const file = req.files
+        const { title, brand, qty, description, category, features, price, rating } = req.body;
+        const file = req.files;
 
         // upload product on cloudinary using uploader method and save in public/avatar folder
         const isSeller = SellerAuhSchema.findById({
             _id: res.Seller.sellerId
-        })
+        });
         if (!isSeller) {
             return res.status(401).json({
                 status: false,
                 errorMessage: 'Seller is not Found'
-            })
+            });
         }
         const matchTitle = await ProductSchema.findOne({
             title: { $regex: `^${title}$`, $options: 'i' }
-        })
+        });
         if (matchTitle) {
-            return next(errorHandler(406, 'Title Hash Been Matched Another Product', res))
+            return next(errorHandler(406, 'Title Hash Been Matched Another Product', res));
             // res.status(406).json({
             //   status: false,
             //   errorMessage: "Title Hash Been Matched Another Product",
@@ -39,86 +40,86 @@ const SellerProduct = {
             res.status(403).json({
                 status: false,
                 errorMessage: 'Images Are Reqired'
-            })
-            return false
+            });
+            return false;
         }
 
         if (title === '' || qty === '' || description === '' || category === '' || features === '' || price === '' || rating === '') {
             res.status(403).json({
                 status: false,
                 errorMessage: 'Please Enter a All Details'
-            })
-            return false
+            });
+            return false;
         }
-        const brandLogo = file.brandLogo[0]
+        const brandLogo = file.brandLogo[0];
 
         if (brandLogo) {
             const logo = await cloudinary.uploader.upload(brandLogo.path, {
                 folder: 'seller/brandLogo',
                 resource_type: 'image'
-            })
+            });
             if (logo) {
                 const brand = {
                     public_id: logo.public_id,
                     img: logo.secure_url
-                }
-                req.body.brand.logo = brand
+                };
+                req.body.brand.logo = brand;
             } else {
                 return res.status(403).json({
                     status: false,
                     errorMessage: 'Logo Not Uploaded'
-                })
+                });
             }
         } else {
             return res.status(403).json({
                 status: false,
                 errorMessage: 'Brand Logo Not Found'
-            })
+            });
         }
-        const thumb = file.thumbnail[0]
+        const thumb = file.thumbnail[0];
         if (!thumb) {
             return res.status(403).json({
                 status: false,
                 errorMessage: 'thumbnail Not Found'
-            })
+            });
         } else {
             const thumAdd = await cloudinary.uploader.upload(thumb.path, {
                 folder: 'seller/thumbnail',
                 resource_type: 'image'
-            })
+            });
 
             if (thumAdd) {
                 const thumbData = {
                     public_id: thumAdd.public_id,
                     img: thumAdd.secure_url
-                }
-                req.body.thumbnail = thumbData
+                };
+                req.body.thumbnail = thumbData;
             } else {
                 res.status(403).json({
                     status: false,
                     errorMessage: 'thumbnail Not Uploaded'
-                })
+                });
             }
         }
-        const arr = []
+        const arr = [];
         for (const files of file.images) {
-            const { path } = files
+            const { path } = files;
 
             const uploadUrl = await cloudinary.uploader.upload(path, {
                 folder: 'seller/products',
                 resource_type: 'image'
-            })
+            });
 
             if (!uploadUrl) {
                 res.status(403).json({
                     status: false,
                     errorMessage: 'images Not Uploaded'
-                })
+                });
             } else {
                 arr.push({
                     public_id: uploadUrl.public_id,
                     img: uploadUrl.secure_url
-                })
+                });
             }
         }
 
@@ -135,28 +136,28 @@ const SellerProduct = {
                 thumbnail: req.body.thumbnail,
                 images: arr,
                 rating: rating
-            })
+            });
             if (product) {
-                await product.save()
+                await product.save();
                 res.status(200).json({
                     status: true,
                     successMessage: 'product saved successfully',
                     product: product
-                })
+                });
             } else {
-                arr.forEach((image) => cloudinary.uploader.destroy(image.public_id))
-                cloudinary.uploader.destroy([req.body.brand.logo.public_id, req.body.thumbnail.public_id])
+                arr.forEach((image) => cloudinary.uploader.destroy(image.public_id));
+                cloudinary.uploader.destroy([req.body.brand.logo.public_id, req.body.thumbnail.public_id]);
                 res.status(200).json({
                     status: false,
                     errorMessage: 'Product Has Been Not Uploaded'
-                })
+                });
             }
         }
     }),
     getDashBoardDetails: asyncHandler(async (req, res) => {
-        const sellerId = new mongoose.Types.ObjectId(res.Seller.sellerId) // Example seller ID
-        const twoMinutesAgo = moment().subtract(2, 'minutes').toDate()
-        const oneDayAgo = moment().subtract(1, 'day').toDate()
+        const sellerId = new mongoose.Types.ObjectId(res.Seller.sellerId); // Example seller ID
+        const twoMinutesAgo = moment().subtract(2, 'minutes').toDate();
+        const oneDayAgo = moment().subtract(1, 'day').toDate();
         const aggregatePipeline = [
             {
                 $match:
@@ -354,15 +355,15 @@ const SellerProduct = {
                         }
                     }
             }
-        ]
+        ];
         await ProductSchema.aggregate(aggregatePipeline)
             .then((results) => {
-                res.status(200).json({ status: true, results: results[0] })
+                res.status(200).json({ status: true, results: results[0] });
             })
             .catch((error) => {
-                res.status(400).json({ status: false, errorMessage: 'internal server error' })
-                console.error('Error:', error)
-            })
+                res.status(400).json({ status: false, errorMessage: 'internal server error' });
+                logger.log(error);
+            });
 
         //   const api = new ApiFeature(
         //     ProductSchema.find(),
@@ -401,17 +402,17 @@ const SellerProduct = {
         //   }
     }),
     getAllproducts: asyncHandler(async (req, res) => {
-        const page = parseInt(req.query.page) || 1
-        const limit = parseInt(req.query.limit) || 3
-        const api = new ApiFeature(ProductSchema.find(), req?.query, res?.Seller?.sellerId).filter().search().sort().limitFields().paginate()
-        const products = await api.query
+        const page = parseInt(req.query.page) || 1;
+        const limit = parseInt(req.query.limit) || 3;
+        const api = new ApiFeature(ProductSchema.find(), req?.query, res?.Seller?.sellerId).filter().search().sort().limitFields().paginate();
+        const products = await api.query;
         const count = await ProductSchema.find({
             sellerId: res?.Seller?.sellerId
-        }).countDocuments()
-        const total = Math.ceil(count / limit || 3)
-        const { prevPages, nextPages, hasOwnPage } = calculatePagination(page, total, products)
+        }).countDocuments();
+        const total = Math.ceil(count / limit || 3);
+        const { prevPages, nextPages, hasOwnPage } = calculatePagination(page, total, products);
 
-        const pageval = `Showing ${(page - 1) * limit + 1} to ${Math.min(page * limit, count)} of ${count} results`
+        const pageval = `Showing ${(page - 1) * limit + 1} to ${Math.min(page * limit, count)} of ${count} results`;
         if (products) {
             res.status(200).json({
                 pageval,
@@ -429,12 +430,12 @@ const SellerProduct = {
                 hasOwnPage,
                 status: true,
                 products
-            })
+            });
         } else {
             res.status(400).json({
                 status: false,
                 errorMessage: 'Product Not Found'
-            })
+            });
         }
     }),
     getProduct: asyncHandler(async (req, res) => {
@@ -451,48 +452,48 @@ const SellerProduct = {
                 },
                 images: { public_id: 0, _id: 0 }
             }
-        )
+        );
         if (product.sellerId === res.Seller.sellerId || product.sellerId !== null) {
             if (!product) {
                 return res.status(400).json({
                     status: false,
                     errorMessage: 'missing your product pelase find it'
-                })
+                });
             }
             res.status(200).json({
                 status: true,
                 path: req.path,
                 product
-            })
+            });
         } else {
             res.status(404).json({
                 status: true,
                 successMessage: 'Product Not Found'
-            })
+            });
         }
     }),
     updateProduct: asyncHandler(async (req, res) => {
-        const { title, qty, description, category, features, price, rating } = req.body
+        const { title, qty, description, category, features, price, rating } = req.body;
         // upload product on cloudinary using uploader method and save in public/avatar folder
         const sellerFind = await SellerAuhSchema.findById({
             _id: res.Seller.sellerId
-        })
+        });
         if (!sellerFind) {
             return res.status(401).json({
                 status: false,
                 errorMessage: 'Seller is not Found'
-            })
+            });
         }
 
         const productFind = await ProductSchema.findById({
             _id: req.params.id
-        })
+        });
 
         const brand = {
             public_id: productFind.brand.logo.public_id,
             img: productFind.brand.logo.img
-        }
-        req.body.brand.logo = brand
+        };
+        req.body.brand.logo = brand;
 
         // sellerId: res.Seller.sellerId,
         const product = await ProductSchema.updateOne(
@@ -510,76 +511,76 @@ const SellerProduct = {
                 brand: req.body.brand
             },
             { new: true }
-        )
+        );
         if (product) {
             res.status(200).json({
                 status: true,
                 successMessage: 'product Update successfully'
-            })
+            });
         } else {
             res.status(400).json({
                 status: false,
                 errorMessage: 'Product Has Been Not Uploaded'
-            })
+            });
         }
     }),
     deleteProduct: asyncHandler(async (req, res) => {
         const prodcutIdFind = await ProductSchema.findById({
             _id: req.params.id
-        })
+        });
 
         if (!prodcutIdFind) {
             return res.status(404).json({
                 status: false,
                 errorMessage: 'product not found with id'
-            })
+            });
         } else {
-            const p1 = prodcutIdFind.images.forEach(async (image) => await cloudinary.uploader.destroy(image.public_id))
-            const p2 = await cloudinary.uploader.destroy(prodcutIdFind.brand.logo.public_id)
-            const p3 = await cloudinary.uploader.destroy(prodcutIdFind.thumbnail.public_id)
+            const p1 = prodcutIdFind.images.forEach(async (image) => await cloudinary.uploader.destroy(image.public_id));
+            const p2 = await cloudinary.uploader.destroy(prodcutIdFind.brand.logo.public_id);
+            const p3 = await cloudinary.uploader.destroy(prodcutIdFind.thumbnail.public_id);
             if (p1 || p2 || p3) {
-                await ProductSchema.deleteOne({ _id: prodcutIdFind._id })
+                await ProductSchema.deleteOne({ _id: prodcutIdFind._id });
                 res.status(200).json({
                     status: true,
                     successMessage: 'Deleted'
-                })
+                });
             } else {
                 res.status(400).json({
                     status: false,
                     errorMessage: 'Product Not Deleted'
-                })
+                });
             }
         }
     }),
     updateBrandLogo: asyncHandler(async (req, res) => {
-        const id = req.params.id
-        const file = req.file
-        const productId = await ProductSchema.findOne({ _id: id })
+        const id = req.params.id;
+        const file = req.file;
+        const productId = await ProductSchema.findOne({ _id: id });
 
         if (!file) {
             return res.status(404).json({
                 status: false,
                 errorMessage: 'logo not found'
-            })
+            });
         }
-        const deleteBrandLogo = await cloudinary.uploader.destroy(productId.brand.logo.public_id)
+        const deleteBrandLogo = await cloudinary.uploader.destroy(productId.brand.logo.public_id);
 
         if (!deleteBrandLogo) {
             return res.status(404).json({
                 status: false,
                 errorMessage: 'not updated'
-            })
+            });
         } else {
             const product = await cloudinary.uploader.upload(file.path, {
                 folder: 'seller/brandLogo',
                 resource_type: 'image'
-            })
+            });
 
             if (!product) {
                 return res.status(404).json({
                     status: false,
                     errorMessage: 'not updated'
-                })
+                });
             }
 
             const brandlogo = await ProductSchema.updateOne(
@@ -600,49 +601,49 @@ const SellerProduct = {
                 {
                     new: true
                 }
-            )
+            );
             if (brandlogo) {
                 return res.status(200).json({
                     status: true,
                     successMessage: 'Brand Logo Has Been Update'
-                })
+                });
             } else {
                 return res.status(404).json({
                     status: false,
                     errorMessage: 'Not updated'
-                })
+                });
             }
         }
     }),
     updateThumbnail: asyncHandler(async (req, res) => {
-        const id = req.params.id
-        const file = req.file
-        const productId = await ProductSchema.findOne({ _id: id })
+        const id = req.params.id;
+        const file = req.file;
+        const productId = await ProductSchema.findOne({ _id: id });
 
         if (!file) {
             return res.status(404).json({
                 status: false,
                 errorMessage: 'logo not found'
-            })
+            });
         }
-        const deleteImage = await cloudinary.uploader.destroy(productId.thumbnail.public_id)
+        const deleteImage = await cloudinary.uploader.destroy(productId.thumbnail.public_id);
 
         if (!deleteImage) {
             return res.status(404).json({
                 status: false,
                 errorMessage: 'not updated'
-            })
+            });
         } else {
             const productThumbnail = await cloudinary.uploader.upload(file.path, {
                 folder: 'seller/thumbnail',
                 resource_type: 'image'
-            })
+            });
 
             if (!productThumbnail) {
                 return res.status(404).json({
                     status: false,
                     errorMessage: 'not updated'
-                })
+                });
             }
             const thumbnail = await ProductSchema.updateOne(
                 {
@@ -659,65 +660,65 @@ const SellerProduct = {
                 {
                     new: true
                 }
-            )
+            );
             if (thumbnail) {
                 return res.status(200).json({
                     status: true,
                     successMessage: 'Thumbnail Has Been Update'
-                })
+                });
             } else {
                 return res.status(404).json({
                     status: false,
                     errorMessage: 'not updated'
-                })
+                });
             }
         }
     }),
     updateImage: asyncHandler(async (req, res) => {
-        const id = req.params.id
-        const file = req.files
-        const productId = await ProductSchema.findOne({ _id: id })
+        const id = req.params.id;
+        const file = req.files;
+        const productId = await ProductSchema.findOne({ _id: id });
 
         if (!file) {
             return res.status(404).json({
                 status: false,
                 errorMessage: 'logo not found'
-            })
+            });
         }
 
         if (!productId) {
             return res.status(404).json({
                 status: false,
                 errorMessage: 'not updated'
-            })
+            });
         } else {
-            productId.images.forEach(async (image) => await cloudinary.uploader.destroy(image.public_id))
-            const arr = []
+            productId.images.forEach(async (image) => await cloudinary.uploader.destroy(image.public_id));
+            const arr = [];
             for (const files of file) {
-                const { path } = files
+                const { path } = files;
 
                 const uploadUrl = await cloudinary.uploader.upload(path, {
                     folder: 'seller/products',
                     resource_type: 'image'
-                })
+                });
 
                 if (!uploadUrl) {
                     res.status(403).json({
                         status: false,
                         errorMessage: 'images Not Uploaded'
-                    })
+                    });
                 } else {
                     arr.push({
                         public_id: uploadUrl.public_id,
                         img: uploadUrl.secure_url
-                    })
+                    });
                 }
             }
             if (!arr) {
                 return res.status(404).json({
                     status: false,
                     errorMessage: 'not updated'
-                })
+                });
             }
             const image = await ProductSchema.updateOne(
                 {
@@ -731,19 +732,19 @@ const SellerProduct = {
                 {
                     new: true
                 }
-            )
+            );
             if (image) {
                 return res.status(200).json({
                     status: true,
                     successMessage: 'Logo Has Been Update'
-                })
+                });
             } else {
                 return res.status(404).json({
                     status: false,
                     errorMessage: 'not updated'
-                })
+                });
             }
         }
     })
-}
-export default SellerProduct
+};
+export default SellerProduct;

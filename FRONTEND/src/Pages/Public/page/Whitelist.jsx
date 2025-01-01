@@ -5,7 +5,7 @@ import { useEffect } from "react";
 import {
   GetWhiteListReqSaga,
   productActionRequest,
-} from "../../../Stores/Saga/Actions/ProductsAction";
+} from "../../../Stores/Actions/ProductsAction";
 
 import { getTokenLocalStoragePublic } from "../../../Utils/LocalStorage";
 

@@ -1,6 +1,7 @@
-import { Schema, model } from 'mongoose'
-import jwt from 'jsonwebtoken'
-import bcrypt from 'bcryptjs'
+import { Schema, model } from 'mongoose';
+import jwt from 'jsonwebtoken';
+import bcrypt from 'bcryptjs';
+import logger from '../Utils/logger.js';
 const addressSchema = new Schema({
     address: { type: String },
     country: { type: String },
@@ -11,14 +12,14 @@ const addressSchema = new Schema({
     state: {
         type: String
     }
-})
+});
 const paymentDetails = new Schema({
     accountName: { type: String },
     bankName: { type: String },
     accountNumber: { type: String },
     ifscCode: { type: String },
     branch: { type: String }
-})
+});
 const bussinessDetails = new Schema({
     bussinessName: { type: String },
     company: { type: String },
@@ -28,7 +29,7 @@ const bussinessDetails = new Schema({
     panNum: {
         type: String
     }
-})
+});
 
 const schema = new Schema(
     {
@@ -59,36 +60,45 @@ const schema = new Schema(
             type: String
         },
         bussinessDetail: { type: bussinessDetails },
+        earnings: { type: Number, default: 0 },
         paymentDetails: {
             type: paymentDetails
         },
+        notifications: [{ type: Schema.Types.ObjectId, ref: 'notification' }],
+        payments: [
+            {
+                paymentId: { type: Schema.Types.ObjectId, ref: 'Payment' },
+                amount: { type: Number },
+                status: { type: String, enum: ['Pending', 'Completed', 'Failed'], default: 'Pending' }
+            }
+        ],
         verify: { type: Boolean },
         resetoken: { type: String, default: '' }
     },
     { timestamps: true }
-)
+);
 schema.pre('save', async function (next) {
-    const usr = this
+    const usr = this;
     if (!usr.isModified('password')) {
-        next()
+        next();
     }
     try {
-        const genSalt = await bcrypt.genSalt(10)
-        const hash_password = await bcrypt.hash(usr.password, genSalt)
-        this.password = hash_password
+        const genSalt = await bcrypt.genSalt(10);
+        const hash_password = await bcrypt.hash(usr.password, genSalt);
+        this.password = hash_password;
     } catch (error) {
-        next(error)
+        next(error);
     }
-})
+});
 
 schema.methods.generatePassword = async function (password) {
-    const genSalt = await bcrypt.genSalt(16)
-    const hash_password = await bcrypt.hash(password, genSalt)
-    return hash_password
-}
+    const genSalt = await bcrypt.genSalt(16);
+    const hash_password = await bcrypt.hash(password, genSalt);
+    return hash_password;
+};
 schema.methods.comparePassword = async function (compare) {
-    return await bcrypt.compare(compare, this.password)
-}
+    return await bcrypt.compare(compare, this.password);
+};
 
 schema.methods.genToken = async function () {
     try {
@@ -103,13 +113,13 @@ schema.methods.genToken = async function () {
             {
                 expiresIn: '3d'
             }
-        )
+        );
     } catch (error) {
-        console.log(error)
+        logger.log(error);
     }
-}
+};
 schema.methods.compareToken = async function (token) {
-    return await jwt.verify(token, process.env.SECRET_KEY)
-}
-const SellerAuhSchema = model('sellerUser', schema)
-export default SellerAuhSchema
+    return await jwt.verify(token, process.env.SECRET_KEY);
+};
+const SellerAuhSchema = model('sellerUser', schema);
+export default SellerAuhSchema;

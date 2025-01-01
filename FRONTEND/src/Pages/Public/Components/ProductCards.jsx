@@ -6,7 +6,7 @@ import { getTokenLocalStoragePublic } from "../../../Utils/LocalStorage";
 import {
   AddWhiteListReqSaga,
   productActionRequest,
-} from "../../../Stores/Saga/Actions/ProductsAction";
+} from "../../../Stores/Actions/ProductsAction";
 import { useNavigate } from "react-router-dom";
 const ProductCards = (props) => {
   const data = props;

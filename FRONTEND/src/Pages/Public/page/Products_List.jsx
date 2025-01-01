@@ -1,31 +1,28 @@
 // import { LuHeart } from "react-icons/lu";
-import {
-  Link,
-  useLocation,
-  // useNavigate,
-  useSearchParams,
-} from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useCallback, useEffect, useMemo, useState } from "react";
+
 import {
   // productActionSuccess
   SubCategoryDataSaga,
-} from "../../../Stores/Saga/Actions/ProductsAction";
+} from "../../../Stores/Actions/ProductsAction";
 
 import ProductCards from "../Components/ProductCards";
 
 const ProductList = () => {
-  console.log("Render List ");
+  // console.log("Render List ");
   const dispatch = useDispatch();
   // const location = useLocation();
   // const Url = new URLSearchParams(window.location.search);
-
+  // const [ispending, startTransition] = useTransition();
   const [useParams, setSearchParams] = useSearchParams(window.location.search);
   // Initialize `page` state from query parameters or default to 1
   const initialPage = parseInt(useParams.get("page") || "1", 10);
   const [page, setPage] = useState(initialPage);
   // const [page, setPage] = useState(1);
   const { data } = useSelector((state) => state.products.subCategoryProducts);
+  const memorizationData = useMemo(() => data.data, [data.data]);
 
   // Extract query parameters
   useParams.set("page", page);
@@ -64,7 +61,6 @@ const ProductList = () => {
     }
   }, [page, setPage, setSearchParams, data?.totalPages]);
   // WhiteList Product additions
-  const memorizationData = useMemo(() => data.data, [data.data]);
   const handleSetPage = useCallback(
     (pageNum) => {
       setPage(pageNum);
@@ -76,7 +72,7 @@ const ProductList = () => {
     },
     [setPage, setSearchParams]
   );
-
+  console.log("product lsit render");
   useEffect(() => {
     // if (page !== initialPage) {
     //   setPage(initialPage);
@@ -99,7 +95,6 @@ const ProductList = () => {
     // setSearchParams,
     page,
     subcategory,
-    location.search,
   ]);
   return (
     <>

@@ -10,20 +10,44 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-* {
+*,
+*:hover {
   scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(15, 25, 94, 1) #ffffff;
+  scrollbar-gutter: both-edges;
 }
+
 /* .carousel-root {
   display: flex;
 } */
+@layer utilities {
+  .scrollbar::-webkit-scrollbar {
+    width: 20px;
+    height: 20px;
 
-div::-webkit-scrollbar {
-  display: none !important;
+    &::-webkit-scrollbar-track {
+      border-radius: 100vh;
+      background: #f7f4ed;
+    }
+    &::-webkit-scrollbar-thumb {
+      background: #e0cbcb;
+      border-radius: 100vh;
+      border: 3px solid #f6f7ed;
+    }
+    &::-webkit-scrollbar-thumb:hover {
+      background: #c0a0b9;
+    }
+  }
 }
+/* div::-webkit-scrollbar {
+  display: none !important;
+} */
 .no-scroll::-webkit-scrollbar {
   display: none !important;
 }
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
-    monospace;
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
 }

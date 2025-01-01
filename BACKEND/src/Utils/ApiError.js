@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 // class ApiError extends Error {
 //     constructor(statusCode, errorMessage = 'somthing went wrong', errors = [], stack = '') {
 //         super(errorMessage)
@@ -7,7 +8,7 @@
 //         this.errorMessage = errorMessage
 //         this.success = false
 
-import logger from './logger.js'
+import logger from './logger.js';
 
 //         if (!stack) {
 //             this.stack = stack
@@ -25,19 +26,19 @@ const errorObj = (err, statusCode = 500) => {
         status: false,
         statusCode: statusCode,
         errorMessage: err instanceof Error ? err.message || 'Somthing Went Wrong' : 'Somthing Went Wrong',
-        trace: { error: err.stack } || null
-    }
+        trace: { error: err.stack ?? null }
+    };
     // log
-    logger.error('Controller Error', { meta: obj })
+    logger.info('Controller Error', { meta: obj });
 
     if (process.env.NODE_ENV === 'production') {
-        delete errorObj.trace
+        delete errorObj.trace;
     }
-    return obj
-}
+    return obj;
+};
 
 const HttpError = (next, err, status, req) => {
-    const errs = errorObj(err, status, req)
-    return next(errs)
-}
-export default HttpError
+    const errs = errorObj(err, status, req);
+    return next(errs);
+};
+export default HttpError;

@@ -1,3 +1,7 @@
+/* eslint-disable no-console */
+
+import logger from './logger.js';
+
 /* eslint-disable no-undef */
 const _config = {
     _PORT: process.env.PORT,
@@ -11,16 +15,16 @@ const _config = {
     _CLOUDINARY_CLOUD_NAME: process.env.CLOUDINARY_CLOUD_NAME,
     _CLOUDINARY_API_KEY: process.env.CLOUDINARY_API_KEY,
     _CLOUDINARY_API_SECRET: process.env.CLOUDINARY_API_SECRET
-}
+};
 
 export const config = {
     get(key) {
-        const value = _config[key]
+        const value = _config[key];
         if (!value) {
-            console.error(`The ${key} not found.Make sure to pass enironment variable`)
-            process.exit()
+            logger.log(`The ${key} not found.Make sure to pass enironment variable`);
+            process.exit();
         }
-        const obj = Object.freeze(value)
-        return obj
+        const obj = Object.freeze(value);
+        return obj;
     }
-}
+};

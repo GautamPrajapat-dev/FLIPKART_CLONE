@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { SellerAuthActionSuccess } from "../Saga/Actions/SellerAuthAction";
+import { SellerAuthActionSuccess } from "../Actions/SellerAuthAction";
 SellerAuthActionSuccess;
 const SellerAuthSlice = createSlice({
   name: "sellerAuth",

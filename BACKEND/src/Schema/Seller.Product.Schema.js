@@ -1,5 +1,6 @@
-import { Schema, model } from 'mongoose'
-import jwt from 'jsonwebtoken'
+import { Schema, model } from 'mongoose';
+import jwt from 'jsonwebtoken';
+import logger from '../Utils/logger.js';
 // import bcrypt from 'bcryptjs'
 
 const productComment = new Schema({
@@ -13,7 +14,7 @@ const productComment = new Schema({
     comment: {
         type: String
     }
-})
+});
 
 const Notification = new Schema({
     title: { type: String },
@@ -21,7 +22,7 @@ const Notification = new Schema({
     readAll: { type: Boolean, default: false },
     userId: { type: Schema.Types.ObjectId, ref: 'pulbicuser' },
     productId: { type: Schema.Types.ObjectId, ref: 'products' }
-})
+});
 const schema = new Schema(
     {
         title: {
@@ -83,7 +84,7 @@ const schema = new Schema(
     },
 
     { timestamps: true }
-)
+);
 schema.methods.genToken = async function () {
     try {
         return jwt.sign(
@@ -96,14 +97,14 @@ schema.methods.genToken = async function () {
             {
                 expiresIn: '30d'
             }
-        )
+        );
     } catch (error) {
-        console.log(error)
+        logger.log(error);
     }
-}
+};
 
 schema.methods.compareToken = async function (token) {
-    return await jwt.verify(token, process.env.SECRET_KEY)
-}
-const ProductSchema = model('products', schema)
-export default ProductSchema
+    return await jwt.verify(token, process.env.SECRET_KEY);
+};
+const ProductSchema = model('products', schema);
+export default ProductSchema;

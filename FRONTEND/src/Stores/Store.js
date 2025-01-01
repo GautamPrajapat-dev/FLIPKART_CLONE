@@ -1,10 +1,10 @@
 import { configureStore } from "@reduxjs/toolkit";
 import reducer from "./CombineReducers";
 import createSagaMiddleware from "redux-saga";
-import { rootSellerAuthSaga } from "./Saga/Watchers/Seller.Auth.Watcher";
-import { productsRoot } from "./Saga/Watchers/Products.Watcher";
-import { rootPublicAuthSaga } from "./Saga/Watchers/Public.Watcher";
-import { sellerProductsRootSaga } from "./Saga/Watchers/Seller.Product.Watcher";
+import { rootSellerAuthSaga } from "./Watchers/Seller.Auth.Watcher";
+import { productsRoot } from "./Watchers/Products.Watcher";
+import { rootPublicAuthSaga } from "./Watchers/Public.Watcher";
+import { sellerProductsRootSaga } from "./Watchers/Seller.Product.Watcher";
 const sagaMiddleware = createSagaMiddleware();
 const Store = configureStore({
   reducer,

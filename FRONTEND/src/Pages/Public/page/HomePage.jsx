@@ -4,7 +4,7 @@ import Card from "../Components/Card";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useTransition } from "react";
-import { CategoryRequestSaga } from "../../../Stores/Saga/Actions/ProductsAction";
+import { CategoryRequestSaga } from "../../../Stores/Actions/ProductsAction";
 // import Dropdown from "../../Seller/SellerComponents/Dropdown";
 // import { FcApproval } from "react-icons/fc";
 const HomePage = () => {
